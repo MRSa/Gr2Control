@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory
+        android:title="@string/pref_cat_application_control">
+
+        <PreferenceScreen
+            android:key="exit_application"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="@string/pref_exit_power_off" />
+
+        <ListPreference
+            android:title="@string/pref_connection_method"
+            android:entryValues="@array/connection_method_value"
+            android:entries="@array/connection_method"
+            android:key="connection_method"
+            android:defaultValue="RICOH_GR2"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_camera">
+
+        <CheckBoxPreference
+            android:key="capture_both_camera_and_live_view"
+            android:title="@string/pref_capture_both_camera_and_live_view" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_initialize">
+
+        <CheckBoxPreference
+            android:key="gr2_lcd_sleep"
+            android:title="@string/pref_gr2_lcd_sleep" />
+
+        <ListPreference
+            android:title="@string/pref_gr2_display_mode"
+            android:entryValues="@array/gr2_display_mode_value"
+            android:entries="@array/gr2_display_mode"
+            android:key="gr2_display_mode"
+            android:defaultValue="0"/>
+
+        <CheckBoxPreference
+            android:key="auto_connect_to_camera"
+            android:title="@string/pref_auto_connect_camera"
+            android:summary="@string/pref_summary_auto_connect_camera" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_gokigen">
+
+        <Preference
+            android:key="instruction_link"
+            android:title="@string/pref_instruction_manual"
+            android:summary="https://osdn.net/projects/gokigen/wiki/A01d"
+            android:selectable="true">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://osdn.net/projects/gokigen/wiki/A01d" />
+        </Preference>
+
+        <Preference
+            android:key="privacy_policy"
+            android:title="@string/pref_privacy_policy"
+            android:summary="https://osdn.net/projects/gokigen/wiki/PrivacyPolicy"
+            android:selectable="true">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://osdn.net/projects/gokigen/wiki/PrivacyPolicy" />
+        </Preference>
+
+        <PreferenceScreen
+            android:key="debug_info"
+            android:title="@string/pref_degug_info"
+            android:summary="@string/pref_summary_debug_info" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

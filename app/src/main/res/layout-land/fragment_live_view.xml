@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText,ContentDescription" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@color/background_dark" >
+
+            <ImageView
+                android:id="@+id/showKeyPanelImageView"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                android:src="@drawable/ic_gamepad_black_24dp"
+                android:layout_marginBottom="6dp"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/connect_disconnect_button"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_cloud_off_black_24dp"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+        <view
+            android:id="@+id/cameraLiveImageView"
+            class="net.osdn.gokigen.gr2control.liveview.CameraLiveImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@color/background_dark" >
+
+            <TextView
+                android:id="@+id/showControlPanelTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="invisible"
+                android:text="@string/show_panel"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/darker_gray"
+                android:textStyle="normal"
+                android:textSize="6pt" />
+
+
+            <ImageButton
+                android:id="@+id/shutter_button"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_camera_black_24dp"
+                android:gravity="center" />
+
+
+            <ImageView
+                android:id="@+id/currentBatteryImageView"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                android:src="@drawable/ic_battery_unknown_black_24dp"
+                android:layout_marginBottom="6dp"
+                android:gravity="center" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/controlPanelLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/background_translucent_white" >
+
+        <TextView
+            android:id="@+id/takemodeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Take"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+
+        <TextView
+            android:id="@+id/shutterSpeedTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="S#"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+
+        <TextView
+            android:id="@+id/apertureValueTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="F#"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+
+        <TextView
+            android:id="@+id/exposureCompensationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="EV#"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+<!--
+        <TextView
+            android:id="@+id/isoSensitivityTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="ISO#"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+-->
+
+        <TextView
+            android:id="@+id/aeModeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="AE"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/whiteBalanceImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_wb_auto_black_24dp" />
+
+        <TextView
+            android:id="@+id/hideControlPanelTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/hide_panel"
+            android:textColor="@color/background_dark"
+            android:textStyle="normal"
+            android:textSize="6pt" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/keyPanelLayout"
+        android:orientation="horizontal"
+        android:layout_width="440dp"
+        android:layout_height="360dp"
+        android:layout_alignLeft="@id/controlPanelLayout"
+        android:layout_alignStart="@id/controlPanelLayout"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        android:background="@color/background_translucent_white" >
+
+        <TextView
+            android:id="@+id/hideKeyPanelTextView"
+            android:layout_width="48dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/hide_panel"
+            android:textColor="@color/background_dark"
+            android:textStyle="normal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:textSize="6pt" />
+    </RelativeLayout>
+</RelativeLayout>

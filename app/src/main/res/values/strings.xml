@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">gr2control</string>
+    <string name="app_name2">AirA01a</string>
+    <string name="blank"> </string>
+
+    <string name="dialog_title_confirmation">Confirmation</string>
+    <string name="dialog_positive_execute">OK</string>
+    <string name="dialog_negative_cancel">Cancel</string>
+
+    <string name="dialog_message_power_off">Power Off</string>
+
+    <string name="dialog_title_connect_failed">Connect failed</string>
+    <string name="dialog_title_button_retry">Retry</string>
+    <string name="dialog_title_button_network_settings">WiFi Settings</string>
+
+    <string name="finish_refresh">Finished Refresh</string>
+
+    <string name="connect_check_wifi">check WIFI</string>
+
+    <string name="camera_not_found">Not Found&#8230;</string>
+    <string name="connect_connected">connected</string>
+
+    <string name="pref_cat_application_control">App. Control</string>
+    <string name="pref_exit_power_off">Exit Application(and Camera OFF)</string>
+
+    <string name="pref_capture_both_camera_and_live_view">Capture both camera and Live View</string>
+
+    <string name="pref_connection_method">Connection Method</string>
+
+    <string name="pref_gr2_display_mode">Display Mode</string>
+    <string name="pref_gr2_lcd_sleep">Screen off during connected</string>
+
+    <string name="pref_cat_camera">Camera</string>
+
+    <string name="pref_cat_initialize">App. Startup</string>
+    <string name="pref_auto_connect_camera">Auto Connect To Camera</string>
+    <string name="pref_summary_auto_connect_camera">Normally to keep ON.</string>
+
+    <string name="pref_cat_gokigen">GOKIGEN</string>
+    <string name="pref_instruction_manual">A01d Instructions</string>
+    <string name="pref_privacy_policy">Privacy Policy</string>
+
+    <string name="only_opc_feature">This feature is only available for a OPC Camera.</string>
+    <string name="pref_degug_info">Debug Information</string>
+    <string name="pref_summary_debug_info">LogCat Information</string>
+
+    <string name="data_saving">Saving&#8230;</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="hide_panel">Hide</string>
+    <string name="show_panel">Show</string>
+
+    <string name="camera_disconnected">Disconnected</string>
+</resources>
