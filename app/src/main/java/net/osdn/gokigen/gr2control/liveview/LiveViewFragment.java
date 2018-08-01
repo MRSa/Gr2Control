@@ -3,7 +3,6 @@ package net.osdn.gokigen.gr2control.liveview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -152,6 +151,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.showKeyPanelImageView);
             setOnClickListener(view, R.id.hideKeyPanelTextView);
             setOnClickListener(view, R.id.shutter_button);
+            setOnClickListener(view, R.id.focusUnlockImageView);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);

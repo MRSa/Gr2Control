@@ -22,4 +22,27 @@
         <item >3</item>
     </string-array>
 
+    <string-array name="exif_exposure_program_value">
+        <item>Unknown</item>
+        <item>Manual</item>
+        <item>Program</item>
+        <item>Aperture priority</item>
+        <item>Shutter priority</item>
+        <item>Creative Program</item>
+        <item>Action Program</item>
+        <item>Portrait mode</item>
+        <item>Landscape mode</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="exif_metering_mode_value">
+        <item>Unknown</item>
+        <item>Average</item>
+        <item>CenterWeightedAverage</item>
+        <item>Spot</item>
+        <item>MutiSpot</item>
+        <item>Pattern</item>
+        <item>Partial</item>
+        <item>Other</item>
+    </string-array>
 </resources>

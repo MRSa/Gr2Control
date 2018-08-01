@@ -14,6 +14,7 @@ import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
+import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.IRicohGr2InterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraButtonControl;
@@ -37,6 +38,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     private final RicohGr2Connection gr2Connection;
     private final RicohGr2CameraButtonControl buttonControl;
     private final RicohGr2StatusChecker statusChecker;
+    private final RicohGr2PlaybackControl playbackControl;
     private RicohGr2LiveViewControl liveViewControl;
     private RicohGr2CameraCaptureControl captureControl;
     private RicohGr2CameraZoomLensControl zoomControl;
@@ -55,6 +57,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
         zoomControl = new RicohGr2CameraZoomLensControl();
         buttonControl = new RicohGr2CameraButtonControl();
         statusChecker = new RicohGr2StatusChecker(500);
+        playbackControl = new RicohGr2PlaybackControl();
     }
 
     /**
@@ -150,5 +153,11 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     @Override
     public ICameraStatusWatcher getCameraStatusWatcher() {
         return (statusChecker);
+    }
+
+    @Override
+    public IPlaybackControl getPlaybackControl()
+    {
+        return (playbackControl);
     }
 }

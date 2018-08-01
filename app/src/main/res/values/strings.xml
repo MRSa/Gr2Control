@@ -50,4 +50,43 @@
     <string name="show_panel">Show</string>
 
     <string name="camera_disconnected">Disconnected</string>
+
+    <string name="action_synchroize_datetime">Time Sync.</string>
+    <string name="action_info">Information</string>
+
+    <string name="action_download">download</string>
+    <string name="action_download_movie">download</string>
+    <string name="action_download_original_movie">Original Size</string>
+    <string name="action_delete_movie">Delete</string>
+    <string name="action_get_information">picture information</string>
+    <string name="action_download_original_size">Original Size</string>
+    <string name="action_download_2048x1536">2048 x 1536</string>
+    <string name="action_download_1920x1440">1920 x 1440</string>
+    <string name="action_download_1600x1200">1600 x 1200</string>
+    <string name="action_download_1024x768">1024 x 768</string>
+    <string name="action_download_raw">RAW</string>
+    <string name="action_delete_picture">Delete</string>
+
+    <string name="dialog_get_information_title">Getting Picture Information</string>
+    <string name="download_control_get_information_title">Information</string>
+    <string name="download_control_download_failed">Download failed</string>
+    <string name="download_control_save_failed">Save failed</string>
+    <string name="download_control_get_information_failed">Get information failed</string>
+    <string name="dialog_download_file_title">Get File</string>
+    <string name="dialog_download_title">Get Image</string>
+    <string name="dialog_download_message">File Name:</string>
+    <string name="download_control_save_success">Saved</string>
+
+    <string name="exif_datetime_title">Date : </string>
+    <string name="exif_exposure_time_title">Exposure Time : </string>
+    <string name="exif_aperture_title">Aperture : </string>
+    <string name="exif_focal_length_title">Focal Length : </string>
+    <string name="exif_focal_35mm_equiv_title">35mm Equiv.</string>
+    <string name="exif_iso_title">ISO : </string>
+    <string name="exif_maker_title">Maker : </string>
+    <string name="exif_camera_title">Model : </string>
+    <string name="exif_camera_mode_title">Mode :</string>
+    <string name="exif_metering_mode_title">Metering Mode :</string>
+    <string name="exif_custom_process_title">(Custom Image Processing)</string>    
+    <string name="exif_with_gps">(with Geolocation)</string>
 </resources>

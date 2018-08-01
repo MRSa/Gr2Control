@@ -10,5 +10,6 @@ public interface IChangeScene
     void changeCameraConnection();
     void changeSceneToDebugInformation();
     void changeSceneToApiList();
+    void changeScenceToImageList();
     void exitApplication();
 }

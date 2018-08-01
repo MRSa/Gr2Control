@@ -51,6 +51,21 @@
                 android:src="@drawable/ic_cloud_off_black_24dp"
                 android:visibility="visible" />
 
+            <ImageView
+                android:id="@+id/show_images_button"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/connect_disconnect_button"
+                android:layout_marginTop="14dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_image_black_24dp"
+                android:visibility="visible" />
+
         </RelativeLayout>
 
         <view
@@ -114,6 +129,22 @@
                 android:src="@drawable/ic_battery_unknown_black_24dp"
                 android:layout_marginBottom="6dp"
                 android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/focusUnlockImageView"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_above="@id/currentBatteryImageView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:scaleType="fitCenter"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"
+                android:src="@drawable/ic_crop_free_black_24dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center" />
+
         </RelativeLayout>
 
     </LinearLayout>

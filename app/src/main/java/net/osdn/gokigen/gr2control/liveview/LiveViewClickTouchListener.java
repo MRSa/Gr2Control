@@ -124,7 +124,17 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     pushedShutterButton();
                     break;
 
-/*
+                case R.id.focusUnlockImageView:
+                    // フォーカスアンロックボタンが押された
+                    pushedFocusUnlock();
+                    break;
+
+                case R.id.show_images_button:
+                    // 画像一覧表示ボタンが押された...画像一覧画面を開く
+                    changeScene.changeScenceToImageList();
+                    break;
+
+                    /*
                 case R.id.show_hide_grid_button:
                     // グリッドの ON/OFF
                     statusNotify.toggleShowGridFrame();
@@ -286,6 +296,24 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 // ライブビュー画像も保管する
                 statusNotify.takePicture();
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *   フォーカスアンロックボタンが押された時の処理
+     *
+     */
+    private void pushedFocusUnlock()
+    {
+        Log.v(TAG, "pushedFocusUnlock()");
+        try
+        {
+            // フォーカスアンロックする
+            focusingControl.unlockAutoFocus();
         }
         catch (Exception e)
         {

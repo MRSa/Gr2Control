@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:compat="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/action_refresh"
+        compat:showAsAction="ifRoom"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:title="@string/action_refresh"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_datetime_synchronize"
+        compat:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/action_synchroize_datetime"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_info"
+        compat:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/action_info"
+        android:visible="false" />
+</menu>

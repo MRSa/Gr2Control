@@ -292,6 +292,28 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
 */
     }
 
+    /**
+     *   画像一覧画面を開く
+     *
+     */
+    //  IChangeScene
+    @Override
+    public void changeScenceToImageList()
+    {
+        Log.v(TAG, "changeScenceToImageList()");
+/*
+        if (sonyApiListFragmentSony == null)
+        {
+            sonyApiListFragmentSony = SonyCameraApiListFragment.newInstance(interfaceProvider);
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment1, sonyApiListFragmentSony);
+        // backstackに追加
+        transaction.addToBackStack(null);
+        transaction.commit();
+*/
+    }
+
     //  IChangeScene
     @Override
     public void exitApplication()

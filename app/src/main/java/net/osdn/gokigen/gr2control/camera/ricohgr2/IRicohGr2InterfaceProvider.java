@@ -8,6 +8,7 @@ import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
+import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 
@@ -27,4 +28,5 @@ public interface IRicohGr2InterfaceProvider
     IDisplayInjector getDisplayInjector();
     ICameraButtonControl getButtonControl();
     ICameraStatusWatcher getCameraStatusWatcher();
+    IPlaybackControl getPlaybackControl();
 }
