@@ -1,7 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.playback;
 
-import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
-
 public interface IDownloadLargeContentCallback
 {
     void onCompleted();

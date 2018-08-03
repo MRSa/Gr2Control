@@ -152,6 +152,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.hideKeyPanelTextView);
             setOnClickListener(view, R.id.shutter_button);
             setOnClickListener(view, R.id.focusUnlockImageView);
+            setOnClickListener(view, R.id.show_images_button);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);
@@ -686,8 +687,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     TextView view = activity.findViewById(R.id.takemodeTextView);
-                    view.setText(mode);
-                    view.invalidate();
+                    if (view != null)
+                    {
+                        view.setText(mode);
+                        view.invalidate();
+                    }
                 }
             });
         }
@@ -714,8 +718,10 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     TextView view = activity.findViewById(R.id.shutterSpeedTextView);
-                    view.setText(shutterSpeed);
-                    view.invalidate();
+                    if (view != null) {
+                        view.setText(shutterSpeed);
+                        view.invalidate();
+                    }
                 }
             });
         }
@@ -743,8 +749,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     TextView view = activity.findViewById(R.id.apertureValueTextView);
-                    view.setText(apertureValue);
-                    view.invalidate();
+                    if (view != null)
+                    {
+                        view.setText(apertureValue);
+                        view.invalidate();
+                    }
                 }
             });
         }
@@ -770,8 +779,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     TextView view = activity.findViewById(R.id.exposureCompensationTextView);
-                    view.setText(xv);
-                    view.invalidate();
+                    if (view != null)
+                    {
+                        view.setText(xv);
+                        view.invalidate();
+                    }
                 }
             });
         }
@@ -797,8 +809,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     TextView view = activity.findViewById(R.id.aeModeTextView);
-                    view.setText(meteringMode);
-                    view.invalidate();
+                    if (view != null)
+                    {
+                        view.setText(meteringMode);
+                        view.invalidate();
+                    }
                 }
             });
         }
@@ -852,8 +867,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 public void run()
                 {
                     ImageView view = activity.findViewById(R.id.currentBatteryImageView);
-                    view.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
-                    view.invalidate();
+                    if (view != null)
+                    {
+                        view.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
+                        view.invalidate();
+                    }
                 }
             });
         }

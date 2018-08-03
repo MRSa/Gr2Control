@@ -7,5 +7,5 @@ import java.util.List;
 public interface IDownloadContentListCallback
 {
     void onCompleted(List<ICameraFileInfo> contentList);
-    void onErrorOccurred( Exception  e);
+    void onErrorOccurred(Exception  e);
 }

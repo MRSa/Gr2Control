@@ -78,7 +78,8 @@ public class RicohGr2LiveViewControl implements ILiveViewControl
     @Override
     public void stopLiveView()
     {
-
+        Log.v(TAG, "stopLiveView()");
+        whileFetching = false;
     }
 
 

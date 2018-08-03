@@ -645,7 +645,8 @@ public class ImagePagerViewFragment extends Fragment
          * @param map    ファイルの情報
          */
 		@Override
-		public void onCompleted(byte[] bytes, Map<String, Object> map) {
+		public void onCompleted(byte[] bytes, Map<String, Object> map)
+		{
             if (isGetInformation) {
                 // Exif情報をダイアログ表示して終わる
                 showExifInformation(bytes);

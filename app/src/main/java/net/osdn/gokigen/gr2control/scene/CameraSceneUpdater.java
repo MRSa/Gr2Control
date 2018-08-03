@@ -12,6 +12,7 @@ import net.osdn.gokigen.gr2control.camera.ICameraStatusReceiver;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.liveview.IStatusViewDrawer;
 import net.osdn.gokigen.gr2control.logcat.LogCatFragment;
+import net.osdn.gokigen.gr2control.playback.ImageGridViewFragment;
 import net.osdn.gokigen.gr2control.preference.ricohgr2.RicohGr2PreferenceFragment;
 
 /**
@@ -301,17 +302,19 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
     public void changeScenceToImageList()
     {
         Log.v(TAG, "changeScenceToImageList()");
-/*
-        if (sonyApiListFragmentSony == null)
+        try
         {
-            sonyApiListFragmentSony = SonyCameraApiListFragment.newInstance(interfaceProvider);
+            ImageGridViewFragment fragment = ImageGridViewFragment.newInstance(interfaceProvider.getRicohGr2Infterface().getPlaybackControl());
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment1, fragment);
+            // backstackに追加
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment1, sonyApiListFragmentSony);
-        // backstackに追加
-        transaction.addToBackStack(null);
-        transaction.commit();
-*/
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     //  IChangeScene

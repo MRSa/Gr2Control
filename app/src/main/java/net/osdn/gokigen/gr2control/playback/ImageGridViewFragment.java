@@ -48,6 +48,7 @@ import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
+import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
 
@@ -85,7 +86,7 @@ public class ImageGridViewFragment extends Fragment
         Log.v(TAG, "ImageGridViewFragment::onCreate()");
 
 		executor = Executors.newFixedThreadPool(1);
-		imageCache = new LruCache<>(100);
+		imageCache = new LruCache<>(160);
 		setHasOptionsMenu(true);
 	}
 	
@@ -159,6 +160,14 @@ public class ImageGridViewFragment extends Fragment
                 }
             }
         }
+        try
+        {
+            refresh();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         Log.v(TAG, "onResume() End");
 	}
 	
@@ -181,7 +190,26 @@ public class ImageGridViewFragment extends Fragment
 		super.onStop();
 	}
 
-	public void refresh()
+	private void refresh()
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                refreshImpl();
+            }
+        });
+        try
+        {
+            thread.start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+      }
+
+
+	private void refreshImpl()
 	{
 		contentList = null;
 
@@ -426,7 +454,7 @@ public class ImageGridViewFragment extends Fragment
 			}
 			final Box box = new Box();
 
-			playbackControl.downloadContentThumbnail(path, new IDownloadImageCallback()
+			playbackControl.downloadContentThumbnail(path, new IDownloadThumbnailImageCallback()
             {
 				@Override
 				public void onProgress(ProgressEvent e)
@@ -435,24 +463,30 @@ public class ImageGridViewFragment extends Fragment
 				}
 				
 				@Override
-				public void onCompleted(byte[] data, Map<String, Object> metadata)
+				public void onCompleted(final Bitmap thumbnail, Map<String, Object> metadata)
 				{
-					final Bitmap thumbnail = createRotatedBitmap(data, metadata);
-					imageCache.put(path, thumbnail);
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							viewHolder.imageView.setImageBitmap(thumbnail);
-							if (path.toLowerCase().endsWith(MOVIE_SUFFIX))
-							{
-								viewHolder.iconView.setImageResource(R.drawable.ic_videocam_black_24dp);
-							} else if (hasRaw) {
-                                viewHolder.iconView.setImageResource(R.drawable.ic_raw_black_1x);
-                            } else {
-								viewHolder.iconView.setImageDrawable(null);
-							}
-						}
-					});
+					if (thumbnail != null)
+					{
+                        try {
+                            Log.v(TAG, "Thumbnail PATH : " + path + " size : " + thumbnail.getByteCount());
+                            imageCache.put(path, thumbnail);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    viewHolder.imageView.setImageBitmap(thumbnail);
+                                    if (path.toLowerCase().endsWith(MOVIE_SUFFIX)) {
+                                        viewHolder.iconView.setImageResource(R.drawable.ic_videocam_black_24dp);
+                                    } else if (hasRaw) {
+                                        viewHolder.iconView.setImageResource(R.drawable.ic_raw_black_1x);
+                                    } else {
+                                        viewHolder.iconView.setImageDrawable(null);
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 					box.isDownloading = false;  
 				}
 				
@@ -511,6 +545,7 @@ public class ImageGridViewFragment extends Fragment
 		}
 		if (bitmap == null)
 		{
+		    Log.v(TAG, "createRotatedBitmap() : bitmap is null : " + data.length);
 			return (null);
 		}
 		

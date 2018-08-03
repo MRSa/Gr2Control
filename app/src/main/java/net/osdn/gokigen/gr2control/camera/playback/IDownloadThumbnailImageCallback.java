@@ -4,9 +4,9 @@ import android.graphics.Bitmap;
 
 import java.util.Map;
 
-public interface IDownloadImageCallback
+public interface IDownloadThumbnailImageCallback
 {
-    void onCompleted(byte[]  data, Map<String, Object> metadata);
+    void onCompleted(Bitmap bitmap, Map<String, Object> metadata);
     void onErrorOccurred(Exception  e);
     void onProgress(ProgressEvent e);
 }
