@@ -42,15 +42,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
+import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
+import net.osdn.gokigen.gr2control.playback.detail.ImagePagerViewFragment;
 
 public class ImageGridViewFragment extends Fragment
 {
@@ -200,18 +202,38 @@ public class ImageGridViewFragment extends Fragment
         });
         try
         {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showHideProgressBar(true);
+                }
+            });
             thread.start();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-      }
+    }
 
+    private void showHideProgressBar(final boolean isVisible)
+    {
+        Activity activity = getActivity();
+        if (activity != null)
+        {
+            ProgressBar bar = getActivity().findViewById(R.id.progress_bar);
+            if (bar != null)
+            {
+                bar.setVisibility((isVisible) ? View.VISIBLE : View.GONE);
+                bar.invalidate();
+            }
+        }
+    }
 
 	private void refreshImpl()
 	{
 		contentList = null;
+		Log.v(TAG, "refreshImpl() start");
 
 		playbackControl.downloadContentList(new IDownloadContentListCallback() {
 			@Override
@@ -264,7 +286,8 @@ public class ImageGridViewFragment extends Fragment
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						gridView.invalidateViews();
+                        showHideProgressBar(false);
+                        gridView.invalidateViews();
 					}
 				});
 			}
@@ -275,12 +298,14 @@ public class ImageGridViewFragment extends Fragment
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						presentMessage("Load failed", message);						
+                        showHideProgressBar(false);
+						presentMessage("Load failed", message);
 					}
 				});
 			}
 		});
-	}
+        Log.v(TAG, "refreshImpl() end");
+    }
 
 	private static class GridCellViewHolder
     {

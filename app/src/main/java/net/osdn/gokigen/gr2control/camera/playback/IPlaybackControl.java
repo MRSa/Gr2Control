@@ -12,8 +12,12 @@ import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
 public interface IPlaybackControl
 {
     void downloadContentList(@NonNull IDownloadContentListCallback callback);
-    void downloadContentScreennail(@NonNull String  path, @NonNull IDownloadImageCallback callback);
+    void getContentInfo(@NonNull String  path, @NonNull IContentInfoCallback  callback);
+
+    void downloadContentScreennail(@NonNull String  path, @NonNull IDownloadThumbnailImageCallback callback);
     void downloadContentThumbnail(@NonNull String path, @NonNull IDownloadThumbnailImageCallback callback);
+    //void downloadContentScreennail(@NonNull String  path, @NonNull IDownloadThumbnailImageCallback callback);
+    //void downloadContentThumbnail(@NonNull String path, @NonNull IDownloadThumbnailImageCallback callback);
     void downloadImage(@NonNull String  path, float resize, @NonNull IDownloadImageCallback  callback);
     void downloadLargeContent(@NonNull String  path, @NonNull IDownloadLargeContentCallback  callback);
 }

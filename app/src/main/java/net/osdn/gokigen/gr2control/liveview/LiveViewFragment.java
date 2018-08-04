@@ -228,7 +228,10 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             focalLengthArea = view.findViewById(R.id.focal_length_with_digital_zoom_view);
 */
             connectStatus = view.findViewById(R.id.connect_disconnect_button);
-            connectStatus.setOnClickListener(onClickTouchListener);
+            if (connectStatus != null)
+            {
+                connectStatus.setOnClickListener(onClickTouchListener);
+            }
         }
         catch (Exception e)
         {

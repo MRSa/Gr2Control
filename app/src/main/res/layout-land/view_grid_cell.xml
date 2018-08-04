@@ -26,5 +26,4 @@
         android:scaleType="centerCrop"
         android:src="@null"
         tools:ignore="ContentDescription" />
-
 </RelativeLayout>

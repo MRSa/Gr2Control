@@ -1,28 +1,28 @@
-package net.osdn.gokigen.gr2control.playback;
+package net.osdn.gokigen.gr2control.playback.detail;
 
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 
-class ImageContentInfoEx
+public class ImageContentInfoEx
 {
     private final ICameraFileInfo fileInfo;
     private boolean hasRaw;
 
-    ImageContentInfoEx(ICameraFileInfo fileInfo, boolean hasRaw)
+    public ImageContentInfoEx(ICameraFileInfo fileInfo, boolean hasRaw)
     {
         this.fileInfo = fileInfo;
         this.hasRaw = hasRaw;
     }
 
-    void setHasRaw(boolean value)
+    public void setHasRaw(boolean value)
     {
         hasRaw = value;
     }
-    boolean hasRaw()
+    public boolean hasRaw()
     {
         return (hasRaw);
     }
 
-    ICameraFileInfo getFileInfo()
+    public ICameraFileInfo getFileInfo()
     {
         return (fileInfo);
     }

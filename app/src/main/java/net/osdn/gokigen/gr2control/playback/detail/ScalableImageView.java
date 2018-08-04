@@ -1,4 +1,4 @@
-package net.osdn.gokigen.gr2control.playback;
+package net.osdn.gokigen.gr2control.playback.detail;
 
 import android.content.Context;
 import android.graphics.Bitmap;

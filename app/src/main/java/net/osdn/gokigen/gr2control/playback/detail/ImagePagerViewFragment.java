@@ -1,14 +1,16 @@
-package net.osdn.gokigen.gr2control.playback;
+package net.osdn.gokigen.gr2control.playback.detail;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -47,14 +49,13 @@ import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadLargeContentCallback;
+import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
-
 
 public class ImagePagerViewFragment extends Fragment
 {
     private final String TAG = this.toString();
-    //private final float IMAGE_RESIZE_FOR_GET_INFORMATION = 640.0f;
     private final String JPEG_SUFFIX = ".jpg";
     private final String RAW_SUFFIX = ".dng";
     private IPlaybackControl playbackControl;
@@ -66,11 +67,7 @@ public class ImagePagerViewFragment extends Fragment
 	private ViewPager viewPager = null;
 	private LruCache<String, Bitmap> imageCache =null;
 
-	private MyImageDownloader imageDownloader = null;
-	private MyMovieDownloader movieDownloader = null;
-
-
-    static ImagePagerViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull List<ImageContentInfoEx> contentList, int contentIndex)
+    public static ImagePagerViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull List<ImageContentInfoEx> contentList, int contentIndex)
 	{
 		ImagePagerViewFragment fragment = new ImagePagerViewFragment();
 		fragment.setInterface(playbackControl);
@@ -86,6 +83,7 @@ public class ImagePagerViewFragment extends Fragment
 	private void setContentList(@NonNull List<ImageContentInfoEx> contentList, int contentIndex)
 	{
 		this.contentList = contentList;
+		this.contentIndex = contentIndex;
 	}
 
 	@Override
@@ -101,11 +99,11 @@ public class ImagePagerViewFragment extends Fragment
 	{
 		layoutInflater = inflater;
 		View view = layoutInflater.inflate(R.layout.fragment_image_pager_view, container, false);
-		viewPager = (ViewPager)view.findViewById(R.id.viewPager1);
+		viewPager = view.findViewById(R.id.viewPager1);
 		viewPager.setAdapter(new ImagePagerAdapter());
 		viewPager.addOnPageChangeListener(new ImagePageChangeListener());
 		
-		return view;
+		return (view);
 	}
 
 	@Override
@@ -161,51 +159,37 @@ public class ImagePagerViewFragment extends Fragment
 	{
 		boolean doDownload = false;
         boolean getInformation = false;
-		float downloadSize = 0;
+		boolean isSmallSize = false;
         String specialSuffix = null;
         if ((item.getItemId() == R.id.action_get_information)||(item.getItemId() == R.id.action_get_information_raw))
         {
-            //downloadSize = OLYCamera.IMAGE_RESIZE_1024;
             getInformation = true;
-            doDownload = true;
         }
         else if ((item.getItemId() == R.id.action_download_original_size)||(item.getItemId() == R.id.action_download_original_size_raw))
         {
-			//downloadSize = OLYCamera.IMAGE_RESIZE_NONE;
 			doDownload = true;
 		}
-        else if ((item.getItemId() == R.id.action_download_2048x1536)||(item.getItemId() == R.id.action_download_2048x1536_raw))
+        else if ((item.getItemId() == R.id.action_download_640x480)||(item.getItemId() == R.id.action_download_640x480_raw))
         {
-			//downloadSize = OLYCamera.IMAGE_RESIZE_2048;
-			doDownload = true;
-		}
-        else if ((item.getItemId() == R.id.action_download_1920x1440)||(item.getItemId() == R.id.action_download_1920x1440_raw))
-        {
-			//downloadSize = OLYCamera.IMAGE_RESIZE_1920;
-			doDownload = true;
-		}
-        else if ((item.getItemId() == R.id.action_download_1600x1200)||(item.getItemId() == R.id.action_download_1600x1200_raw))
-        {
-			//downloadSize = OLYCamera.IMAGE_RESIZE_1600;
-			doDownload = true;
-		}
-        else if ((item.getItemId() == R.id.action_download_1024x768)||(item.getItemId() == R.id.action_download_1024x768_raw))
-        {
-			//downloadSize = OLYCamera.IMAGE_RESIZE_1024;
-			doDownload = true;
-		}
+            isSmallSize = true;
+            doDownload = true;
+        }
         else if (item.getItemId() == R.id.action_download_original_movie)
         {
-            //downloadSize = OLYCamera.IMAGE_RESIZE_NONE;
             doDownload = true;
         }
         else if (item.getItemId() == R.id.action_download_raw)
         {
             doDownload = true;
-            //downloadSize = OLYCamera.IMAGE_RESIZE_NONE;
             specialSuffix = RAW_SUFFIX;
 		}
 
+		if (getInformation)
+        {
+            showFileInformation((contentList.get(contentIndex)).getFileInfo());
+        }
+
+        /*
 		if (doDownload)
 		{
 			try
@@ -225,10 +209,44 @@ public class ImagePagerViewFragment extends Fragment
 				e.printStackTrace();
 			}
 		}
-		return super.onOptionsItemSelected(item);
+*/
+		return (super.onOptionsItemSelected(item));
 	}
-	
-	@Override
+
+    private void showFileInformation(final ICameraFileInfo fileInfo)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String message = "";
+                try {
+                    String model = fileInfo.getModel();
+                    String dateTime = "";
+                    Date date = fileInfo.getDatetime();
+                    if (date != null) {
+                        dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US).format(date);
+                    }
+                    String path = fileInfo.getDirectoryPath() + "/" + fileInfo.getFilename();
+                    String shutter = fileInfo.getShutterSpeed();
+                    shutter = shutter.replace(".", "/");
+                    String aperture = fileInfo.getAperature();
+                    String iso = fileInfo.getIsoSensitivity();
+                    String expRev = fileInfo.getExpRev();
+
+                    message = path + "\r\n" + dateTime + "\r\n" + "- - - - - - - - - -\r\n  " + shutter + "  F" + aperture + " (" + expRev + ")" + " ISO" + iso + "\r\n" + "- - - - - - - - - -\r\n" + "  model : " + model + "\r\n";
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                presentMessage(getString(R.string.download_control_get_information_title), message);
+                System.gc();
+            }
+        });
+
+    }
+
+    @Override
 	public void onResume()
     {
 		super.onResume();
@@ -260,7 +278,6 @@ public class ImagePagerViewFragment extends Fragment
         }
 	}
 
-	
 	private class ImagePagerAdapter extends PagerAdapter
     {
 
@@ -316,23 +333,7 @@ public class ImagePagerViewFragment extends Fragment
                 ICameraFileInfo file = (contentList.get(contentIndex)).getFileInfo();
                 String path = file.getDirectoryPath() + "/" + file.getFilename();
 
-                /**
-                 try
-                 {
-                 // 試しにコンテンツ情報を取得してみる ... アートフィルターの設定情報はとれる
-                 Map<String, Object> content = camera.inquireContentInformation(path);
-                 for (String key : content.keySet())
-                 {
-                 Log.v(TAG, "INFO: " + key + " " + content.get(key).toString());
-                 }
-                 }
-                 catch (Exception e)
-                 {
-                 e.printStackTrace();
-                 }
-                 **/
-
-                AppCompatActivity activity = (AppCompatActivity)getActivity();
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
                 if (activity != null)
                 {
                     ActionBar bar = activity.getSupportActionBar();
@@ -349,10 +350,27 @@ public class ImagePagerViewFragment extends Fragment
                 e.printStackTrace();
             }
 		}
-
 	}
 
-	private void downloadImage(int position, final ImageView view)
+	private void downloadImage(final int position, final ImageView view)
+	{
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				downloadImageImpl(position, view);
+			}
+		});
+		try
+		{
+			thread.start();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void downloadImageImpl(int position, final ImageView view)
     {
         try
         {
@@ -360,16 +378,25 @@ public class ImagePagerViewFragment extends Fragment
             final String path = file.getDirectoryPath() + "/" + file.getFilename();
 
             // Get the cached image.
-            Bitmap bitmap = imageCache.get(path);
-            if (bitmap != null) {
-                if (view != null && viewPager.indexOfChild(view) > -1) {
-                    view.setImageBitmap(bitmap);
+            final Bitmap bitmap = imageCache.get(path);
+            if (bitmap != null)
+            {
+                if (view != null && viewPager.indexOfChild(view) > -1)
+                {
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            view.setImageBitmap(bitmap);
+                        }
+                    });
                 }
                 return;
             }
 
             // Download the image.
-            playbackControl.downloadContentScreennail(path, new IDownloadImageCallback() {
+            playbackControl.downloadContentScreennail(path, new IDownloadThumbnailImageCallback() {
                 @Override
                 public void onProgress(ProgressEvent e) {
                     // MARK: Do not use to cancel a downloading by progress handler.
@@ -379,10 +406,11 @@ public class ImagePagerViewFragment extends Fragment
                 }
 
                 @Override
-                public void onCompleted(final byte[] data, final Map<String, Object> metadata) {
+				//public void onCompleted(final byte[] data, final Map<String, Object> metadata) {
+                public void onCompleted(final Bitmap bitmap, final Map<String, Object> metadata) {
                     // Cache the downloaded image.
 
-                    final Bitmap bitmap = createRotatedBitmap(data, metadata);
+                    //final Bitmap bitmap = createRotatedBitmap(data, metadata);
                     try {
                         if (bitmap == null)
                         {
@@ -436,18 +464,22 @@ public class ImagePagerViewFragment extends Fragment
      */
 	public void saveImageWithDialog(final String filename, float downloadSize, boolean isGetInformationMode)
 	{
-		if (filename.endsWith(JPEG_SUFFIX))
-		{
-			// 静止画の取得
-			imageDownloader = new MyImageDownloader(filename, downloadSize, isGetInformationMode);
-			imageDownloader.startDownload();
-		}
-		else
-		{
-			// 動画・RAWファイルの取得
-            movieDownloader = new MyMovieDownloader(filename);
-            movieDownloader.startDownload();
-		}
+	    try
+        {
+            if (filename.endsWith(JPEG_SUFFIX)) {
+                // 静止画の取得
+                MyImageDownloader imageDownloader = new MyImageDownloader(filename, downloadSize, isGetInformationMode);
+                imageDownloader.startDownload();
+            } else {
+                // 動画・RAWファイルの取得
+                MyMovieDownloader movieDownloader = new MyMovieDownloader(filename);
+                movieDownloader.startDownload();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 	}
 
 
@@ -470,7 +502,6 @@ public class ImagePagerViewFragment extends Fragment
 		}
 		getActivity().runOnUiThread(action);
 	}
-	
 	
 	private Bitmap createRotatedBitmap(byte[] data, Map<String, Object> metadata)
 	{
@@ -647,13 +678,14 @@ public class ImagePagerViewFragment extends Fragment
 		@Override
 		public void onCompleted(byte[] bytes, Map<String, Object> map)
 		{
+/*
             if (isGetInformation) {
                 // Exif情報をダイアログ表示して終わる
                 showExifInformation(bytes);
                 System.gc();
                 return;
             }
-
+*/
             final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + getString(R.string.app_name2) + "/";
             final String filepath = new File(directoryPath.toLowerCase(), filename).getPath();
 
@@ -701,19 +733,23 @@ public class ImagePagerViewFragment extends Fragment
 			{
 				long now = System.currentTimeMillis();
 				ContentValues values = new ContentValues();
-				ContentResolver resolver = getActivity().getContentResolver();
 				values.put(Images.Media.MIME_TYPE, "image/jpeg");
 				values.put(Images.Media.DATA, filepath);
 				values.put(Images.Media.DATE_ADDED, now);
 				values.put(Images.Media.DATE_TAKEN, now);
-                if ((hasGps)&&(latLong.length >= 2))
+                values.put(Images.Media.DATE_MODIFIED, now);
+                values.put(Images.Media.ORIENTATION, getRotationDegrees(bytes, map));
+                if (hasGps)
                 {
                     values.put(MediaStore.Images.Media.LATITUDE, latLong[0]);
                     values.put(MediaStore.Images.Media.LONGITUDE, latLong[1]);
                 }
-				values.put(Images.Media.DATE_MODIFIED, now);
-				values.put(Images.Media.ORIENTATION, getRotationDegrees(bytes, map));
-				final Uri insertedImage = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                Activity activity = getActivity();
+                if (activity != null)
+                {
+                    ContentResolver resolver = getActivity().getContentResolver();
+                    final Uri insertedImage = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                }
 
 				runOnUiThread(new Runnable() {
 					@Override
@@ -808,6 +844,8 @@ public class ImagePagerViewFragment extends Fragment
                 Log.v(TAG, " URI : " + pictureUri);
             }
         }
+
+
 
         /**
          *   EXIF情報の表示 (ExifInterface を作って、表示クラスに渡す)

@@ -8,4 +8,14 @@ public interface ICameraFileInfo
     String getDirectoryPath();
     String getFilename();
 
+    String getAperature();
+    String getShutterSpeed();
+    String getIsoSensitivity();
+    String getExpRev();
+    int getOrientation();
+    String getAspectRatio();
+    String getModel();
+    String getLatLng();
+    boolean getCaptured();
+
 }

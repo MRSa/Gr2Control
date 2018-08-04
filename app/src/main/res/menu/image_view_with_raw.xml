@@ -26,26 +26,11 @@
 		        android:id="@+id/action_download_original_size_raw"
 		        compat:showAsAction="never"
 		        android:title="@string/action_download_original_size"/>
-		    
-		    <item
-		        android:id="@+id/action_download_2048x1536_raw"
-		        compat:showAsAction="never"
-		        android:title="@string/action_download_2048x1536"/>
-		    
-		    <item
-		        android:id="@+id/action_download_1920x1440_raw"
-		        compat:showAsAction="never"
-		        android:title="@string/action_download_1920x1440"/>
-		    
-		    <item
-		        android:id="@+id/action_download_1600x1200_raw"
-		        compat:showAsAction="never"
-		        android:title="@string/action_download_1600x1200"/>
-		    
-		    <item
-			android:id="@+id/action_download_1024x768_raw"
-			compat:showAsAction="never"
-			android:title="@string/action_download_1024x768"/>
+
+			<item
+				android:id="@+id/action_download_640x480_raw"
+				compat:showAsAction="never"
+				android:title="@string/action_download_640x480"/>
 
 			<!---->
 			<item

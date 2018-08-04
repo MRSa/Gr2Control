@@ -1,4 +1,4 @@
-package net.osdn.gokigen.gr2control.playback;
+package net.osdn.gokigen.gr2control.playback.detail;
 
 import android.support.media.ExifInterface;
 import android.util.Log;
@@ -175,5 +175,4 @@ class ExifInformationDumper
 
         return (msg);
     }
-
 }
