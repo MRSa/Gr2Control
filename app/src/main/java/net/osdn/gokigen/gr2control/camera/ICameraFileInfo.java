@@ -18,4 +18,5 @@ public interface ICameraFileInfo
     String getLatLng();
     boolean getCaptured();
 
+    void updateValues(String dateTime, String av, String tv, String sv, String xv, int orientation, String aspectRatio, String model, String LatLng, boolean captured);
 }

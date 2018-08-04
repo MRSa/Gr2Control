@@ -186,7 +186,21 @@ public class ImagePagerViewFragment extends Fragment
 
 		if (getInformation)
         {
-            showFileInformation((contentList.get(contentIndex)).getFileInfo());
+        	Thread thread = new Thread(new Runnable() {
+				@Override
+				public void run()
+                {
+                    showFileInformation((contentList.get(contentIndex)).getFileInfo());
+                }
+			});
+        	try
+            {
+                thread.start();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         /*
@@ -215,6 +229,11 @@ public class ImagePagerViewFragment extends Fragment
 
     private void showFileInformation(final ICameraFileInfo fileInfo)
     {
+        if (playbackControl != null)
+        {
+            playbackControl.updateCameraFileInfo(fileInfo);
+        }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -224,7 +243,7 @@ public class ImagePagerViewFragment extends Fragment
                     String dateTime = "";
                     Date date = fileInfo.getDatetime();
                     if (date != null) {
-                        dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US).format(date);
+                        dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(date);
                     }
                     String path = fileInfo.getDirectoryPath() + "/" + fileInfo.getFilename();
                     String shutter = fileInfo.getShutterSpeed();
@@ -243,7 +262,6 @@ public class ImagePagerViewFragment extends Fragment
                 System.gc();
             }
         });
-
     }
 
     @Override
@@ -282,8 +300,18 @@ public class ImagePagerViewFragment extends Fragment
     {
 
 		@Override
-		public int getCount() {
-			return contentList.size();
+		public int getCount()
+        {
+            int count = 0;
+		    try
+            {
+                count = contentList.size();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+			return (count);
 		}
 
 		@Override

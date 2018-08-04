@@ -23,6 +23,7 @@ public class SimpleHttpClient
 {
     private static final String TAG = SimpleHttpClient.class.getSimpleName();
     private static final int DEFAULT_TIMEOUT = 10 * 1000; // [ms]
+    private static final int BUFFER_SIZE = 4096;
 
     public SimpleHttpClient()
     {
@@ -175,9 +176,10 @@ public class SimpleHttpClient
         int count = 0;
         try
         {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int c;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             reader = new BufferedReader(new InputStreamReader(inputStream));
-            int c;
             while ((c = reader.read()) != -1)
             {
                 out.write(c);

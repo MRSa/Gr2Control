@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class CameraFileInfo implements ICameraFileInfo
 {
@@ -26,47 +28,6 @@ public class CameraFileInfo implements ICameraFileInfo
         this.path = path;
         this.name = name;
         this.dateTime = new Date();
-    }
-
-    public void setDateTime(@NonNull Date dateTime)
-    {
-        this.dateTime = dateTime;
-    }
-    public void setCaptured(boolean captured)
-    {
-        this.captured = captured;
-    }
-    public void setAperature(String av)
-    {
-        this.av = av;
-    }
-    public void setShutterSpeed(String tv)
-    {
-        this.tv = tv;
-    }
-    public void setIso(String sv)
-    {
-        this.sv = sv;
-    }
-    public void setExpRev(String xv)
-    {
-        this.xv = xv;
-    }
-    public void setOrientation(int orientation)
-    {
-        this.orientation = orientation;
-    }
-    public void setAspectRatio(String aspectRatio)
-    {
-        this.aspectRatio = aspectRatio;
-    }
-    public void setModel(String cameraModel)
-    {
-        this.cameraModel = cameraModel;
-    }
-    public void setLatLng(String latlng)
-    {
-        this.latlng = latlng;
     }
 
     @Override
@@ -139,5 +100,27 @@ public class CameraFileInfo implements ICameraFileInfo
     public boolean getCaptured()
     {
         return (captured);
+    }
+
+    @Override
+    public void updateValues(String dateTime, String av, String tv, String sv, String xv, int orientation, String aspectRatio, String model, String latLng, boolean captured) {
+        this.av = av;
+        this.tv = tv;
+        this.sv = sv;
+        this.xv = xv;
+        this.orientation = orientation;
+        this.aspectRatio = aspectRatio;
+        this.cameraModel = model;
+        this.latlng = latLng;
+        this.captured = captured;
+        try
+        {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+            this.dateTime = df.parse(dateTime);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

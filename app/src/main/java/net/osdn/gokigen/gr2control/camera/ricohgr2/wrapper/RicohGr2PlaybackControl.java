@@ -83,19 +83,7 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
                     for (int fileIndex = 0; fileIndex < nofFiles; fileIndex++)
                     {
                         String fileName = filesArray.getString(fileIndex);
-                        CameraFileInfo info = new CameraFileInfo(dirName, fileName);
-/*
-                        try
-                        {
-                            updateCameraFileInfo(info);
-                            //Log.v(TAG, ">> FILE INFO: " + info.getFilename() + " [" + info.getDatetime() + "] O : " + info.getOrientation() + " " + info.getModel());
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-*/
-                        fileList.add(info);
+                        fileList.add(new CameraFileInfo(dirName, fileName));
                     }
                 }
             }
@@ -108,7 +96,8 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
         callback.onCompleted(fileList);
     }
 
-    private void updateCameraFileInfo(CameraFileInfo info)
+    @Override
+    public void updateCameraFileInfo(ICameraFileInfo info)
     {
         String url = getPhotoUrl + info.getDirectoryPath() + "/" + info.getFilename() + "/info";
         Log.v(TAG, "updateCameraFileInfo() GET URL : " + url);
@@ -122,44 +111,17 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
             JSONObject object = new JSONObject(response);
 
             // データを突っ込む
-            info.setCaptured(object.getBoolean("captured"));
+            boolean captured = object.getBoolean("captured");
             String av = getJSONString(object, "av");
-            if (av != null)
-            {
-                info.setAperature(av);
-            }
             String tv = getJSONString(object, "tv");
-            if (tv != null)
-            {
-                info.setShutterSpeed(tv);
-            }
             String sv = getJSONString(object,"sv");
-            if (sv != null)
-            {
-                info.setIso(sv);
-            }
             String xv = getJSONString(object,"xv");
-            if (xv != null)
-            {
-                info.setExpRev(xv);
-            }
-            info.setOrientation(object.getInt("orientation"));
+            int orientation = object.getInt("orientation");
             String aspectRatio = getJSONString(object,"aspectRatio");
-            if (aspectRatio != null)
-            {
-                info.setAspectRatio(aspectRatio);
-            }
             String cameraModel = getJSONString(object,"cameraModel");
-            if (cameraModel != null)
-            {
-                info.setModel(cameraModel);
-            }
             String latLng = getJSONString(object,"latlng");
-            if (latLng != null)
-            {
-                info.setLatLng(latLng);
-            }
-            //info.setDateTime(new Date(object.getString("datetime")));
+            String dateTime = object.getString("datetime");
+            info.updateValues(dateTime, av, tv, sv, xv, orientation, aspectRatio, cameraModel, latLng, captured);
         }
         catch (Throwable e)
         {
@@ -169,7 +131,7 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
 
     private String getJSONString(JSONObject object, String key)
     {
-        String value = null;
+        String value = "";
         try
         {
             value = object.getString(key);

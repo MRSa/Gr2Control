@@ -153,6 +153,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.shutter_button);
             setOnClickListener(view, R.id.focusUnlockImageView);
             setOnClickListener(view, R.id.show_images_button);
+            setOnClickListener(view, R.id.camera_power_off_button);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);

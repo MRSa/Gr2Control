@@ -37,13 +37,28 @@
                 android:gravity="center" />
 
             <ImageView
-                android:id="@+id/connect_disconnect_button"
+                android:id="@+id/camera_power_off_button"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_power_settings_new_black_24dp"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/connect_disconnect_button"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_below="@id/camera_power_off_button"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="14dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"

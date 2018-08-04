@@ -17,6 +17,7 @@ import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
+import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
 
@@ -134,6 +135,11 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     changeScene.changeScenceToImageList();
                     break;
 
+                case R.id.camera_power_off_button:
+                    // 電源ボタンが押された...終了してよいか確認して、終了する
+                    confirmExitApplication();
+                    break;
+
                     /*
                 case R.id.show_hide_grid_button:
                     // グリッドの ON/OFF
@@ -240,7 +246,25 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         }
     }
 
-
+    private void confirmExitApplication()
+    {
+        try
+        {
+            // 確認ダイアログの生成と表示
+            ConfirmationDialog dialog = ConfirmationDialog.newInstance(context);
+            dialog.show(R.string.dialog_title_confirmation, R.string.dialog_message_power_off, new ConfirmationDialog.Callback() {
+                @Override
+                public void confirm()
+                {
+                    changeScene.exitApplication();
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     private void actionZoomin()
     {
@@ -366,5 +390,4 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         Log.v(TAG, "onTouch() : " + id + " (" + motionEvent.getX() + "," + motionEvent.getY() + ")");
         return ((id == R.id.cameraLiveImageView)&&(focusingControl.driveAutoFocus(motionEvent)));
     }
-
 }
