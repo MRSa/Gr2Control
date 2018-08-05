@@ -36,8 +36,13 @@
     <string name="pref_auto_connect_camera">Auto Connect To Camera</string>
     <string name="pref_summary_auto_connect_camera">Normally to keep ON.</string>
 
+    <string name="pref_cat_others">Others</string>
+    <string name="pref_call_share_after_save">Share after Save</string>
+    <string name="pref_use_playback_menu">Use playback screen menu</string>
+
+
     <string name="pref_cat_gokigen">GOKIGEN</string>
-    <string name="pref_instruction_manual">A01d Instructions</string>
+    <string name="pref_instruction_manual">Instructions</string>
     <string name="pref_privacy_policy">Privacy Policy</string>
 
     <string name="only_opc_feature">This feature is only available for a OPC Camera.</string>

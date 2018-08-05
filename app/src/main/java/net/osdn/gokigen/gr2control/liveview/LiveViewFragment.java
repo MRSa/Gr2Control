@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,6 +156,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.focusUnlockImageView);
             setOnClickListener(view, R.id.show_images_button);
             setOnClickListener(view, R.id.camera_power_off_button);
+            setOnClickListener(view, R.id.show_preference_button);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);
@@ -463,6 +466,17 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         super.onResume();
         Log.v(TAG, "onResume() Start");
+
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        if (activity != null)
+        {
+            ActionBar bar = activity.getSupportActionBar();
+            if (bar != null)
+            {
+                bar.hide();   // ActionBarの表示を消す
+            }
+        }
+
 /*
         // 撮影モードかどうかを確認して、撮影モードではなかったら撮影モードに切り替える
         if ((changeRunModeExecutor != null)&&(!changeRunModeExecutor.isRecordingMode()))
@@ -562,7 +576,6 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     public void startLiveView()
     {
         ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
-
         if (liveViewControl == null)
         {
             if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)

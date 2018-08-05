@@ -18,6 +18,8 @@ public interface IPreferencePropertyAccessor
     String SOUND_VOLUME_LEVEL = "sound_volume_level";
     String SOUND_VOLUME_LEVEL_DEFAULT_VALUE = "OFF";
 
+    String USE_PLAYBACK_MENU = "use_playback_menu";
+
     String RAW = "raw";
 
     String LIVE_VIEW_QUALITY = "live_view_quality";
@@ -41,7 +43,7 @@ public interface IPreferencePropertyAccessor
     String OLYCAMERA_BLUETOOTH_SETTINGS = "olympus_air_bt";
 
     String CONNECTION_METHOD = "connection_method";
-    String CONNECTION_METHOD_DEFAULT_VALUE = "OPC";
+    String CONNECTION_METHOD_DEFAULT_VALUE = "RICOH_GR2";
 
     String GR2_DISPLAY_MODE = "gr2_display_mode";
     String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";

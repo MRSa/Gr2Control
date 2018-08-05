@@ -75,7 +75,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     {
         super.onAttach(activity);
         Log.v(TAG, "onAttach()");
-
         try
         {
             // Preference をつかまえる
@@ -108,6 +107,9 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             }
             if (!items.containsKey(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW)) {
                 editor.putBoolean(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, true);
+            }
+            if (!items.containsKey(IPreferencePropertyAccessor.USE_PLAYBACK_MENU)) {
+                editor.putBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, false);
             }
             if (!items.containsKey(IPreferencePropertyAccessor.CONNECTION_METHOD)) {
                 editor.putString(IPreferencePropertyAccessor.CONNECTION_METHOD, IPreferencePropertyAccessor.CONNECTION_METHOD_DEFAULT_VALUE);
@@ -146,6 +148,11 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
 
                 case IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW:
                     value = preferences.getBoolean(key, true);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.USE_PLAYBACK_MENU:
+                    value = preferences.getBoolean(key, false);
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
@@ -213,7 +220,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     {
         super.onResume();
         Log.v(TAG, "onResume() Start");
-
         try
         {
             synchronizedProperty();
@@ -224,7 +230,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
         }
 
         Log.v(TAG, "onResume() End");
-
     }
 
     /**
@@ -236,7 +241,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     {
         super.onPause();
         Log.v(TAG, "onPause() Start");
-
         try
         {
             // Preference変更のリスナを解除
@@ -317,8 +321,8 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         // Preferenceの画面に反映させる
                         setBooleanPreference(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, IPreferencePropertyAccessor.USE_PLAYBACK_MENU, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
-
                     }
                     catch (Exception e)
                     {

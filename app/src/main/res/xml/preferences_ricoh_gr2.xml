@@ -47,15 +47,36 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_cat_others">
+<!--
+                <CheckBoxPreference
+                    android:key="share_after_save"
+                    android:title="@string/pref_call_share_after_save" />
+
+                <CheckBoxPreference
+                    android:key="use_custom_splash"
+                    android:title="@string/pref_custom_splash" />
+
+                <PreferenceScreen
+                    android:key="select_splash_image"
+                    android:title="@string/pref_select_splash_image" />
+-->
+        <CheckBoxPreference
+            android:key="use_playback_menu"
+            android:title="@string/pref_use_playback_menu"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/pref_cat_gokigen">
 
         <Preference
             android:key="instruction_link"
             android:title="@string/pref_instruction_manual"
-            android:summary="https://osdn.net/projects/gokigen/wiki/A01d"
+            android:summary="https://osdn.net/projects/gokigen/wiki/GR2Control"
             android:selectable="true">
             <intent android:action="android.intent.action.VIEW"
-                android:data="https://osdn.net/projects/gokigen/wiki/A01d" />
+                android:data="https://osdn.net/projects/gokigen/wiki/GR2Control" />
         </Preference>
 
         <Preference

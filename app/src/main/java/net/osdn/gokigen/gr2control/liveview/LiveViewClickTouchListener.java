@@ -140,16 +140,17 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     confirmExitApplication();
                     break;
 
+                case R.id.show_preference_button:
+                    // カメラの設定
+                    changeScene.changeSceneToConfiguration();
+                    break;
+
+
                     /*
                 case R.id.show_hide_grid_button:
                     // グリッドの ON/OFF
                     statusNotify.toggleShowGridFrame();
                     statusViewDrawer.updateGridIcon();
-                    break;
-
-                case R.id.show_preference_button:
-                    // カメラの設定
-                    changeScene.changeSceneToConfiguration();
                     break;
 
                 case R.id.camera_property_settings_button:

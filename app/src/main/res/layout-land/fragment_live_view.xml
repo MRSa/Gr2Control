@@ -115,6 +115,20 @@
                 android:textStyle="normal"
                 android:textSize="6pt" />
 
+            <ImageView
+                android:id="@+id/show_preference_button"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="46dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings_black_24dp"
+                android:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/shutter_button"
