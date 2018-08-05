@@ -29,6 +29,8 @@ public interface IPreferencePropertyAccessor
 
     String SHOW_GRID_STATUS = "show_grid";
 
+    String SHARE_AFTER_SAVE = "share_after_save";
+
     String DIGITAL_ZOOM_LEVEL = "digital_zoom_level";
     String DIGITAL_ZOOM_LEVEL_DEFAULT_VALUE = "1.0";
 

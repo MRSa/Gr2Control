@@ -8,5 +8,4 @@ public interface IDownloadThumbnailImageCallback
 {
     void onCompleted(Bitmap bitmap, Map<String, Object> metadata);
     void onErrorOccurred(Exception  e);
-    void onProgress(ProgressEvent e);
 }

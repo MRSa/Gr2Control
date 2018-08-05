@@ -8,20 +8,23 @@ import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.CameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IContentInfoCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadLargeContentCallback;
+import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
+import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ *
+ *
+ */
 public class RicohGr2PlaybackControl implements IPlaybackControl
 {
     private final String TAG = toString();
@@ -143,8 +146,6 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
         return (value);
     }
 
-
-
     @Override
     public void getContentInfo(@NonNull String path, @NonNull IContentInfoCallback callback)
     {
@@ -205,20 +206,45 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
         catch (Throwable e)
         {
             e.printStackTrace();
+            callback.onErrorOccurred(new NullPointerException());
         }
    }
 
     @Override
-    public void downloadImage(@NonNull String path, float resize, @NonNull IDownloadImageCallback callback)
+    public void downloadContent(@NonNull String  path, boolean isSmallSize, @NonNull final IDownloadContentCallback callback)
     {
-        Log.v(TAG, "downloadImage() " + path + " [" + resize + "]");
+        Log.v(TAG, "downloadContent() : " + path);
+        String suffix = "?size=full";
+        if (isSmallSize)
+        {
+            suffix = "?size=view";
+        }
+        String url = getPhotoUrl + path + suffix;
+        Log.v(TAG, "downloadContent() GET URL : " + url);
+        try
+        {
+            SimpleHttpClient.httpGetBytes(url, DEFAULT_TIMEOUT, new SimpleHttpClient.IReceivedMessageCallback() {
+                @Override
+                public void onCompleted() {
+                    callback.onCompleted();
+                }
 
-    }
+                @Override
+                public void onErrorOccurred(Exception e) {
+                    callback.onErrorOccurred(e);
+                }
 
-    @Override
-    public void downloadLargeContent(@NonNull String path, @NonNull IDownloadLargeContentCallback callback)
-    {
-        Log.v(TAG, "downloadLargeContent() : " + path);
-
+                @Override
+                public void onReceive(int readBytes, int length, byte[] data) {
+                    float percent = (length == 0) ? 0.0f : ((float) readBytes / (float) length);
+                    ProgressEvent event = new ProgressEvent(percent, null);
+                    callback.onProgress(data, event);
+                }
+            });
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 }

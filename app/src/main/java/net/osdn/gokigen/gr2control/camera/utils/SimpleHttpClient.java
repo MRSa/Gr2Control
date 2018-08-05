@@ -2,8 +2,10 @@ package net.osdn.gokigen.gr2control.camera.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -127,12 +129,10 @@ public class SimpleHttpClient
      *
      *
      */
-    public static byte[] httpGetBytes(String url, int timeoutMs)
+    public static void httpGetBytes(String url, int timeoutMs, @NonNull IReceivedMessageCallback callback)
     {
         HttpURLConnection httpConn = null;
         InputStream inputStream = null;
-        byte[] receivedData = new byte[0];
-
         int timeout = timeoutMs;
         if (timeoutMs < 0)
         {
@@ -157,7 +157,9 @@ public class SimpleHttpClient
             if (inputStream == null)
             {
                 Log.w(TAG, "httpGet: Response Code Error: " + responseCode + ": " + url);
-                return (receivedData);
+                callback.onErrorOccurred(new NullPointerException());
+                callback.onCompleted();
+                return;
             }
         }
         catch (Exception e)
@@ -168,44 +170,36 @@ public class SimpleHttpClient
             {
                 httpConn.disconnect();
             }
-            return (receivedData);
+            callback.onErrorOccurred(e);
+            callback.onCompleted();
+            return;
         }
 
         // 応答を確認する
-        BufferedReader reader = null;
-        int count = 0;
         try
         {
+            int contentLength = httpConn.getContentLength();
             byte[] buffer = new byte[BUFFER_SIZE];
-            int c;
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            while ((c = reader.read()) != -1)
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            int readBytes = 0;
+            int readSize = bufferedInputStream.read(buffer, 0, BUFFER_SIZE);
+            while (readSize != -1)
             {
-                out.write(c);
-                count++;
+                callback.onReceive(readBytes, contentLength, buffer);
+                readBytes += readSize;
+                readSize = bufferedInputStream.read(buffer, 0, BUFFER_SIZE);
             }
-            receivedData = out.toByteArray();
-            Log.v(TAG, "RECEIVED " + count + " BYTES. ");
+            Log.v(TAG, "RECEIVED " + readBytes + " BYTES. (contentLength : " + contentLength + ")");
+            bufferedInputStream.close();
         }
         catch (Exception e)
         {
             Log.w(TAG, "httpGet: exception: " + e.getMessage());
             e.printStackTrace();
+            callback.onErrorOccurred(e);
         }
         finally
         {
-            try
-            {
-                if (reader != null)
-                {
-                    reader.close();
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
             try
             {
                 inputStream.close();
@@ -215,8 +209,9 @@ public class SimpleHttpClient
                 e.printStackTrace();
             }
         }
-        return (receivedData);
+        callback.onCompleted();
     }
+
     /**
      *
      *
@@ -392,5 +387,12 @@ public class SimpleHttpClient
             }
         }
         return (replyString);
+    }
+
+    public interface IReceivedMessageCallback
+    {
+        void onCompleted();
+        void onErrorOccurred(Exception  e);
+        void onReceive(int readBytes, int length, byte[] data);
     }
 }

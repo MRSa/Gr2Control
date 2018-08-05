@@ -1,8 +1,5 @@
 package net.osdn.gokigen.gr2control.playback.detail;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,23 +9,10 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.media.ExifInterface;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -43,21 +27,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadImageCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadLargeContentCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
-import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
 
 public class ImagePagerViewFragment extends Fragment
 {
     private final String TAG = this.toString();
-    private final String JPEG_SUFFIX = ".jpg";
-    private final String RAW_SUFFIX = ".dng";
+    private static final String JPEG_SUFFIX = ".JPG";
+    private static final String RAW_SUFFIX = ".DNG";
     private IPlaybackControl playbackControl;
 
 	private List<ImageContentInfoEx> contentList = null;
@@ -67,6 +47,7 @@ public class ImagePagerViewFragment extends Fragment
 	private ViewPager viewPager = null;
 	private LruCache<String, Bitmap> imageCache =null;
 
+
     public static ImagePagerViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull List<ImageContentInfoEx> contentList, int contentIndex)
 	{
 		ImagePagerViewFragment fragment = new ImagePagerViewFragment();
@@ -75,10 +56,12 @@ public class ImagePagerViewFragment extends Fragment
 		return (fragment);
 	}
 
+
 	private void setInterface(@NonNull IPlaybackControl playbackControl)
     {
         this.playbackControl = playbackControl;
     }
+
 
 	private void setContentList(@NonNull List<ImageContentInfoEx> contentList, int contentIndex)
 	{
@@ -125,7 +108,7 @@ public class ImagePagerViewFragment extends Fragment
                     bar.setTitle(path);
                 }
             }
-			String lowerCasePath = path.toLowerCase();
+			String lowerCasePath = path.toUpperCase();
 			if (lowerCasePath.endsWith(JPEG_SUFFIX))
             {
                 if (info.hasRaw())
@@ -192,7 +175,7 @@ public class ImagePagerViewFragment extends Fragment
                 {
                     showFileInformation((contentList.get(contentIndex)).getFileInfo());
                 }
-			});
+        	});
         	try
             {
                 thread.start();
@@ -203,27 +186,26 @@ public class ImagePagerViewFragment extends Fragment
             }
         }
 
-        /*
 		if (doDownload)
 		{
 			try
 			{
                 ICameraFileInfo file = (contentList.get(contentIndex)).getFileInfo();
 				String path = file.getDirectoryPath() + "/" + file.getFilename();
-				String lowerCasePath = path.toLowerCase();
-				String suffix = (specialSuffix == null) ? lowerCasePath.substring(lowerCasePath.lastIndexOf(".")) : specialSuffix;
+				String upperCasePath = path.toUpperCase();
+				String suffix = (specialSuffix == null) ? upperCasePath.substring(upperCasePath.lastIndexOf(".")) : specialSuffix;
 				Calendar calendar = Calendar.getInstance();
 				String filename = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(calendar.getTime()) + suffix;
 
 				//  ダイアログを表示して保存する
-				saveImageWithDialog(filename, downloadSize, getInformation);
+				saveImageWithDialog(filename, isSmallSize);
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-*/
+
 		return (super.onOptionsItemSelected(item));
 	}
 
@@ -380,6 +362,10 @@ public class ImagePagerViewFragment extends Fragment
 		}
 	}
 
+    /**
+     *
+     *
+     */
 	private void downloadImage(final int position, final ImageView view)
 	{
 		Thread thread = new Thread(new Runnable() {
@@ -398,6 +384,10 @@ public class ImagePagerViewFragment extends Fragment
 		}
 	}
 
+    /**
+     *
+     *
+     */
 	private void downloadImageImpl(int position, final ImageView view)
     {
         try
@@ -425,14 +415,6 @@ public class ImagePagerViewFragment extends Fragment
 
             // Download the image.
             playbackControl.downloadContentScreennail(path, new IDownloadThumbnailImageCallback() {
-                @Override
-                public void onProgress(ProgressEvent e) {
-                    // MARK: Do not use to cancel a downloading by progress handler.
-                    //       A communication error may occur by the downloading of the next image when
-                    //       you cancel the downloading of the image by a progress handler in
-                    //       the current version.
-                }
-
                 @Override
 				//public void onCompleted(final byte[] data, final Map<String, Object> metadata) {
                 public void onCompleted(final Bitmap bitmap, final Map<String, Object> metadata) {
@@ -487,21 +469,25 @@ public class ImagePagerViewFragment extends Fragment
 	 *   デバイスに画像ファイルをダウンロード（保存）する
 	 *
 	 * @param filename       ファイル名（カメラ内の）
-	 * @param downloadSize   ダウンロードサイズ
-     * @param isGetInformationMode 情報取得モードか？
+	 * @param isSmallSize    小さいサイズの量にするか
      */
-	public void saveImageWithDialog(final String filename, float downloadSize, boolean isGetInformationMode)
+	public void saveImageWithDialog(final String filename, final boolean isSmallSize)
 	{
-	    try
+        Log.v(TAG, "saveImageWithDialog() : " + filename + " (small : " + isSmallSize + ")");
+        try
         {
-            if (filename.endsWith(JPEG_SUFFIX)) {
-                // 静止画の取得
-                MyImageDownloader imageDownloader = new MyImageDownloader(filename, downloadSize, isGetInformationMode);
-                imageDownloader.startDownload();
-            } else {
-                // 動画・RAWファイルの取得
-                MyMovieDownloader movieDownloader = new MyMovieDownloader(filename);
-                movieDownloader.startDownload();
+            final Activity activity = getActivity();
+            if (activity != null)
+            {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyContentDownloader contentDownloader = new MyContentDownloader(activity, playbackControl);
+                        ICameraFileInfo fileInfo = (contentList.get(contentIndex)).getFileInfo();
+                        contentDownloader.startDownload(fileInfo,  (filename.endsWith(RAW_SUFFIX)) ? RAW_SUFFIX : null, isSmallSize);
+                    }
+                });
+                thread.start();
             }
         }
         catch (Exception e)
@@ -510,16 +496,20 @@ public class ImagePagerViewFragment extends Fragment
         }
 	}
 
-
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
 	
-	private void presentMessage(String title, String message)
+	private void presentMessage(final String title, final String message)
     {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(title).setMessage(message);
-		builder.show();
+        runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(title).setMessage(message);
+                    builder.show();
+                }
+        });
 	}
 	
 	private void runOnUiThread(Runnable action)
@@ -530,7 +520,8 @@ public class ImagePagerViewFragment extends Fragment
 		}
 		getActivity().runOnUiThread(action);
 	}
-	
+
+/*
 	private Bitmap createRotatedBitmap(byte[] data, Map<String, Object> metadata)
 	{
 		Bitmap bitmap;
@@ -620,691 +611,5 @@ public class ImagePagerViewFragment extends Fragment
 		}
 		return degrees;
 	}
-
-    /**
-     *   静止画のダウンロード（とEXIF情報の取得）
-     *
-     */
-	private class MyImageDownloader implements IDownloadImageCallback
-	{
-        private boolean isGetInformation;
-		private ProgressDialog downloadDialog = null;
-		private String filename;
-		private float downloadImageSize;
-
-		/**
-		 *   コンストラクタ
-		 *
-		 * @param filename  ファイル名
-		 * @param downloadSize  ダウンロードのサイズ
-         * @param isGetInformation  情報を取得するだけかどうか（trueなら情報を取得するだけ)
-         */
-		MyImageDownloader(final String filename, float downloadSize, boolean isGetInformation)
-		{
-			this.filename = filename;
-			this.downloadImageSize = downloadSize;
-            this.isGetInformation = isGetInformation;
-		}
-
-		/**
-		 *   静止画のダウンロード開始指示
-		 *
-		 */
-		void startDownload()
-		{
-			Log.v(TAG, "startDownload() " + filename);
-			downloadDialog = new ProgressDialog(getContext());
-            if (isGetInformation)
-            {
-                downloadDialog.setTitle(getString(R.string.dialog_get_information_title));
-            }
-            else
-            {
-                downloadDialog.setTitle(getString(R.string.dialog_download_title));
-            }
-			downloadDialog.setMessage(getString(R.string.dialog_download_message) + " " + filename);
-			downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			downloadDialog.setCancelable(false);
-			downloadDialog.show();
-
-			// Download the image.
-            try
-            {
-                ICameraFileInfo file = (contentList.get(contentIndex)).getFileInfo();
-                String path = file.getDirectoryPath() + "/" + file.getFilename();
-                playbackControl.downloadImage(path, downloadImageSize, this);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-		}
-
-		/**
-		 *   進行中の表示 (進捗バーの更新)
-		 *
-		 * @param progressEvent 進捗情報
-         */
-		@Override
-		public void onProgress(ProgressEvent progressEvent)
-		{
-			//
-			if (downloadDialog != null)
-			{
-				int percent = (int)(progressEvent.getProgress() * 100.0f);
-				downloadDialog.setProgress(percent);
-				//downloadDialog.setCancelable(progressEvent.isCancellable()); // キャンセルできるようにしないほうが良さそうなので
-			}
-		}
-
-		/**
-		 *   ファイル受信終了時の処理
-		 *
-		 * @param bytes  受信バイト数
-         * @param map    ファイルの情報
-         */
-		@Override
-		public void onCompleted(byte[] bytes, Map<String, Object> map)
-		{
-/*
-            if (isGetInformation) {
-                // Exif情報をダイアログ表示して終わる
-                showExifInformation(bytes);
-                System.gc();
-                return;
-            }
 */
-            final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + getString(R.string.app_name2) + "/";
-            final String filepath = new File(directoryPath.toLowerCase(), filename).getPath();
-
-            // ファイルを保存する
-            try {
-                final File directory = new File(directoryPath);
-                if (!directory.exists()) {
-                    if (!directory.mkdirs()) {
-                        Log.v(TAG, "MKDIR FAIL. : " + directoryPath);
-                    }
-                }
-                FileOutputStream outputStream = new FileOutputStream(filepath);
-                outputStream.write(bytes);
-                outputStream.close();
-            } catch (Exception e) {
-                final String message = e.getMessage();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (downloadDialog != null) {
-                            downloadDialog.dismiss();
-                        }
-                        presentMessage(getString(R.string.download_control_save_failed), message);
-                    }
-                });
-                // ダウンロード失敗時には、ギャラリーにデータ登録を行わない。
-                return;
-            }
-
-            boolean hasGps = false;
-            float[] latLong = new float[2];
-            try
-            {
-                //
-                ExifInterface exif = new ExifInterface(filepath);
-                hasGps = exif.getLatLong(latLong);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-			// ギャラリーに受信したファイルを登録する
-			try
-			{
-				long now = System.currentTimeMillis();
-				ContentValues values = new ContentValues();
-				values.put(Images.Media.MIME_TYPE, "image/jpeg");
-				values.put(Images.Media.DATA, filepath);
-				values.put(Images.Media.DATE_ADDED, now);
-				values.put(Images.Media.DATE_TAKEN, now);
-                values.put(Images.Media.DATE_MODIFIED, now);
-                values.put(Images.Media.ORIENTATION, getRotationDegrees(bytes, map));
-                if (hasGps)
-                {
-                    values.put(MediaStore.Images.Media.LATITUDE, latLong[0]);
-                    values.put(MediaStore.Images.Media.LONGITUDE, latLong[1]);
-                }
-                Activity activity = getActivity();
-                if (activity != null)
-                {
-                    ContentResolver resolver = getActivity().getContentResolver();
-                    final Uri insertedImage = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                }
-
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run()
-					{
-						if (downloadDialog != null)
-						{
-							downloadDialog.dismiss();
-						}
-						Toast.makeText(getActivity(), getString(R.string.download_control_save_success) + " " + filename, Toast.LENGTH_SHORT).show();
-/*
-                        try
-                        {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            if (preferences.getBoolean(ICameraPropertyAccessor.SHARE_AFTER_SAVE, false))
-                            {
-                                shareContent(insertedImage);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-*/
-                    }
-				});
-			} catch (Exception e) {
-				final String message = e.getMessage();
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if (downloadDialog != null)
-						{
-							downloadDialog.dismiss();
-						}
-						presentMessage(getString(R.string.download_control_save_failed), message);
-					}
-				});
-			}
-			System.gc();
-		}
-
-        /**
-         *   エラー発生時の処理
-         *
-         * @param e エラーの情報
-         */
-		@Override
-		public void onErrorOccurred(Exception e)
-		{
-			final String message = e.getMessage();
-			runOnUiThread(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (downloadDialog != null)
-					{
-						downloadDialog.dismiss();
-					}
-                    if (isGetInformation)
-                    {
-                        presentMessage(getString(R.string.download_control_get_information_failed), message);
-                    }
-                    else
-                    {
-                        presentMessage(getString(R.string.download_control_download_failed), message);
-                    }
-				}
-			});
-		}
-
-        /**
-         *   共有の呼び出し
-         *
-         * @param pictureUri  画像ファイル名
-         */
-        private void shareContent(final Uri pictureUri)
-        {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            try
-            {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_STREAM, pictureUri);
-                getActivity().startActivityForResult(intent, 0);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                Log.v(TAG, " URI : " + pictureUri);
-            }
-        }
-
-
-
-        /**
-         *   EXIF情報の表示 (ExifInterface を作って、表示クラスに渡す)
-         *
-         * @param bytes データ並び
-         */
-        private void showExifInformation(byte[] bytes)
-        {
-            ExifInterface exif = null;
-            try
-            {
-                Calendar calendar = Calendar.getInstance();
-                String filename = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(calendar.getTime());
-                File tempFile = File.createTempFile(filename, null);
-                {
-                    FileOutputStream outStream = new FileOutputStream(tempFile.getAbsolutePath());
-                    outStream.write(bytes);
-                    outStream.close();
-                }
-                exif = new ExifInterface(tempFile.getAbsolutePath());
-                if (!tempFile.delete())
-                {
-                    Log.v(TAG, "temp file delete failure.");
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            runOnUiThread(new ExifInfoToShow(exif));
-        }
-
-        /**
-         *   EXIF情報を表示する処理
-         *   （クラス生成時に、表示情報を作り出す）
-         */
-        private class ExifInfoToShow implements Runnable
-        {
-            private String message = "";
-
-            /**
-             *   コンストラクタ
-             * @param information メッセージ
-             */
-            ExifInfoToShow(ExifInterface information)
-            {
-                this.message = formMessage(information);
-            }
-
-            /**
-             *   Exif情報を表示に適した形式に変更し、情報を表示する
-             * @param exifInterface Exif情報
-             * @return 表示に適したExif情報
-             */
-            private String formMessage(ExifInterface exifInterface)
-            {
-                String msg = "";
-                if (exifInterface != null) {
-					// 撮影時刻
-					msg = msg + getString(R.string.exif_datetime_title);
-					msg = msg + " " + getExifAttribute(exifInterface, ExifInterface.TAG_DATETIME) + "\r\n"; //(string)
-					//msg = msg + "\r\n";
-
-					// 焦点距離
-					double focalLength = exifInterface.getAttributeDouble(ExifInterface.TAG_FOCAL_LENGTH, 0.0f);
-					msg = msg + getString(R.string.exif_focal_length_title);
-					msg = msg + " " + String.valueOf(focalLength) + "mm ";
-					msg = msg + "(" + getString(R.string.exif_focal_35mm_equiv_title) + " " + String.valueOf(focalLength * 2.0d) + "mm)" + "\r\n";
-					msg = msg + "\r\n";
-
-					// カスタムイメージプロセッシング利用の有無
-					//if (exifInterface.getAttributeInt(ExifInterface.TAG_CUSTOM_RENDERED, 0) != 0)
-					//{
-					//	msg = msg + getString(R.string.exif_custom_process_title) + "\r\n";
-					//}
-
-					// 撮影モード
-					String[] stringArray = getResources().getStringArray(R.array.exif_exposure_program_value);
-					int exposureProgram = exifInterface.getAttributeInt(ExifInterface.TAG_EXPOSURE_PROGRAM, 0);
-					msg = msg + getString(R.string.exif_camera_mode_title);
-					msg = msg + " " + ((stringArray.length > exposureProgram) ? stringArray[exposureProgram] : ("? (" + exposureProgram + ")")) + "\r\n";
-					//msg = msg + "\r\n";
-
-					// 測光モードの表示
-					String[] meteringStringArray = getResources().getStringArray(R.array.exif_metering_mode_value);
-					int metering = exifInterface.getAttributeInt(ExifInterface.TAG_METERING_MODE, 0);
-					msg = msg + getString(R.string.exif_metering_mode_title);
-					msg = msg + " " + ((meteringStringArray.length > metering) ? meteringStringArray[metering] : ("? (" + metering + ")")) + "\r\n";
-					//msg = msg + "\r\n";
-
-                    // 露光時間
-                    msg = msg + getString(R.string.exif_exposure_time_title);
-					String expTime =  getExifAttribute(exifInterface, ExifInterface.TAG_EXPOSURE_TIME);
-					float val, inv = 0.0f;
-					try
-					{
-						val = Float.parseFloat(expTime);
-						if (val < 1.0f)
-						{
-							inv = 1.0f / val;
-						}
-						if (inv < 2.0f)  // if (inv < 10.0f)
-						{
-							inv = 0.0f;
-						}
-					}
-					catch (Exception e)
-					{
-						//
-						e.printStackTrace();
-					}
-
-                    //msg = msg + " " + expTime + "s "; //(string)
-					if (inv > 0.0f)
-					{
-                        // シャッター速度を分数で表示する
-                        int intValue = (int) inv;
-                        int modValue = intValue % 10;
-                        if ((modValue == 9)||(modValue == 4))
-                        {
-                            // ちょっと格好が悪いけど...切り上げ
-                            intValue++;
-                        }
-                        msg = msg + " 1/" + intValue + " s ";
-					}
-                    else
-                    {
-                        // シャッター速度を数値(秒数)で表示する
-                        msg = msg + " " + expTime + "s "; //(string)
-                    }
-					msg = msg + "\r\n";
-
-                    // 絞り値
-                    msg = msg + getString(R.string.exif_aperture_title);
-                    msg = msg + " " + getExifAttribute(exifInterface, ExifInterface.TAG_F_NUMBER) + "\r\n";  // (string)
-
-                    // ISO感度
-                    msg = msg + getString(R.string.exif_iso_title);
-                    msg = msg + " " + getExifAttribute(exifInterface, ExifInterface.TAG_ISO_SPEED_RATINGS) + "\r\n";  // (string)
-
-                    msg = msg + "\r\n";
-
-                    // カメラの製造元
-                    msg = msg + getString(R.string.exif_maker_title);
-                    msg = msg + " " + getExifAttribute(exifInterface, ExifInterface.TAG_MAKE) + "\r\n";
-
-                    // カメラのモデル名
-                    msg = msg + getString(R.string.exif_camera_title);
-                    msg = msg + " " + getExifAttribute(exifInterface, ExifInterface.TAG_MODEL)+ "\r\n";  // (string)
-
-					String lat = getExifAttribute(exifInterface, ExifInterface.TAG_GPS_LATITUDE);
-					if ((lat != null)&&(lat.length() > 0))
-					{
-                        // 「位置情報あり」と表示
-						msg = msg + "\r\n  " + getString(R.string.exif_with_gps) + "\r\n";
-					}
-                    //msg = msg + getExifAttribute(exifInterface, ExifInterface.TAG_FLASH);      // フラッシュ (int)
-                    //msg = msg + getExifAttribute(exifInterface, ExifInterface.TAG_ORIENTATION);  // 画像の向き (int)
-                    //msg = msg + getExifAttribute(exifInterface, ExifInterface.TAG_WHITE_BALANCE);  // ホワイトバランス (int)
-
-                    // その他の情報...EXIFタグで取得できたものをログにダンプする
-                    msg = msg + ExifInformationDumper.dumpExifInformation(exifInterface, false);
-                }
-                else
-                {
-                    msg = getString(R.string.download_control_get_information_failed);
-                }
-                return (msg);
-            }
-
-            private String getExifAttribute(ExifInterface attr, String tag)
-            {
-                String value = attr.getAttribute(tag);
-                if (value == null)
-                {
-                    value = "";
-                }
-                return (value);
-            }
-
-
-            @Override
-            public void run()
-            {
-                if (downloadDialog != null)
-                {
-                    downloadDialog.dismiss();
-                }
-                presentMessage(getString(R.string.download_control_get_information_title), message);
-                System.gc();
-            }
-        }
-    }
-
-	/**
-	 *   動画(とRAWファイル)のダウンロード
-	 *
-	 */
-	private class MyMovieDownloader implements IDownloadLargeContentCallback
-	{
-		private ProgressDialog downloadDialog = null;
-		private String filename = null;
-		private String filepath = null;
-		private FileOutputStream outputStream = null;
-
-		/**
-		 *   コンストラクタ
-		 *
-		 * @param filename ファイル名
-		 */
-		MyMovieDownloader(final String filename)
-		{
-			this.filename = filename;
-		}
-
-		/**
-		 *   ダウンロードの開始
-		 *
-		 */
-		void startDownload()
-		{
-			Log.v(TAG, "startDownload() " + filename);
-			downloadDialog = new ProgressDialog(getContext());
-			downloadDialog.setTitle(getString(R.string.dialog_download_file_title));
-			downloadDialog.setMessage(getString(R.string.dialog_download_message) + " " + filename);
-			downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			downloadDialog.setCancelable(false);
-			downloadDialog.show();
-
-			// Download the image.
-            try
-            {
-                ImageContentInfoEx content = contentList.get(contentIndex);
-                ICameraFileInfo file = content.getFileInfo();
-                String targetFileName = file.getFilename();
-                if (content.hasRaw())
-                {
-                    targetFileName = targetFileName.replace(".JPG", ".ORF");
-                }
-                String path = file.getDirectoryPath() + "/" + targetFileName;
-                Log.v(TAG, "downloadLargeContent : " + path);
-                playbackControl.downloadLargeContent(path, this);
-
-                final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + getString(R.string.app_name2) + "/";
-                filepath = new File(directoryPath.toLowerCase(), filename).getPath();
-                try {
-                    final File directory = new File(directoryPath);
-                    if (!directory.exists())
-                    {
-                        if (!directory.mkdirs())
-                        {
-                            Log.v(TAG, "MKDIR FAIL. : " + directoryPath);
-                        }
-                    }
-                    outputStream = new FileOutputStream(filepath);
-                }
-                catch (Exception e)
-                {
-                    final String message = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (downloadDialog != null) {
-                                downloadDialog.dismiss();
-                            }
-                            presentMessage(getString(R.string.download_control_save_failed), message);
-                        }
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-		}
-
-		@Override
-		public void onProgress(byte[] bytes, ProgressEvent progressEvent)
-		{
-			if (downloadDialog != null)
-			{
-				int percent = (int)(progressEvent.getProgress() * 100.0f);
-				downloadDialog.setProgress(percent);
-				//downloadDialog.setCancelable(progressEvent.isCancellable()); // キャンセルできるようにしないほうが良さそうなので
-			}
-			try
-			{
-				if (outputStream != null)
-				{
-					outputStream.write(bytes);
-				}
-			}
-            catch (Exception e)
-			{
-                e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void onCompleted()
-		{
-			try
-			{
-				if (outputStream != null)
-				{
-					outputStream.flush();
-					outputStream.close();
-                    outputStream = null;
-				}
-                if (!filename.endsWith(RAW_SUFFIX))
-                {
-                    // ギャラリーに受信したファイルを登録する
-                    long now = System.currentTimeMillis();
-                    ContentValues values = new ContentValues();
-                    ContentResolver resolver = getActivity().getContentResolver();
-                    values.put(Images.Media.MIME_TYPE, "video/mp4");
-                    values.put(Images.Media.DATA, filepath);
-                    values.put(Images.Media.DATE_ADDED, now);
-                    values.put(Images.Media.DATE_TAKEN, now);
-                    values.put(Images.Media.DATE_MODIFIED, now);
-					final Uri content = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-/*
-                    try
-                    {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        if (preferences.getBoolean(ICameraPropertyAccessor.SHARE_AFTER_SAVE, false))
-                        {
-                            runOnUiThread(new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    shareContent(content);
-                                }
-                            });
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-*/
-                }
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run()
-					{
-						if (downloadDialog != null)
-						{
-							downloadDialog.dismiss();
-						}
-						Toast.makeText(getActivity(), getString(R.string.download_control_save_success) + " " + filename, Toast.LENGTH_SHORT).show();
-                        System.gc();
-					}
-				});
-			}
-			catch (Exception e)
-			{
-				final String message = e.getMessage();
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if (downloadDialog != null)
-						{
-							downloadDialog.dismiss();
-						}
-						presentMessage(getString(R.string.download_control_save_failed), message);
-					}
-				});
-			}
-            System.gc();
-		}
-
-		@Override
-		public void onErrorOccurred(Exception e)
-		{
-			final String message = e.getMessage();
-            try
-            {
-                if (outputStream != null)
-                {
-                    outputStream.flush();
-                    outputStream.close();
-                    outputStream = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                e.printStackTrace();
-                ex.printStackTrace();
-            }
-			runOnUiThread(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (downloadDialog != null)
-					{
-						downloadDialog.dismiss();
-					}
-					presentMessage(getString(R.string.download_control_download_failed), message);
-                    System.gc();
-				}
-			});
-			System.gc();
-		}
-
-        /**
-         *   共有の呼び出し
-         *
-         * @param movieFileUri  動画ファイルUri
-         */
-        private void shareContent(final Uri movieFileUri)
-        {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            try
-            {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setType("video/mp4");
-                intent.putExtra(Intent.EXTRA_STREAM, movieFileUri);
-                FragmentActivity activity = getActivity();
-                if (activity != null)
-                {
-					activity.startActivityForResult(intent, 0);
-				}
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-	}
 }

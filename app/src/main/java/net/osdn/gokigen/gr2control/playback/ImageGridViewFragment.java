@@ -1,8 +1,6 @@
 package net.osdn.gokigen.gr2control.playback;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,11 +16,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -50,7 +45,6 @@ import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
-import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
 import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
 import net.osdn.gokigen.gr2control.playback.detail.ImagePagerViewFragment;
 
@@ -257,11 +251,11 @@ public class ImageGridViewFragment extends Fragment
                 for (ICameraFileInfo item : list)
                 {
                     String path = item.getFilename().toLowerCase(Locale.getDefault());
-                    if ((path.endsWith(JPEG_SUFFIX))||(path.endsWith(MOVIE_SUFFIX)))
+                    if ((path.toLowerCase().endsWith(JPEG_SUFFIX))||(path.toLowerCase().endsWith(MOVIE_SUFFIX)))
                     {
                         contentItems.add(new ImageContentInfoEx(item, false));
                     }
-                    else if (path.endsWith(RAW_SUFFIX))
+                    else if (path.toLowerCase().endsWith(RAW_SUFFIX))
                     {
                         rawItems.put(path, new ImageContentInfoEx(item, true));
                     }
@@ -270,7 +264,7 @@ public class ImageGridViewFragment extends Fragment
                 for (ImageContentInfoEx item : contentItems)
                 {
                     String path = item.getFileInfo().getFilename().toLowerCase(Locale.getDefault());
-                    if (path.endsWith(JPEG_SUFFIX))
+                    if (path.toLowerCase().endsWith(JPEG_SUFFIX))
                     {
                         String target = path.replace(JPEG_SUFFIX, RAW_SUFFIX);
                         ImageContentInfoEx raw = rawItems.get(target);
@@ -482,12 +476,6 @@ public class ImageGridViewFragment extends Fragment
 			playbackControl.downloadContentThumbnail(path, new IDownloadThumbnailImageCallback()
             {
 				@Override
-				public void onProgress(ProgressEvent e)
-                {
-                	//
-				}
-				
-				@Override
 				public void onCompleted(final Bitmap thumbnail, Map<String, Object> metadata)
 				{
 					if (thumbnail != null)
@@ -556,7 +544,8 @@ public class ImageGridViewFragment extends Fragment
         }
 		activity.runOnUiThread(action);
 	}
-	
+
+/*
 	private Bitmap createRotatedBitmap(byte[] data, Map<String, Object> metadata)
     {
 		Bitmap bitmap = null;
@@ -641,4 +630,5 @@ public class ImageGridViewFragment extends Fragment
 		}
 		return (degrees);
 	}
+*/
 }
