@@ -24,6 +24,9 @@ import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  *   コンテントのダウンロード
@@ -69,38 +72,39 @@ class MyContentDownloader implements IDownloadContentCallback
         // Download the image.
         try
         {
+            Calendar calendar = Calendar.getInstance();
+            String extendName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(calendar.getTime());
+            targetFileName = fileInfo.getFilename().toUpperCase();
+            if (replaceJpegSuffix != null)
+            {
+                targetFileName = targetFileName.replace(JPEG_SUFFIX, replaceJpegSuffix);
+            }
+            if (targetFileName.toUpperCase().contains(RAW_SUFFIX))
+            {
+                mimeType = "image/x-adobe-dng";
+            }
+            else if (targetFileName.toUpperCase().contains(MOVIE_SUFFIX))
+            {
+                mimeType =  "video/mp4";
+            }
+
             ////// ダイアログの表示
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     downloadDialog = new ProgressDialog(activity);
                     downloadDialog.setTitle(activity.getString(R.string.dialog_download_file_title));
-                    downloadDialog.setMessage(activity.getString(R.string.dialog_download_message) + " " + fileInfo.getFilename());
+                    downloadDialog.setMessage(activity.getString(R.string.dialog_download_message) + " " + targetFileName);
                     downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     downloadDialog.setCancelable(false);
                     downloadDialog.show();
                 }
             });
-
-            targetFileName = fileInfo.getFilename().toUpperCase();
-            if (replaceJpegSuffix != null)
-            {
-                targetFileName = targetFileName.replace(JPEG_SUFFIX, replaceJpegSuffix);
-            }
-            if (targetFileName.contains(RAW_SUFFIX))
-            {
-                mimeType = "image/x-adobe-dng";
-            }
-            else if (targetFileName.contains(MOVIE_SUFFIX))
-            {
-                mimeType =  "video/mp4";
-            }
-
             String path = fileInfo.getDirectoryPath() + "/" + targetFileName;
 
-
             final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + activity.getString(R.string.app_name2) + "/";
-            filepath = new File(directoryPath.toLowerCase(), targetFileName.toLowerCase()).getPath();
+            String outputFileName =  extendName + "_" + targetFileName;
+            filepath = new File(directoryPath.toLowerCase(), outputFileName.toLowerCase()).getPath();
             try
             {
                 final File directory = new File(directoryPath);
@@ -136,19 +140,20 @@ class MyContentDownloader implements IDownloadContentCallback
     }
 
     @Override
-    public void onProgress(byte[] bytes, ProgressEvent progressEvent)
+    public void onProgress(byte[] bytes, int length, ProgressEvent progressEvent)
     {
         if (downloadDialog != null)
         {
             int percent = (int)(progressEvent.getProgress() * 100.0f);
             downloadDialog.setProgress(percent);
             //downloadDialog.setCancelable(progressEvent.isCancellable()); // キャンセルできるようにしないほうが良さそうなので
+            //Log.v(TAG, "DOWNLOAD (" + percent + "%) " + bytes.length);
         }
         try
         {
             if (outputStream != null)
             {
-                outputStream.write(bytes);
+                outputStream.write(bytes, 0, length);
             }
         }
         catch (Exception e)
@@ -168,7 +173,7 @@ class MyContentDownloader implements IDownloadContentCallback
                 outputStream.close();
                 outputStream = null;
             }
-            if (!targetFileName.endsWith(RAW_SUFFIX))
+            if (!targetFileName.toUpperCase().endsWith(RAW_SUFFIX))
             {
                 // ギャラリーに受信したファイルを登録する
                 long now = System.currentTimeMillis();
@@ -179,26 +184,28 @@ class MyContentDownloader implements IDownloadContentCallback
                 values.put(MediaStore.Images.Media.DATE_ADDED, now);
                 values.put(MediaStore.Images.Media.DATE_TAKEN, now);
                 values.put(MediaStore.Images.Media.DATE_MODIFIED, now);
-                final Uri content = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-                    try
+                Uri mediaValue = mimeType.contains("video") ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                final Uri content = resolver.insert(mediaValue, values);
+                try
+                {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                    if (preferences.getBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false))
                     {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-                        if (preferences.getBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false))
+                        activity.runOnUiThread(new Runnable()
                         {
-                            activity.runOnUiThread(new Runnable()
+                            @Override
+                            public void run()
                             {
-                                @Override
-                                public void run()
-                                {
-                                    shareContent(content, mimeType);
-                                }
-                            });
-                        }
+                                shareContent(content, mimeType);
+                            }
+                        });
                     }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
             }
             activity.runOnUiThread(new Runnable() {
                 @Override

@@ -180,17 +180,16 @@ public class SimpleHttpClient
         {
             int contentLength = httpConn.getContentLength();
             byte[] buffer = new byte[BUFFER_SIZE];
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             int readBytes = 0;
-            int readSize = bufferedInputStream.read(buffer, 0, BUFFER_SIZE);
+            int readSize = inputStream.read(buffer, 0, BUFFER_SIZE);
             while (readSize != -1)
             {
-                callback.onReceive(readBytes, contentLength, buffer);
+                callback.onReceive(readBytes, contentLength, readSize, buffer);
                 readBytes += readSize;
-                readSize = bufferedInputStream.read(buffer, 0, BUFFER_SIZE);
+                readSize = inputStream.read(buffer, 0, BUFFER_SIZE);
             }
             Log.v(TAG, "RECEIVED " + readBytes + " BYTES. (contentLength : " + contentLength + ")");
-            bufferedInputStream.close();
+            inputStream.close();
         }
         catch (Exception e)
         {
@@ -393,6 +392,6 @@ public class SimpleHttpClient
     {
         void onCompleted();
         void onErrorOccurred(Exception  e);
-        void onReceive(int readBytes, int length, byte[] data);
+        void onReceive(int readBytes, int length, int size, byte[] data);
     }
 }

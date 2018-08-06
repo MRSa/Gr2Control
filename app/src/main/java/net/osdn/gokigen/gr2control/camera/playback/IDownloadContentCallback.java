@@ -4,5 +4,5 @@ public interface IDownloadContentCallback
 {
     void onCompleted();
     void onErrorOccurred(Exception  e);
-    void onProgress(byte[] data, ProgressEvent e);
+    void onProgress(byte[] data, int length, ProgressEvent e);
 }
