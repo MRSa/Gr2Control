@@ -8,7 +8,7 @@ public interface ILiveViewControl
 {
     void changeLiveViewSize(String size);
 
-    void startLiveView();
+    void startLiveView(boolean isCameraScreen);
     void stopLiveView();
     void updateDigitalZoom();
     void updateMagnifyingLiveViewScale(boolean isChangeScale);

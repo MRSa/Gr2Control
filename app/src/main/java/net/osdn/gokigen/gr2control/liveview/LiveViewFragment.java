@@ -51,6 +51,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     private ICameraInformation cameraInformation = null;
     private ICameraStatusWatcher statusWatcher = null;
     private LiveViewClickTouchListener onClickTouchListener = null;
+    private LiveViewControlPanelClickListener onPanelClickListener = null;
 
     private TextView statusArea = null;
     private TextView focalLengthArea = null;
@@ -158,6 +159,17 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.camera_power_off_button);
             setOnClickListener(view, R.id.show_preference_button);
 
+            if (onPanelClickListener == null)
+            {
+                onPanelClickListener = new LiveViewControlPanelClickListener(this.getActivity(), interfaceProvider);
+            }
+            setPanelClickListener(view, R.id.takemodeTextView);
+            setPanelClickListener(view, R.id.shutterSpeedTextView);
+            setPanelClickListener(view, R.id.apertureValueTextView);
+            setPanelClickListener(view, R.id.exposureCompensationTextView);
+            setPanelClickListener(view, R.id.aeModeTextView);
+            setPanelClickListener(view, R.id.whiteBalanceImageView);
+
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);
             view.findViewById(R.id.camera_property_settings_button).setOnClickListener(onClickTouchListener);
@@ -260,6 +272,23 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             e.printStackTrace();
         }
     }
+
+    private void setPanelClickListener(View view, int id)
+    {
+        try
+        {
+            View button = view.findViewById(id);
+            if (button != null)
+            {
+                button.setOnClickListener(onPanelClickListener);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      *
@@ -593,10 +622,12 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         {
             // ライブビューの開始
             Context context = getContext();
+            boolean isCameraScreen = true;
             if (context != null)
             {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 liveViewControl.changeLiveViewSize(preferences.getString(IPreferencePropertyAccessor.LIVE_VIEW_QUALITY, IPreferencePropertyAccessor.LIVE_VIEW_QUALITY_DEFAULT_VALUE));
+                isCameraScreen = preferences.getBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);
             }
             ILiveViewListener lvListener = interfaceProvider.getRicohGr2Infterface().getLiveViewListener();
 /*
@@ -615,8 +646,9 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 lvListener = liveViewListener;
             }
 */
+
             lvListener.setCameraLiveImageView(imageView);
-            liveViewControl.startLiveView();
+            liveViewControl.startLiveView(isCameraScreen);   // false : ライブビューのみ、 true : カメラ画面をミラー
 
             // ステータス監視も実施する
             startWatchStatus();
@@ -843,7 +875,8 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     @Override
     public void updatedWBMode(final String wbMode)
     {
-        // とりあえず何もしない...
+        // とりあえず何もしない... 選択肢は以下
+        // auto, multiAuto, daylight, shade, cloud, tungsten, warmWhiteFluorescent, daylightFluorescent, dayWhiteFluorescent, coolWhiteFluorescent, incandescent,manual1, cte, custom
     }
 
     /**

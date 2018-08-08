@@ -270,6 +270,7 @@ public class ImageGridViewFragment extends Fragment
                         ImageContentInfoEx raw = rawItems.get(target);
                         if (raw != null)
                         {
+                        	// RAW は、JPEGファイルがあった場合にのみリストする
                             item.setHasRaw(true);
                             Log.v(TAG, "DETECT RAW FILE: " + target);
                         }

@@ -17,7 +17,8 @@ public class RicohGr2LiveViewControl implements ILiveViewControl
 {
     private final String TAG = toString();
     private final CameraLiveViewListenerImpl liveViewListener;
-    private String liveViewUrl = "http://192.168.0.1/v1/display";
+    private String cameraDisplayUrl = "http://192.168.0.1/v1/display";    //  カメラの画面をコピーする場合...
+    private String liveViewUrl = "http://192.168.0.1/v1/liveview";         //  何も表示しない（ライブビューモード）の場合...
     private float cropScale = 1.0f;
     private boolean whileFetching = false;
     private static final int FETCH_ERROR_MAX = 30;
@@ -34,7 +35,7 @@ public class RicohGr2LiveViewControl implements ILiveViewControl
 /*
     public void setLiveViewAddress(@NonNull String address, @NonNull String page)
     {
-        liveViewUrl = "http://" + address + "/" + page;
+        cameraDisplayUrl = "http://" + address + "/" + page;
     }
 */
 
@@ -46,7 +47,7 @@ public class RicohGr2LiveViewControl implements ILiveViewControl
     }
 
     @Override
-    public void startLiveView()
+    public void startLiveView(final boolean isCameraScreen)
     {
         Log.v(TAG, "startLiveView()");
         try
@@ -58,7 +59,14 @@ public class RicohGr2LiveViewControl implements ILiveViewControl
                 {
                     try
                     {
-                        start(liveViewUrl);
+                        if (isCameraScreen)
+                        {
+                            start(cameraDisplayUrl);
+                        }
+                        else
+                        {
+                            start(liveViewUrl);
+                        }
                     }
                     catch (Exception e)
                     {

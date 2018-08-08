@@ -7,6 +7,7 @@ import android.util.Log;
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
+import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusReceiver;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.ICaptureControl;
@@ -142,6 +143,12 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     @Override
     public IDisplayInjector getDisplayInjector() {
         return (this);
+    }
+
+    @Override
+    public ICameraStatus getCameraStatusListHolder()
+    {
+        return (statusChecker);
     }
 
     @Override

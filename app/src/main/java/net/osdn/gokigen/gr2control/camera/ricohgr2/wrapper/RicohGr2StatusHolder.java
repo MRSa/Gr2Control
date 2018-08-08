@@ -1,11 +1,15 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +20,7 @@ class RicohGr2StatusHolder
     private final String TAG = toString();
     private final ICameraStatusUpdateNotify notifier;
 
+    private JSONObject latestResultObject = null;
     private String avStatus = "";
     private String tvStatus = "";
     private String xvStatus = "";
@@ -37,6 +42,53 @@ class RicohGr2StatusHolder
      *
      *
      */
+    List<String> getAvailableItemList(@NonNull String key)
+    {
+        List<String> itemList = new ArrayList<>();
+        try
+        {
+            JSONArray array = latestResultObject.getJSONArray(key);
+            if (array == null)
+            {
+                return (itemList);
+            }
+            int nofItems = array.length();
+            for (int index = 0; index < nofItems; index++)
+            {
+                try
+                {
+                    itemList.add(array.getString(index));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (itemList);
+    }
+
+    String getItemStatus(@NonNull String key)
+    {
+        try
+        {
+            return (latestResultObject.getString(key));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ("");
+    }
+
+    /**
+     *
+     *
+     */
     void updateStatus(String replyString)
     {
         if ((replyString == null)||(replyString.length() < 1))
@@ -47,15 +99,15 @@ class RicohGr2StatusHolder
 
         try
         {
-            JSONObject resultObject = new JSONObject(replyString);
-            String result = resultObject.getString("errMsg");
-            String av = resultObject.getString("av");
-            String tv = resultObject.getString("tv");
-            String xv = resultObject.getString("xv");
-            String exposureMode = resultObject.getString("exposureMode");
-            String meteringMode = resultObject.getString("meteringMode");
-            String wbMode = resultObject.getString("WBMode");
-            String battery = resultObject.getString("battery");
+            latestResultObject = new JSONObject(replyString);
+            String result = latestResultObject.getString("errMsg");
+            String av = latestResultObject.getString("av");
+            String tv = latestResultObject.getString("tv");
+            String xv = latestResultObject.getString("xv");
+            String exposureMode = latestResultObject.getString("exposureMode");
+            String meteringMode = latestResultObject.getString("meteringMode");
+            String wbMode = latestResultObject.getString("WBMode");
+            String battery = latestResultObject.getString("battery");
 
             if (result.contains("OK"))
             {
@@ -95,6 +147,7 @@ class RicohGr2StatusHolder
                     notifier.updateRemainBattery(Integer.parseInt(batteryStatus));
                 }
             }
+            System.gc();
         }
         catch (Exception e)
         {

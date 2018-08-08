@@ -30,6 +30,11 @@
         android:title="@string/pref_cat_initialize">
 
         <CheckBoxPreference
+            android:key="gr2_display_camera_view"
+            android:title="@string/pref_gr2_display_camera_view"
+            android:summary="@string/pref_gr2_display_camera_view_summary"/>
+
+        <CheckBoxPreference
             android:key="gr2_lcd_sleep"
             android:title="@string/pref_gr2_lcd_sleep" />
 

@@ -3,6 +3,7 @@ package net.osdn.gokigen.gr2control.camera.ricohgr2;
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
+import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
@@ -26,6 +27,7 @@ public interface IRicohGr2InterfaceProvider
     IZoomLensControl getZoomLensControl();
     ICaptureControl getCaptureControl();
     IDisplayInjector getDisplayInjector();
+    ICameraStatus getCameraStatusListHolder();
     ICameraButtonControl getButtonControl();
     ICameraStatusWatcher getCameraStatusWatcher();
     IPlaybackControl getPlaybackControl();

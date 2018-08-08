@@ -274,6 +274,26 @@ public class SimpleHttpClient
      */
     public static String httpPost(String url, String postData, int timeoutMs)
     {
+        return (httpCommand(url, "POST", postData, timeoutMs));
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    public static String httpPut(String url, String postData, int timeoutMs)
+    {
+        return (httpCommand(url, "PUT", postData, timeoutMs));
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    private static String httpCommand(String url, String requestMethod, String postData, int timeoutMs)
+    {
         HttpURLConnection httpConn = null;
         OutputStream outputStream = null;
         OutputStreamWriter writer = null;
@@ -285,12 +305,12 @@ public class SimpleHttpClient
             timeout = DEFAULT_TIMEOUT;
         }
 
-        //  HTTP Postメソッドで要求を送出
+        //  HTTP メソッドで要求を送出
         try
         {
             final URL urlObj = new URL(url);
             httpConn = (HttpURLConnection) urlObj.openConnection();
-            httpConn.setRequestMethod("POST");
+            httpConn.setRequestMethod(requestMethod);
             httpConn.setConnectTimeout(timeout);
             httpConn.setReadTimeout(timeout);
             httpConn.setDoInput(true);
@@ -312,13 +332,13 @@ public class SimpleHttpClient
             }
             if (inputStream == null)
             {
-                Log.w(TAG, "httpPost: Response Code Error: " + responseCode + ": " + url);
+                Log.w(TAG, "http " + requestMethod + " : Response Code Error: " + responseCode + ": " + url);
                 return ("");
             }
         }
         catch (Exception e)
         {
-            Log.w(TAG, "httpPost: IOException: " + e.getMessage());
+            Log.w(TAG, "http " + requestMethod + " : IOException: " + e.getMessage());
             e.printStackTrace();
             if (httpConn != null)
             {

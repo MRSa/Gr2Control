@@ -3,21 +3,27 @@ package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  *
  */
-public class RicohGr2StatusChecker implements ICameraStatusWatcher
+public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatus
 {
     private final String TAG = toString();
     private final String statusCheckUrl = "http://192.168.0.1/v1/props";
+    private final String statusSetUrl = "http://192.168.0.1/v1/params/camera";
+    private final String grCommandUrl = "http://192.168.0.1/_gr";
     private final int sleepMs;
 
-    private int timeoutMs = 6000;
+    private int timeoutMs = 5000;
     private boolean whileFetching = false;
     private RicohGr2StatusHolder statusHolder;
 
@@ -111,6 +117,75 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher
                     Log.v(TAG, "STATUS WATCH STOPPED.");
                 }
             });
+            thread.start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public @NonNull List<String> getStatusList(@NonNull final String key)
+    {
+        try
+        {
+            if (statusHolder == null)
+            {
+                return (new ArrayList<>());
+            }
+            String listKey = key + "List";
+            return (statusHolder.getAvailableItemList(listKey));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (new ArrayList<>());
+    }
+
+    @Override
+    public String getStatus(@NonNull String key)
+    {
+        try
+        {
+            if (statusHolder == null)
+            {
+                return ("");
+            }
+            return (statusHolder.getItemStatus(key));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ("");
+    }
+
+    @Override
+    public void setStatus(@NonNull final String key, @NonNull final String value)
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    String postData = key + "=" + value;
+                    String response = SimpleHttpClient.httpPut(statusSetUrl, postData, timeoutMs);
+                    Log.v(TAG, "SET PROPERTY : " + postData + " resp. (" + response.length() + "bytes.)");
+
+                    //  GR専用コマンドで、画面表示をリフレッシュ
+                    response = SimpleHttpClient.httpPost(grCommandUrl, "cmd=mode refresh", timeoutMs);
+                    Log.v(TAG, "refresh resp. (" + response.length() + "bytes.)");
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        try
+        {
             thread.start();
         }
         catch (Exception e)

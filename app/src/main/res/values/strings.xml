@@ -28,6 +28,8 @@
     <string name="pref_connection_method">Connection Method</string>
 
     <string name="pref_gr2_display_mode">Display Mode</string>
+    <string name="pref_gr2_display_camera_view">Mirror Camera Screen</string>
+    <string name="pref_gr2_display_camera_view_summary">Use same camera screen.</string>
     <string name="pref_gr2_lcd_sleep">Screen off during connected</string>
 
     <string name="pref_cat_camera">Camera</string>

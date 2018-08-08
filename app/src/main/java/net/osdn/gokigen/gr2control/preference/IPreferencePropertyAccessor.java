@@ -50,6 +50,8 @@ public interface IPreferencePropertyAccessor
     String GR2_DISPLAY_MODE = "gr2_display_mode";
     String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";
 
+    String GR2_DISPLAY_CAMERA_VIEW = "gr2_display_camera_view";
+
     String GR2_LCD_SLEEP = "gr2_lcd_sleep";
 
     /*

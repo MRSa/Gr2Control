@@ -114,6 +114,9 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.CONNECTION_METHOD)) {
                 editor.putString(IPreferencePropertyAccessor.CONNECTION_METHOD, IPreferencePropertyAccessor.CONNECTION_METHOD_DEFAULT_VALUE);
             }
+            if (!items.containsKey(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW)) {
+                editor.putBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);
+            }
             if (!items.containsKey(IPreferencePropertyAccessor.GR2_LCD_SLEEP)) {
                 editor.putBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false);
             }
@@ -153,6 +156,11 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
 
                 case IPreferencePropertyAccessor.USE_PLAYBACK_MENU:
                     value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW:
+                    value = preferences.getBoolean(key, true);
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
@@ -322,6 +330,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         setBooleanPreference(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, IPreferencePropertyAccessor.USE_PLAYBACK_MENU, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
                     }
                     catch (Exception e)
