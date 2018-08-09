@@ -279,6 +279,16 @@
             android:focusable="true"
             android:src="@drawable/ic_wb_auto_black_24dp" />
 
+        <ImageView
+            android:id="@+id/setEffectImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_photo_filter_black_24dp" />
+
         <TextView
             android:id="@+id/hideControlPanelTextView"
             android:layout_width="match_parent"

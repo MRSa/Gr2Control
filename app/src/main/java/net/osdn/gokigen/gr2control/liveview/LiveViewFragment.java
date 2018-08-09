@@ -169,6 +169,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setPanelClickListener(view, R.id.exposureCompensationTextView);
             setPanelClickListener(view, R.id.aeModeTextView);
             setPanelClickListener(view, R.id.whiteBalanceImageView);
+            setPanelClickListener(view, R.id.setEffectImageView);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);

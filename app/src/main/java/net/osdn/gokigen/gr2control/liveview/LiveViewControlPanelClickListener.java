@@ -70,6 +70,10 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
                     selectWhiteBalance(statusList);
                     break;
 
+                case R.id.setEffectImageView:
+                    selectEffect(statusList);
+                    break;
+
                 default:
                     Log.v(TAG, "onClick() : " + id);
                     break;
@@ -163,6 +167,18 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
         }
     }
 
+    private void selectEffect(@NonNull ICameraStatus statusList)
+    {
+        Log.v(TAG,"selectWhiteBalance()");
+        try
+        {
+            choiceStatusList(statusList, ICameraStatus.EFFECT);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
