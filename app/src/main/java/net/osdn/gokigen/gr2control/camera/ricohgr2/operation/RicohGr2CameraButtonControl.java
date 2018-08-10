@@ -1,10 +1,10 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.operation;
 
-        import android.support.annotation.NonNull;
-        import android.util.Log;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
-        import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
-        import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
+import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
+import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
 
 /**
  *
@@ -21,19 +21,9 @@ public class RicohGr2CameraButtonControl implements ICameraButtonControl
      *
      */
     @Override
-    public void pushButton(int code)
+    public void pushedButton(String code)
     {
-        pushButton(convertFromCodeToString(code));
-    }
-
-    /**
-     *
-     *
-     */
-    private String convertFromCodeToString(int code)
-    {
-        //  ここでキーコードを文字列に変換する
-        return ("bok");
+        pushButton(code);
     }
 
     /**

@@ -52,6 +52,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     private ICameraStatusWatcher statusWatcher = null;
     private LiveViewClickTouchListener onClickTouchListener = null;
     private LiveViewControlPanelClickListener onPanelClickListener = null;
+    private LiveViewKeyPanelClickListener onKeyPanelClickListener = null;
 
     private TextView statusArea = null;
     private TextView focalLengthArea = null;
@@ -170,6 +171,29 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setPanelClickListener(view, R.id.aeModeTextView);
             setPanelClickListener(view, R.id.whiteBalanceImageView);
             setPanelClickListener(view, R.id.setEffectImageView);
+
+            if (onKeyPanelClickListener == null)
+            {
+                onKeyPanelClickListener = new LiveViewKeyPanelClickListener(interfaceProvider);
+            }
+            setKeyPanelClickListener(view, R.id.button_front_left);
+            setKeyPanelClickListener(view, R.id.button_front_right);
+            setKeyPanelClickListener(view, R.id.button_adjust_left);
+            setKeyPanelClickListener(view, R.id.button_adjust_enter);
+            setKeyPanelClickListener(view, R.id.button_adjust_right);
+            setKeyPanelClickListener(view, R.id.button_toggle_aeaf);
+            setKeyPanelClickListener(view, R.id.lever_ael_caf);
+            setKeyPanelClickListener(view, R.id.button_up);
+            setKeyPanelClickListener(view, R.id.button_left);
+            setKeyPanelClickListener(view, R.id.button_center_enter);
+            setKeyPanelClickListener(view, R.id.button_right);
+            setKeyPanelClickListener(view, R.id.button_down);
+            setKeyPanelClickListener(view, R.id.button_function_1);
+            setKeyPanelClickListener(view, R.id.button_function_2);
+            setKeyPanelClickListener(view, R.id.button_function_3);
+            setKeyPanelClickListener(view, R.id.button_plus);
+            setKeyPanelClickListener(view, R.id.button_minus);
+            setKeyPanelClickListener(view, R.id.button_playback);
 
             /*
             view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);
@@ -290,6 +314,21 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         }
     }
 
+    private void setKeyPanelClickListener(View view, int id)
+    {
+        try
+        {
+            View button = view.findViewById(id);
+            if (button != null)
+            {
+                button.setOnClickListener(onKeyPanelClickListener);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
