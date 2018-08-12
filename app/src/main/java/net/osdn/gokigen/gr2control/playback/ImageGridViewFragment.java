@@ -42,6 +42,7 @@ import android.widget.ProgressBar;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
+import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
@@ -53,26 +54,30 @@ public class ImageGridViewFragment extends Fragment
 	private final String TAG = this.toString();
     private final String MOVIE_SUFFIX = ".mov";
     private final String JPEG_SUFFIX = ".jpg";
-    private final String RAW_SUFFIX = ".dng";
+    private final String RAW_SUFFIX_1 = ".dng";
+	private final String RAW_SUFFIX_2 = ".orf";
+
 
     private GridView gridView;
 	private boolean gridViewIsScrolling;
 	private IPlaybackControl playbackControl;
+	private ICameraRunMode runMode;
 		
     private List<ImageContentInfoEx> contentList;
 	private ExecutorService executor;
 	private LruCache<String, Bitmap> imageCache;
 
-	public static ImageGridViewFragment newInstance(@NonNull IPlaybackControl playbackControl)
+	public static ImageGridViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull ICameraRunMode runMode)
 	{
 		ImageGridViewFragment fragment = new ImageGridViewFragment();
-		fragment.setPlaybackControl(playbackControl);
+		fragment.setControllers(playbackControl, runMode);
 		return (fragment);
 	}
 
-	private void setPlaybackControl(IPlaybackControl playbackControl)
+	private void setControllers(IPlaybackControl playbackControl, ICameraRunMode runMode)
 	{
 		this.playbackControl = playbackControl;
+		this.runMode = runMode;
 	}
 
 	@Override
@@ -156,6 +161,7 @@ public class ImageGridViewFragment extends Fragment
                 }
             }
         }
+
         try
         {
             refresh();
@@ -171,6 +177,12 @@ public class ImageGridViewFragment extends Fragment
 	public void onPause()
 	{
         Log.v(TAG, "onPause() Start");
+        if (!runMode.isRecordingMode())
+        {
+            // Threadで呼んではダメみたいだ...
+            runMode.changeRunMode(true);
+        }
+
 		if (!executor.isShutdown())
 		{
 			executor.shutdownNow();
@@ -188,9 +200,27 @@ public class ImageGridViewFragment extends Fragment
 
 	private void refresh()
     {
+        try
+        {
+            if (runMode.isRecordingMode())
+            {
+                runMode.changeRunMode(false);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+/*
+                if (runMode.isRecordingMode())
+                {
+                    runMode.changeRunMode(false);
+                }
+*/
                 refreshImpl();
             }
         });
@@ -255,10 +285,15 @@ public class ImageGridViewFragment extends Fragment
                     {
                         contentItems.add(new ImageContentInfoEx(item, false));
                     }
-                    else if (path.toLowerCase().endsWith(RAW_SUFFIX))
+                    else if (path.toLowerCase().endsWith(RAW_SUFFIX_1))
                     {
                         rawItems.put(path, new ImageContentInfoEx(item, true));
                     }
+                    else if (path.toLowerCase().endsWith(RAW_SUFFIX_2))
+                    {
+                        rawItems.put(path, new ImageContentInfoEx(item, true));
+                    }
+
                 }
 
                 for (ImageContentInfoEx item : contentItems)
@@ -266,13 +301,21 @@ public class ImageGridViewFragment extends Fragment
                     String path = item.getFileInfo().getFilename().toLowerCase(Locale.getDefault());
                     if (path.toLowerCase().endsWith(JPEG_SUFFIX))
                     {
-                        String target = path.replace(JPEG_SUFFIX, RAW_SUFFIX);
-                        ImageContentInfoEx raw = rawItems.get(target);
-                        if (raw != null)
+                        String target1 = path.replace(JPEG_SUFFIX, RAW_SUFFIX_1);
+                        ImageContentInfoEx raw1 = rawItems.get(target1);
+                        if (raw1 != null)
                         {
                         	// RAW は、JPEGファイルがあった場合にのみリストする
                             item.setHasRaw(true);
-                            Log.v(TAG, "DETECT RAW FILE: " + target);
+                            Log.v(TAG, "DETECT RAW FILE: " + target1);
+                        }
+                        String target2 = path.replace(JPEG_SUFFIX, RAW_SUFFIX_2);
+                        ImageContentInfoEx raw2 = rawItems.get(target2);
+                        if (raw2 != null)
+                        {
+                            // RAW は、JPEGファイルがあった場合にのみリストする
+                            item.setHasRaw(true);
+                            Log.v(TAG, "DETECT RAW FILE: " + target2);
                         }
                     }
                 }
@@ -414,7 +457,7 @@ public class ImageGridViewFragment extends Fragment
     {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-	        ImagePagerViewFragment fragment = ImagePagerViewFragment.newInstance(playbackControl, contentList, position);
+	        ImagePagerViewFragment fragment = ImagePagerViewFragment.newInstance(playbackControl, runMode, contentList, position);
             FragmentActivity activity = getActivity();
 	        if (activity != null)
 	        {

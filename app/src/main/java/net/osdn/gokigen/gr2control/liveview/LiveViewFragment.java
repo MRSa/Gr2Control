@@ -22,6 +22,7 @@ import android.widget.TextView;
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
+import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
@@ -32,7 +33,6 @@ import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
-
 /**
  *  撮影用ライブビュー画面
  *
@@ -40,10 +40,9 @@ import net.osdn.gokigen.gr2control.scene.IChangeScene;
 public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFocusingModeNotify, IFavoriteSettingDialogKicker, ICameraStatusUpdateNotify
 {
     private final String TAG = this.toString();
-    private static final int COMMAND_MY_PROPERTY = 0x00000100;
 
     private ILiveViewControl liveViewControl = null;
-    private IZoomLensControl zoomLensControl = null;
+    //private IZoomLensControl zoomLensControl = null;
     private IInterfaceProvider interfaceProvider = null;
     private IDisplayInjector interfaceInjector = null;
     //private OlympusCameraLiveViewListenerImpl liveViewListener = null;
@@ -337,48 +336,13 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         Log.v(TAG, "prepare()");
 
-        IDisplayInjector interfaceInjector;
-        interfaceInjector = interfaceProvider.getRicohGr2Infterface().getDisplayInjector();
-/*
-        ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
-        if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
-        {
-            interfaceInjector = interfaceProvider.getRicohGr2Infterface().getDisplayInjector();
-        }
-        else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-        {
-            interfaceInjector = interfaceProvider.getSonyInterface().getDisplayInjector();
-        }
-        else // if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-        {
-            interfaceInjector = interfaceProvider.getOlympusInterface().getDisplayInjector();
-        }
-*/
         this.changeScene = sceneSelector;
         this.interfaceProvider = interfaceProvider;
-        this.interfaceInjector = interfaceInjector;
-
-        //if  (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
-        {
-            this.liveViewControl = interfaceProvider.getRicohGr2Infterface().getLiveViewControl();
-            this.zoomLensControl = interfaceProvider.getRicohGr2Infterface().getZoomLensControl();
-            this.cameraInformation = interfaceProvider.getRicohGr2Infterface().getCameraInformation();
-            this.statusWatcher = interfaceProvider.getRicohGr2Infterface().getCameraStatusWatcher();
-        }
-/*
-        else  if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-        {
-            this.liveViewControl = interfaceProvider.getSonyInterface().getSonyLiveViewControl();
-            this.zoomLensControl = interfaceProvider.getSonyInterface().getZoomLensControl();
-            this.cameraInformation = interfaceProvider.getSonyInterface().getCameraInformation();
-        }
-        else //  if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-        {
-            this.liveViewControl = interfaceProvider.getOlympusInterface().getLiveViewControl();
-            this.zoomLensControl = interfaceProvider.getOlympusInterface().getZoomLensControl();
-            this.cameraInformation = interfaceProvider.getOlympusInterface().getCameraInformation();
-        }
-*/
+        this.interfaceInjector = interfaceProvider.getDisplayInjector();
+        this.liveViewControl = interfaceProvider.getLiveViewControl();
+        //this.zoomLensControl = interfaceProvider.getZoomLensControl();
+        this.cameraInformation = interfaceProvider.getCameraInformation();
+        this.statusWatcher = interfaceProvider.getCameraStatusWatcher();
     }
 
     /**
@@ -546,14 +510,15 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             }
         }
 
-/*
         // 撮影モードかどうかを確認して、撮影モードではなかったら撮影モードに切り替える
+        ICameraRunMode changeRunModeExecutor = interfaceProvider.getCameraRunMode();
         if ((changeRunModeExecutor != null)&&(!changeRunModeExecutor.isRecordingMode()))
         {
-            // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。
+            // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。）
             changeRunModeExecutor.changeRunMode(true);
         }
 
+/*
         // ステータスの変更を通知してもらう
         camera.setCameraStatusListener(statusListener);
 
@@ -669,25 +634,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 liveViewControl.changeLiveViewSize(preferences.getString(IPreferencePropertyAccessor.LIVE_VIEW_QUALITY, IPreferencePropertyAccessor.LIVE_VIEW_QUALITY_DEFAULT_VALUE));
                 isCameraScreen = preferences.getBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);
             }
-            ILiveViewListener lvListener = interfaceProvider.getRicohGr2Infterface().getLiveViewListener();
-/*
-            ILiveViewListener lvListener;
-            if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
+            ILiveViewListener lvListener = interfaceProvider.getLiveViewListener();
+            if (lvListener != null)
             {
-                lvListener = interfaceProvider.getRicohGr2Infterface().getLiveViewListener();
+                lvListener.setCameraLiveImageView(imageView);
             }
-            else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-            {
-                lvListener = interfaceProvider.getSonyInterface().getLiveViewListener();
-            }
-            else  // if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-            {
-                interfaceProvider.getOlympusLiveViewListener().setOlympusLiveViewListener(liveViewListener);
-                lvListener = liveViewListener;
-            }
-*/
-
-            lvListener.setCameraLiveImageView(imageView);
             liveViewControl.startLiveView(isCameraScreen);   // false : ライブビューのみ、 true : カメラ画面をミラー
 
             // ステータス監視も実施する

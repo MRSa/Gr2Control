@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <LinearLayout
+        android:id="@+id/propertyInformationPanelLayout"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="14dp"
+        android:background="@color/background_translucent_dark" >
+
+        <TextView
+            android:id="@+id/propertyInformationMessageTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/blank"
+            android:textColor="@color/background_dark"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/propertyConfigPanelLayout"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="24dp"
+        android:background="@color/background_translucent_dark" >
+
+        <ImageView
+            android:id="@+id/propertySettings_save"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            android:contentDescription="@string/configuration"
+            android:src="@drawable/ic_save_black_24dp" />
+
+        <ImageView
+            android:id="@+id/propertySettings_refresh"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            android:contentDescription="@string/configuration"
+            android:src="@drawable/ic_refresh_black_24dp" />
+
+        <ImageView
+            android:id="@+id/propertySettings_restore"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            android:contentDescription="@string/restore"
+            android:src="@drawable/ic_restore_page_black_24dp" />
+
+    </LinearLayout>
+
+    <ListView android:id="@+id/CameraPropertyListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
+</LinearLayout>

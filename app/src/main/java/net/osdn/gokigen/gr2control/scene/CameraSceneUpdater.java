@@ -241,7 +241,8 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
         }
         try
         {
-            ICameraConnection connection = getCameraConnection(interfaceProvider.getCammeraConnectionMethod());
+            interfaceProvider.resetCameraConnectionMethod();
+            ICameraConnection connection = interfaceProvider.getCameraConnection();
             if (connection != null)
             {
                 ICameraConnection.CameraConnectionStatus status = connection.getConnectionStatus();
@@ -304,7 +305,7 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
         Log.v(TAG, "changeScenceToImageList()");
         try
         {
-            ImageGridViewFragment fragment = ImageGridViewFragment.newInstance(interfaceProvider.getRicohGr2Infterface().getPlaybackControl());
+            ImageGridViewFragment fragment = ImageGridViewFragment.newInstance(interfaceProvider.getPlaybackControl(), interfaceProvider.getCameraRunMode());
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment1, fragment);
             // backstackに追加
@@ -340,6 +341,6 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
     private ICameraConnection getCameraConnection(ICameraConnection.CameraConnectionMethod method)
     {
         Log.v(TAG, "method : " + method);
-        return (interfaceProvider.getRicohGr2Infterface().getRicohGr2CameraConnection());
+        return (interfaceProvider.getCameraConnection());
     }
 }

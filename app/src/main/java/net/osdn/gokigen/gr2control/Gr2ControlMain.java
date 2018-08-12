@@ -93,7 +93,7 @@ public class Gr2ControlMain extends AppCompatActivity
         super.onPause();
         try
         {
-            ICameraConnection connection = getCameraConnection(interfaceProvider.getCammeraConnectionMethod());
+            ICameraConnection connection = interfaceProvider.getCameraConnection();
             if (connection != null)
             {
                 connection.stopWatchWifiStatus(this);
@@ -153,32 +153,5 @@ public class Gr2ControlMain extends AppCompatActivity
         {
             e.printStackTrace();
         }
-    }
-
-    /**
-     *
-     *
-     *
-     */
-    private ICameraConnection getCameraConnection(ICameraConnection.CameraConnectionMethod connectionMethod)
-    {
-        Log.v(TAG, "getCameraConnection() : " + connectionMethod);
-        return (interfaceProvider.getRicohGr2Infterface().getRicohGr2CameraConnection());
-/*
-        ICameraConnection connection;
-        if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
-        {
-            connection = interfaceProvider.getRicohGr2Infterface().getRicohGr2CameraConnection();
-        }
-        else if  (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-        {
-            connection = interfaceProvider.getSonyInterface().getSonyCameraConnection();
-        }
-        else // if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-        {
-            connection = interfaceProvider.getOlympusInterface().getOlyCameraConnection();
-        }
-        return (connection);
-*/
     }
 }

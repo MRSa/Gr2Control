@@ -50,6 +50,12 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
     }
 
     @Override
+    public String getRawFileSuffix()
+    {
+        return (".DNG");
+    }
+
+    @Override
     public void downloadContentList(@NonNull IDownloadContentListCallback callback)
     {
         List<ICameraFileInfo> fileList = new ArrayList<>();

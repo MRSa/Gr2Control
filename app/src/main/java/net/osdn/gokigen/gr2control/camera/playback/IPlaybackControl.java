@@ -10,6 +10,7 @@ import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
  */
 public interface IPlaybackControl
 {
+    String getRawFileSuffix();
     void downloadContentList(@NonNull IDownloadContentListCallback callback);
     void getContentInfo(@NonNull String  path, @NonNull IContentInfoCallback  callback);
     void updateCameraFileInfo(ICameraFileInfo info);

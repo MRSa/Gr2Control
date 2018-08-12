@@ -1,8 +1,8 @@
 package net.osdn.gokigen.gr2control.liveview;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
-import net.osdn.gokigen.gr2control.camera.ICameraInformation;
 import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
@@ -19,7 +18,6 @@ import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
-
 
 /**
  *
@@ -41,7 +39,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     private final IFavoriteSettingDialogKicker dialogKicker;
     private final IZoomLensControl zoomLensControl;
 
-    LiveViewClickTouchListener(Activity context, ILiveImageStatusNotify imageStatusNotify, IStatusViewDrawer statusView, IChangeScene changeScene, IInterfaceProvider interfaceProvider, IFavoriteSettingDialogKicker dialogKicker)
+    LiveViewClickTouchListener(@NonNull Activity context, @NonNull ILiveImageStatusNotify imageStatusNotify, @NonNull IStatusViewDrawer statusView, @NonNull IChangeScene changeScene, @NonNull IInterfaceProvider interfaceProvider, @NonNull IFavoriteSettingDialogKicker dialogKicker)
     {
         this.context = context;
         this.statusNotify = imageStatusNotify;
@@ -49,36 +47,11 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         this.changeScene = changeScene;
         this.interfaceProvider = interfaceProvider;
 
-        //ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
-        //if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
-        {
-            this.focusingControl = interfaceProvider.getRicohGr2Infterface().getFocusingControl();
-            this.captureControl = interfaceProvider.getRicohGr2Infterface().getCaptureControl();
-            //this.propertyProvider = interfaceProvider.getOlympusInterface().getCameraPropertyProvider();  // 要変更
-            //this.cameraInformation = interfaceProvider.getRicohGr2Infterface().getCameraInformation();
-            this.cameraConnection = interfaceProvider.getRicohGr2Infterface().getRicohGr2CameraConnection();
-            this.zoomLensControl = interfaceProvider.getRicohGr2Infterface().getZoomLensControl();
-        }
-/*
-        else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-        {
-            this.focusingControl = interfaceProvider.getSonyInterface().getFocusingControl();
-            this.captureControl = interfaceProvider.getSonyInterface().getCaptureControl();
-            this.propertyProvider = interfaceProvider.getOlympusInterface().getCameraPropertyProvider();  // 要変更
-            this.cameraInformation = interfaceProvider.getSonyInterface().getCameraInformation();
-            this.cameraConnection = interfaceProvider.getSonyInterface().getSonyCameraConnection();
-            this.zoomLensControl = interfaceProvider.getSonyInterface().getZoomLensControl();
-        }
-        else  // if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-        {
-            this.focusingControl = interfaceProvider.getOlympusInterface().getFocusingControl();
-            this.captureControl = interfaceProvider.getOlympusInterface().getCaptureControl();
-            this.propertyProvider = interfaceProvider.getOlympusInterface().getCameraPropertyProvider();
-            this.cameraInformation = interfaceProvider.getOlympusInterface().getCameraInformation();
-            this.cameraConnection = interfaceProvider.getOlympusInterface().getOlyCameraConnection();
-            this.zoomLensControl = interfaceProvider.getOlympusInterface().getZoomLensControl();
-        }
-*/
+        this.focusingControl = interfaceProvider.getFocusingControl();
+        this.captureControl = interfaceProvider.getCaptureControl();
+        this.cameraConnection = interfaceProvider.getCameraConnection();
+        this.zoomLensControl = interfaceProvider.getZoomLensControl();
+
         this.dialogKicker = dialogKicker;
     }
 

@@ -37,7 +37,8 @@ class MyContentDownloader implements IDownloadContentCallback
     private final String TAG = toString();
     private final Activity activity;
     private final IPlaybackControl playbackControl;
-    private static final String RAW_SUFFIX = ".DNG";
+    private static final String RAW_SUFFIX_1 = ".DNG";
+    private static final String RAW_SUFFIX_2 = ".ORF";
     private static final String MOVIE_SUFFIX = ".MOV";
     private static final String JPEG_SUFFIX = ".JPG";
     private ProgressDialog downloadDialog = null;
@@ -79,9 +80,13 @@ class MyContentDownloader implements IDownloadContentCallback
             {
                 targetFileName = targetFileName.replace(JPEG_SUFFIX, replaceJpegSuffix);
             }
-            if (targetFileName.toUpperCase().contains(RAW_SUFFIX))
+            if (targetFileName.toUpperCase().contains(RAW_SUFFIX_1))
             {
                 mimeType = "image/x-adobe-dng";
+            }
+            else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_2))
+            {
+                mimeType = "image/image/x-olympus-orf";
             }
             else if (targetFileName.toUpperCase().contains(MOVIE_SUFFIX))
             {
@@ -173,7 +178,7 @@ class MyContentDownloader implements IDownloadContentCallback
                 outputStream.close();
                 outputStream = null;
             }
-            if (!targetFileName.toUpperCase().endsWith(RAW_SUFFIX))
+            if ((!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_1))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_2)))
             {
                 // ギャラリーに受信したファイルを登録する
                 long now = System.currentTimeMillis();

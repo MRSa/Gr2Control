@@ -30,6 +30,7 @@ import android.widget.ImageView;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
+import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 
@@ -37,8 +38,9 @@ public class ImagePagerViewFragment extends Fragment
 {
     private final String TAG = this.toString();
     private static final String JPEG_SUFFIX = ".JPG";
-    private static final String RAW_SUFFIX = ".DNG";
+
     private IPlaybackControl playbackControl;
+    private ICameraRunMode runMode;
 
 	private List<ImageContentInfoEx> contentList = null;
 	private int contentIndex = 0;
@@ -48,18 +50,19 @@ public class ImagePagerViewFragment extends Fragment
 	private LruCache<String, Bitmap> imageCache =null;
 
 
-    public static ImagePagerViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull List<ImageContentInfoEx> contentList, int contentIndex)
+    public static ImagePagerViewFragment newInstance(@NonNull IPlaybackControl playbackControl, @NonNull ICameraRunMode runMode, @NonNull List<ImageContentInfoEx> contentList, int contentIndex)
 	{
 		ImagePagerViewFragment fragment = new ImagePagerViewFragment();
-		fragment.setInterface(playbackControl);
+		fragment.setInterface(playbackControl, runMode);
 		fragment.setContentList(contentList, contentIndex);
 		return (fragment);
 	}
 
 
-	private void setInterface(@NonNull IPlaybackControl playbackControl)
+	private void setInterface(@NonNull IPlaybackControl playbackControl, @NonNull ICameraRunMode runMode)
     {
         this.playbackControl = playbackControl;
+        this.runMode = runMode;
     }
 
 
@@ -164,7 +167,7 @@ public class ImagePagerViewFragment extends Fragment
         else if (item.getItemId() == R.id.action_download_raw)
         {
             doDownload = true;
-            specialSuffix = RAW_SUFFIX;
+            specialSuffix = playbackControl.getRawFileSuffix();
 		}
 
 		if (getInformation)
@@ -260,7 +263,14 @@ public class ImagePagerViewFragment extends Fragment
                 bar.show();
             }
         }
-		viewPager.setCurrentItem(contentIndex);
+
+        if (runMode.isRecordingMode())
+        {
+            // Threadで呼んではダメみたいだ...
+            runMode.changeRunMode(false);
+        }
+
+        viewPager.setCurrentItem(contentIndex);
 	}
 
 	@Override
@@ -276,7 +286,13 @@ public class ImagePagerViewFragment extends Fragment
                 bar.hide();
             }
         }
-	}
+
+        if (!runMode.isRecordingMode())
+        {
+            // Threadで呼んではダメみたいだ...
+            runMode.changeRunMode(true);
+        }
+    }
 
 	private class ImagePagerAdapter extends PagerAdapter
     {
@@ -484,7 +500,7 @@ public class ImagePagerViewFragment extends Fragment
                     public void run() {
                         MyContentDownloader contentDownloader = new MyContentDownloader(activity, playbackControl);
                         ICameraFileInfo fileInfo = (contentList.get(contentIndex)).getFileInfo();
-                        contentDownloader.startDownload(fileInfo,  (filename.endsWith(RAW_SUFFIX)) ? RAW_SUFFIX : null, isSmallSize);
+                        contentDownloader.startDownload(fileInfo,  (filename.endsWith(playbackControl.getRawFileSuffix())) ? playbackControl.getRawFileSuffix() : null, isSmallSize);
                     }
                 });
                 thread.start();

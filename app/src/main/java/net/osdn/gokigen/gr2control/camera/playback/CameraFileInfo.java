@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CameraFileInfo implements ICameraFileInfo
+public class CameraFileInfo implements ICameraFileInfo, ICameraFileInfoSetter
 {
     private final String path;
     private final String name;
@@ -22,6 +22,7 @@ public class CameraFileInfo implements ICameraFileInfo
     private String aspectRatio;
     private String cameraModel;
     private String latlng;
+    private long fileSize;
 
     public CameraFileInfo(@NonNull String path, @NonNull String name)
     {
@@ -103,7 +104,8 @@ public class CameraFileInfo implements ICameraFileInfo
     }
 
     @Override
-    public void updateValues(String dateTime, String av, String tv, String sv, String xv, int orientation, String aspectRatio, String model, String latLng, boolean captured) {
+    public void updateValues(String dateTime, String av, String tv, String sv, String xv, int orientation, String aspectRatio, String model, String latLng, boolean captured)
+    {
         this.av = av;
         this.tv = tv;
         this.sv = sv;
@@ -123,4 +125,11 @@ public class CameraFileInfo implements ICameraFileInfo
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void setDate(Date datetime)
+    {
+        this.dateTime = datetime;
+    }
+
 }

@@ -36,7 +36,7 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
         try
         {
             int id = view.getId();
-            ICameraStatus statusList = interfaceProvider.getRicohGr2Infterface().getCameraStatusListHolder();
+            ICameraStatus statusList = interfaceProvider.getCameraStatusListHolder();
             if (statusList == null)
             {
                 // ステータスリストの保持クラスが取れなかった...

@@ -10,9 +10,10 @@ public interface ICameraConnection
 {
     enum CameraConnectionMethod
     {
+        UNKNOWN,
         OPC,
         SONY,
-        RICOH_GR2
+        RICOH_GR2,
     }
 
     enum CameraConnectionStatus

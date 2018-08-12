@@ -109,7 +109,7 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
             }
             if (keyId.length() > 1)
             {
-                ICameraButtonControl buttonControl = interfaceProvider.getRicohGr2Infterface().getButtonControl();
+                ICameraButtonControl buttonControl = interfaceProvider.getButtonControl();
                 if (buttonControl != null)
                 {
                     buttonControl.pushedButton(keyId);
