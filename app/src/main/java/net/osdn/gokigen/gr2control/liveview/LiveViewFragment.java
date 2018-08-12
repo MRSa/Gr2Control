@@ -29,7 +29,6 @@ import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
-import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
