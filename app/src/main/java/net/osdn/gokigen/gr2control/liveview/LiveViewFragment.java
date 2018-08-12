@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -32,6 +33,8 @@ import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  *  撮影用ライブビュー画面
@@ -142,9 +145,11 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             {
                 Log.v(TAG, "interfaceInjector is NULL...");
             }
-            if (onClickTouchListener == null)
+            Activity activity = this.getActivity();
+            Vibrator vibrator = (activity != null) ? (Vibrator) activity.getSystemService(VIBRATOR_SERVICE) : null;
+            if ((onClickTouchListener == null)&&(activity != null))
             {
-                onClickTouchListener = new LiveViewClickTouchListener(this.getActivity(), imageView, this, changeScene, interfaceProvider, this);
+                onClickTouchListener = new LiveViewClickTouchListener(activity, imageView, this, changeScene, interfaceProvider, this);
             }
             imageView.setOnClickListener(onClickTouchListener);
             imageView.setOnTouchListener(onClickTouchListener);
@@ -161,7 +166,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
 
             if (onPanelClickListener == null)
             {
-                onPanelClickListener = new LiveViewControlPanelClickListener(this.getActivity(), interfaceProvider);
+                onPanelClickListener = new LiveViewControlPanelClickListener(activity, interfaceProvider);
             }
             setPanelClickListener(view, R.id.takemodeTextView);
             setPanelClickListener(view, R.id.shutterSpeedTextView);
@@ -173,7 +178,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
 
             if (onKeyPanelClickListener == null)
             {
-                onKeyPanelClickListener = new LiveViewKeyPanelClickListener(interfaceProvider);
+                onKeyPanelClickListener = new LiveViewKeyPanelClickListener(interfaceProvider, vibrator);
             }
             setKeyPanelClickListener(view, R.id.button_front_left);
             setKeyPanelClickListener(view, R.id.button_front_right);

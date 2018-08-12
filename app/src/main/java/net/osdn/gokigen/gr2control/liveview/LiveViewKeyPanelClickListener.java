@@ -1,6 +1,8 @@
 package net.osdn.gokigen.gr2control.liveview;
 
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -16,10 +18,12 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
 {
     private final String TAG = toString();
     private final IInterfaceProvider interfaceProvider;
+    private final Vibrator vibrator;
 
-    LiveViewKeyPanelClickListener(@NonNull IInterfaceProvider interfaceProvider)
+    LiveViewKeyPanelClickListener(@NonNull IInterfaceProvider interfaceProvider, @Nullable Vibrator vibrator)
     {
         this.interfaceProvider = interfaceProvider;
+        this.vibrator = vibrator;
     }
 
     @Override
@@ -113,6 +117,10 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
                 if (buttonControl != null)
                 {
                     buttonControl.pushedButton(keyId);
+                    if (vibrator != null)
+                    {
+                        vibrator.vibrate(30);
+                    }
                 }
             }
         }
