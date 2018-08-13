@@ -925,4 +925,22 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void updateIsoSensitivity(String sv)
+    {
+        Log.v(TAG, "updateIsoSensitivity : " + sv);
+    }
+
+    @Override
+    public void updateWarning(String warning)
+    {
+        Log.v(TAG, "updateWarning : " + warning);
+    }
+
+    @Override
+    public void updateStorageStatus(String status)
+    {
+        Log.v(TAG, "updateStorageStatus : " + status);
+    }
 }

@@ -23,7 +23,7 @@ public interface IPreferencePropertyAccessor
     String RAW = "raw";
 
     String LIVE_VIEW_QUALITY = "live_view_quality";
-    String LIVE_VIEW_QUALITY_DEFAULT_VALUE = "QVGA";
+    String LIVE_VIEW_QUALITY_DEFAULT_VALUE = "VGA";
 
     String CAMERAKIT_VERSION = "camerakit_version";
 

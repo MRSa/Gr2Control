@@ -18,7 +18,7 @@ public class CameraPropertyUtilities
     {
         if (quality == null)
         {
-            return OLYCamera.LiveViewSize.QVGA;
+            return OLYCamera.LiveViewSize.VGA;
         }
         if (quality.equalsIgnoreCase("QVGA"))
         {
@@ -37,7 +37,7 @@ public class CameraPropertyUtilities
         {
             return OLYCamera.LiveViewSize.QUAD_VGA;
         }
-        return OLYCamera.LiveViewSize.QVGA;
+        return OLYCamera.LiveViewSize.VGA;
     }
 
     public static String getPropertyValue(String value)

@@ -13,4 +13,8 @@ public interface ICameraStatusUpdateNotify
     void updatedMeteringMode(String meteringMode);
     void updatedWBMode(String wbMode);
     void updateRemainBattery(int percentage);
+
+    void updateIsoSensitivity(String sv);
+    void updateWarning(String warning);
+    void updateStorageStatus(String status);
 }
