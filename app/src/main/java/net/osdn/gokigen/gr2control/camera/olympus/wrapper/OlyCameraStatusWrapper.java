@@ -14,6 +14,10 @@ import jp.co.olympus.camerakit.OLYCamera;
 import jp.co.olympus.camerakit.OLYCameraPropertyListener;
 import jp.co.olympus.camerakit.OLYCameraStatusListener;
 
+/**
+ *
+ *
+ */
 public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatcher, OLYCameraStatusListener, OLYCameraPropertyListener
 {
     private final String TAG = toString();
@@ -31,11 +35,9 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
     private static final String CAMERA_STATUS_EXPOSURE_WARNING = "ExposureWarning";
     private static final String CAMERA_STATUS_EXPOSURE_METERING_WARNING = "ExposureMeteringWarning";
     private static final String CAMERA_STATUS_HIGH_TEMPERATURE_WARNING = "HighTemperatureWarning";
-/*
     private static final String CAMERA_STATUS_DETECT_FACES = "DetectedHumanFaces";
     private static final String CAMERA_STATUS_FOCAL_LENGTH = "ActualFocalLength";
     private static final String CAMERA_STATUS_LEVEL_GAUGE = "LevelGauge";
-*/
 
     private String currentTakeMode = "";
     private String currentMeteringMode = "";
@@ -51,47 +53,124 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
     }
 
 
+    private String convertToOpcKey(@NonNull String key)
+    {
+        String opcKey = "";
+        switch (key)
+        {
+            case EFFECT:
+                opcKey = "COLORTONE";
+                break;
+            case TAKE_MODE:
+                opcKey = "TAKEMODE";
+                break;
+            case APERATURE:
+                opcKey = "APERTURE";
+                break;
+            case SHUTTER_SPEED:
+                opcKey = "SHUTTER";
+                break;
+            case ISO_SENSITIVITY:
+                opcKey = "ISO";
+                break;
+            case EXPREV:
+                opcKey = "EXPREV";
+                break;
+            case WHITE_BALANCE:
+                opcKey = "WB";
+                break;
+            case AE:
+                opcKey = "AE";
+                break;
+            case IMAGESIZE:
+                opcKey = "IMAGESIZE";
+                break;
+            case MOVIESIZE:
+                opcKey = "QUALITY_MOVIE";
+                break;
+            case DRIVE_MODE:
+                opcKey = "TAKE_DRIVE";
+                break;
+            case FOCUS_MODE:
+                opcKey = "TAKE_DRIVE";
+                break;
+            case AF_MODE:
+                opcKey = "FOCUS_STILL";
+                break;
+            case FLASH_XV:
+                break;
+        }
+        return (opcKey);
+    }
+
     @Override
     public @NonNull List<String> getStatusList(@NonNull String key)
     {
         List<String> array = new ArrayList<>();
-
-        // OPC用に変更...
-/*
-        String BATTERY = "battery";
-        String STATE = "state";
-        String FOCUS_MODE = "focusMode";
-        String AF_MODE = "AFMode";
-
-        String RESOLUTION = "reso";
-        String DRIVE_MODE = "shootMode";
-        String WHITE_BALANCE = "WBMode";
-        String AE = "meteringMode";
-
-        String EFFECT = "effect";
-        String TAKE_MODE = "exposureMode";
-        String IMAGESIZE = "stillSize";
-        String MOVIESIZE = "movieSize";
-
-        String APERATURE = "av";
-        String SHUTTER_SPEED = "tv";
-        String ISO_SENSITIVITY = "sv";
-        String EXPREV = "xv";
-        String FLASH_XV = "flashxv";
-*/
+        String opcKey = convertToOpcKey(key);
+        if (opcKey.length() < 1)
+        {
+            return (array);
+        }
+        try
+        {
+            List<String> values = camera.getCameraPropertyValueList(opcKey);
+            for (String value : values)
+            {
+                array.add(camera.getCameraPropertyValueTitle(value));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return (array);
     }
 
     @Override
     public String getStatus(@NonNull String key)
     {
+        String opcKey = convertToOpcKey(key);
+        if (opcKey.length() < 1)
+        {
+            return ("");
+        }
+        try
+        {
+            return (camera.getCameraPropertyValueTitle(camera.getCameraPropertyValue(opcKey)));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return ("");
     }
 
     @Override
     public void setStatus(@NonNull String key, @NonNull String value)
     {
-
+        Log.v(TAG, "setStatus : " + key + " " + value);
+        try
+        {
+            String opcKey = convertToOpcKey(key);
+            if (opcKey.length() < 1)
+            {
+                return;
+            }
+            List<String> values = camera.getCameraPropertyValueList(opcKey);
+            for (String item : values)
+            {
+                String valueTitle = camera.getCameraPropertyValueTitle(item);
+                if (value.equals(valueTitle))
+                {
+                    camera.setCameraPropertyValue(opcKey, item);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -101,6 +180,7 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
         try
         {
             camera.setCameraStatusListener(this);
+            camera.setCameraPropertyListener(this);
         }
         catch (Exception e)
         {
@@ -112,7 +192,6 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
     public void stoptStatusWatch()
     {
         this.updateReceiver = null;
-
     }
 
     @Override
@@ -154,8 +233,10 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
                 case CAMERA_STATUS_MEDIA_ERROR:
                     updateReceiver.updateStorageStatus(name);
                     break;
+                case CAMERA_STATUS_DETECT_FACES:
+                case CAMERA_STATUS_FOCAL_LENGTH:
+                case CAMERA_STATUS_LEVEL_GAUGE:
                 default:
-                    checkUpdateStatus(olyCamera);
                     break;
             }
         }
@@ -192,18 +273,7 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
             int percentage = 0;
 
             Log.v(TAG, "currentRemainBattery : " + currentRemainBattery);
-/*
-            UNKNOWN	未検出
-            CHARGE	充電中
-            EMPTY	電池残量0
-            WARNING	電池残量小
-            LOW	電池残量中間
-            FULL	電池残量フル
-            EMPTY_AC	電池残量0/給電
-            SUPPLY_WARNING	電池残量小/給電
-            SUPPLY_LOW	電池残量中間/給電
-            SUPPLY_FULL	電池残量フル/給電
- */
+
             updateReceiver.updateRemainBattery(percentage);
         }
         String shutterSpeed = getPropertyTitle(olyCamera, "SHUTTER");

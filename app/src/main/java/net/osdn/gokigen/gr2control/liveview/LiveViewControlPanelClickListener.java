@@ -29,7 +29,6 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
         this.interfaceProvider = interfaceProvider;
     }
 
-
     @Override
     public void onClick(View view)
     {
@@ -47,7 +46,7 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
             {
                 case R.id.takemodeTextView:
                     //  撮影モードは変えられない...なぜ？
-                    // selectTakeMode(statusList);
+                    selectTakeMode(statusList);
                     break;
 
                 case R.id.shutterSpeedTextView:
@@ -62,11 +61,11 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
                     selectExposureCompensation(statusList);
                     break;
 
-                case R.id.aeModeTextView:
+                case R.id.aeModeImageView:
                     selectAeMode(statusList);
                     break;
 
-                case R.id.whiteBalanceImageView:
+                case R.id.whiteBalanceTextView:
                     selectWhiteBalance(statusList);
                     break;
 
@@ -152,7 +151,6 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
             e.printStackTrace();
         }
     }
-
 
     private void selectWhiteBalance(@NonNull ICameraStatus statusList)
     {

@@ -24,6 +24,7 @@ import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
@@ -171,8 +172,8 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setPanelClickListener(view, R.id.shutterSpeedTextView);
             setPanelClickListener(view, R.id.apertureValueTextView);
             setPanelClickListener(view, R.id.exposureCompensationTextView);
-            setPanelClickListener(view, R.id.aeModeTextView);
-            setPanelClickListener(view, R.id.whiteBalanceImageView);
+            setPanelClickListener(view, R.id.aeModeImageView);
+            setPanelClickListener(view, R.id.whiteBalanceTextView);
             setPanelClickListener(view, R.id.setEffectImageView);
 
             if (onKeyPanelClickListener == null)
@@ -842,20 +843,39 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
+            Log.v(TAG, "updatedMeteringMode() : " + meteringMode);
             final Activity activity = getActivity();
-            if (activity == null)
+            if ((activity == null)||(meteringMode == null))
             {
                 return;
             }
+
+            int iconId = R.drawable.ic_crop_free_black_24dp;
+            switch (meteringMode)
+            {
+                case ICameraStatus.AE_STATUS_MULTI:
+                case ICameraStatus.AE_STATUS_ESP:
+                    iconId = R.drawable.ic_crop_free_black_24dp;
+                    break;
+                case ICameraStatus.AE_STATUS_CENTER:
+                case ICameraStatus.AE_STATUS_CENTER2:
+                    iconId = R.drawable.ic_center_focus_weak_black_24dp;
+                    break;
+                case ICameraStatus.AE_STATUS_SPOT:
+                case ICameraStatus.AE_STATUS_PINPOINT:
+                    iconId = R.drawable.ic_filter_center_focus_black_24dp;
+                    break;
+            }
+            final int id = iconId;
             activity.runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    TextView view = activity.findViewById(R.id.aeModeTextView);
+                    ImageView view = activity.findViewById(R.id.aeModeImageView);
                     if (view != null)
                     {
-                        view.setText(meteringMode);
+                        view.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
                         view.invalidate();
                     }
                 }
@@ -870,7 +890,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     @Override
     public void updatedWBMode(final String wbMode)
     {
-        // とりあえず何もしない... 選択肢は以下
+        // とりあえず何もしない... 選択肢は以下 (Ricohの場合...)
         // auto, multiAuto, daylight, shade, cloud, tungsten, warmWhiteFluorescent, daylightFluorescent, dayWhiteFluorescent, coolWhiteFluorescent, incandescent,manual1, cte, custom
     }
 

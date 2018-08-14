@@ -256,28 +256,28 @@
             android:textSize="12pt" />
 -->
 
-        <TextView
-            android:id="@+id/aeModeTextView"
+        <ImageView
+            android:id="@+id/aeModeImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:text="AE"
+            android:src="@drawable/ic_crop_free_black_24dp" />
+
+        <TextView
+            android:id="@+id/whiteBalanceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/white_balance"
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
             android:textSize="12pt" />
-
-        <ImageView
-            android:id="@+id/whiteBalanceImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_wb_auto_black_24dp" />
 
         <ImageView
             android:id="@+id/setEffectImageView"

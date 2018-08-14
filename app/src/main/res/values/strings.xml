@@ -116,6 +116,8 @@
     <string name="label_aelock">AEL/AFL</string>
     <string name="label_c_af">C-AF</string>
 
+    <string name="white_balance">WB</string>
+
     <string name="exif_datetime_title">Date : </string>
     <string name="exif_exposure_time_title">Exposure Time : </string>
     <string name="exif_aperture_title">Aperture : </string>

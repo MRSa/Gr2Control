@@ -21,7 +21,15 @@ public interface ICameraStatus
     String RESOLUTION = "reso";
     String DRIVE_MODE = "shootMode";
     String WHITE_BALANCE = "WBMode";
+
     String AE = "meteringMode";
+
+    String AE_STATUS_MULTI = "multi";
+    String AE_STATUS_ESP = "ESP";
+    String AE_STATUS_SPOT = "spot";
+    String AE_STATUS_PINPOINT = "Spot";
+    String AE_STATUS_CENTER = "center";
+    String AE_STATUS_CENTER2 = "Ctr-Weighted";
 
     String EFFECT = "effect";
     String TAKE_MODE = "exposureMode";
@@ -33,4 +41,7 @@ public interface ICameraStatus
     String ISO_SENSITIVITY = "sv";
     String EXPREV = "xv";
     String FLASH_XV = "flashxv";
+
+
+
 }
