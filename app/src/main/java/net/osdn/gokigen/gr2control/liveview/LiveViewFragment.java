@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.osdn.gokigen.gr2control.R;
+import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
@@ -40,7 +42,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
  *  撮影用ライブビュー画面
  *
  */
-public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFocusingModeNotify, IFavoriteSettingDialogKicker, ICameraStatusUpdateNotify
+public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFocusingModeNotify, IFavoriteSettingDialogKicker, ICameraStatusUpdateNotify, LiveViewKeyPanelClickListener.KeyPanelFeedback
 {
     private final String TAG = this.toString();
 
@@ -174,11 +176,12 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setPanelClickListener(view, R.id.exposureCompensationTextView);
             setPanelClickListener(view, R.id.aeModeImageView);
             setPanelClickListener(view, R.id.whiteBalanceTextView);
+            setPanelClickListener(view, R.id.isoSensitivityTextView);
             setPanelClickListener(view, R.id.setEffectImageView);
 
             if (onKeyPanelClickListener == null)
             {
-                onKeyPanelClickListener = new LiveViewKeyPanelClickListener(interfaceProvider, vibrator);
+                onKeyPanelClickListener = new LiveViewKeyPanelClickListener(interfaceProvider, this, vibrator);
             }
             setKeyPanelClickListener(view, R.id.button_front_left);
             setKeyPanelClickListener(view, R.id.button_front_right);
@@ -198,84 +201,22 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setKeyPanelClickListener(view, R.id.button_plus);
             setKeyPanelClickListener(view, R.id.button_minus);
             setKeyPanelClickListener(view, R.id.button_playback);
+            setKeyPanelClickListener(view, R.id.button_acclock);
+            setKeyPanelClickListener(view, R.id.button_lcd_onoff);
+            setKeyPanelClickListener(view, R.id.button_highlight);
 
-            /*
-            view.findViewById(R.id.show_preference_button).setOnClickListener(onClickTouchListener);
-            view.findViewById(R.id.camera_property_settings_button).setOnClickListener(onClickTouchListener);
-            view.findViewById(R.id.shutter_button).setOnClickListener(onClickTouchListener);
-            view.findViewById(R.id.btn_zoomin).setOnClickListener(onClickTouchListener);
-            view.findViewById(R.id.btn_zoomout).setOnClickListener(onClickTouchListener);
-
-            manualFocus = view.findViewById(R.id.focusing_button);
-            changeLiveViewScale = view.findViewById(R.id.live_view_scale_button);
-
-            ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
-
-            if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-            {
-                view.findViewById(R.id.show_favorite_settings_button).setOnClickListener(onClickTouchListener);
-            }
-            else
-            {
-                // お気に入りボタン(とMFボタン)は、SONYモード, RICOH GR2モードのときには表示しない
-                final View favoriteButton = view.findViewById(R.id.show_favorite_settings_button);
-                final View propertyButton = view.findViewById(R.id.camera_property_settings_button);
-                if ((favoriteButton != null)&&(manualFocus != null))
-                {
-                    runOnUiThread(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            favoriteButton.setVisibility(View.INVISIBLE);
-                            if (manualFocus != null)
-                            {
-                                manualFocus.setVisibility(View.INVISIBLE);
-                            }
-                            propertyButton.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-                if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY)
-                {
-                    if (changeLiveViewScale != null)
-                    {
-                        changeLiveViewScale.setVisibility(View.INVISIBLE);
-                    }
-                }
-                else // if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
-                {
-                    if (changeLiveViewScale != null)
-                    {
-                        changeLiveViewScale.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            if (manualFocus != null)
-            {
-                manualFocus.setOnClickListener(onClickTouchListener);
-            }
-            changedFocusingMode();
-
-            if (changeLiveViewScale != null)
-            {
-                changeLiveViewScale.setOnClickListener(onClickTouchListener);
-            }
-
-            showGrid = view.findViewById(R.id.show_hide_grid_button);
-            showGrid.setOnClickListener(onClickTouchListener);
-            updateGridIcon();
-
-            updateConnectionStatus(ICameraConnection.CameraConnectionStatus.UNKNOWN);
-
-            statusArea = view.findViewById(R.id.informationMessageTextView);
-            focalLengthArea = view.findViewById(R.id.focal_length_with_digital_zoom_view);
-*/
             connectStatus = view.findViewById(R.id.connect_disconnect_button);
             if (connectStatus != null)
             {
                 connectStatus.setOnClickListener(onClickTouchListener);
+            }
+
+            View keyPanel = view.findViewById(R.id.showKeyPanelImageView);
+            ICameraButtonControl buttonControl = interfaceProvider.getButtonControl();
+            if (keyPanel != null)
+            {
+                keyPanel.setVisibility((buttonControl == null) ? View.INVISIBLE : View.VISIBLE);
+                keyPanel.invalidate();
             }
         }
         catch (Exception e)
@@ -414,7 +355,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     }
 
     /**
-     *   AF/MFの表示を更新する
+     *
      *
      */
     @Override
@@ -523,13 +464,6 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             changeRunModeExecutor.changeRunMode(true);
         }
 
-/*
-        // ステータスの変更を通知してもらう
-        camera.setCameraStatusListener(statusListener);
-
-        // 画面下部の表示エリアの用途を切り替える
-        setupLowerDisplayArea();
-*/
         // propertyを取得
         try
         {
@@ -962,5 +896,63 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     public void updateStorageStatus(String status)
     {
         Log.v(TAG, "updateStorageStatus : " + status);
+    }
+
+    @Override
+    public void updateToggleButton(boolean isOn)
+    {
+        try
+        {
+            Activity activity = getActivity();
+            if (activity != null)
+            {
+                ImageView imageView = activity.findViewById(R.id.button_toggle_aeaf);
+                if (isOn)
+                {
+                    imageView.setImageDrawable(ContextCompat.getDrawable(activity,R.drawable.ic_radio_button_checked_black_24dp));
+                }
+                else
+                {
+                    imageView.setImageDrawable(ContextCompat.getDrawable(activity,R.drawable.ic_radio_button_unchecked_black_24dp));
+                }
+                imageView.invalidate();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateLcdOnOff(boolean isOn)
+    {
+        Log.v(TAG, "updateLcdOnOff() " + isOn);
+    }
+
+    @Override
+    public void updateAFLlever(boolean isCaf)
+    {
+        try
+        {
+            Activity activity = getActivity();
+            if (activity != null)
+            {
+                TextView textView = activity.findViewById(R.id.lever_ael_caf);
+                if (isCaf)
+                {
+                    textView.setText(getString(R.string.label_c_af));
+                }
+                else
+                {
+                    textView.setText(getString(R.string.label_aelock));
+                }
+                textView.invalidate();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

@@ -241,30 +241,6 @@
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
             android:textSize="12pt" />
-<!--
-        <TextView
-            android:id="@+id/isoSensitivityTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="ISO#"
-            android:textColor="@color/setting_text_color"
-            android:textStyle="bold"
-            android:textSize="12pt" />
--->
-
-        <ImageView
-            android:id="@+id/aeModeImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_crop_free_black_24dp" />
 
         <TextView
             android:id="@+id/whiteBalanceTextView"
@@ -278,6 +254,29 @@
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
             android:textSize="12pt" />
+
+        <TextView
+            android:id="@+id/isoSensitivityTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="ISO"
+            android:textColor="@color/setting_text_color"
+            android:textStyle="bold"
+            android:textSize="12pt" />
+
+        <ImageView
+            android:id="@+id/aeModeImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_crop_free_black_24dp" />
 
         <ImageView
             android:id="@+id/setEffectImageView"
@@ -306,7 +305,7 @@
     <RelativeLayout
         android:id="@+id/keyPanelLayout"
         android:orientation="horizontal"
-        android:layout_width="100pt"
+        android:layout_width="125pt"
         android:layout_height="120pt"
         android:layout_alignLeft="@id/controlPanelLayout"
         android:layout_alignStart="@id/controlPanelLayout"
@@ -596,5 +595,50 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="4dp"
             android:textSize="6pt" />
+
+        <ImageView
+            android:id="@+id/button_lcd_onoff"
+            android:layout_width="20pt"
+            android:layout_height="12pt"
+            android:layout_alignTop="@id/button_function_3"
+            android:layout_toEndOf="@id/button_function_3"
+            android:layout_toRightOf="@id/button_function_3"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginLeft="8pt"
+            android:layout_marginStart="8pt"
+            android:src="@drawable/ic_panorama_wide_angle_black_24dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/button_highlight"
+            android:layout_width="20pt"
+            android:layout_height="12pt"
+            android:layout_alignLeft="@id/button_lcd_onoff"
+            android:layout_alignStart="@id/button_lcd_onoff"
+            android:layout_alignTop="@id/button_minus"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_highlight_black_24dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/button_acclock"
+            android:layout_width="20pt"
+            android:layout_height="12pt"
+            android:layout_alignLeft="@id/button_lcd_onoff"
+            android:layout_alignStart="@id/button_lcd_onoff"
+            android:layout_alignTop="@id/button_front_right"
+            android:scaleType="fitCenter"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_photo_camera_black_24dp"
+            android:gravity="center" />
+
     </RelativeLayout>
 </RelativeLayout>

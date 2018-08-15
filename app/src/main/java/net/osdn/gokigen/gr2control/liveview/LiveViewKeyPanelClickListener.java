@@ -18,11 +18,26 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
 {
     private final String TAG = toString();
     private final IInterfaceProvider interfaceProvider;
+    private final KeyPanelFeedback feedback;
     private final Vibrator vibrator;
 
-    LiveViewKeyPanelClickListener(@NonNull IInterfaceProvider interfaceProvider, @Nullable Vibrator vibrator)
+    private boolean lcdOffOn = false;
+    private boolean lightOnOff = false;
+    private boolean accLock = false;
+    private boolean toggleButton = false;
+    private boolean leverAfl = false;
+
+    interface KeyPanelFeedback
+    {
+        void updateToggleButton(boolean isOn);
+        void updateLcdOnOff(boolean isOn);
+        void updateAFLlever(boolean isCaf);
+    };
+
+    LiveViewKeyPanelClickListener(@NonNull IInterfaceProvider interfaceProvider, @Nullable KeyPanelFeedback feedback, @Nullable Vibrator vibrator)
     {
         this.interfaceProvider = interfaceProvider;
+        this.feedback = feedback;
         this.vibrator = vibrator;
     }
 
@@ -107,6 +122,18 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
                     // プレイボタン
                     keyId = ICameraButtonControl.BUTTON_PLAYBACK;
                     break;
+                case R.id.button_acclock:
+                    // アクセサリーロックボタン
+                    keyId = decideAccLock();
+                    break;
+                case R.id.button_highlight:
+                    // ライトオンオフボタン
+                    keyId = decideLightOnOff();
+                    break;
+                case R.id.button_lcd_onoff:
+                    // LCDオンオフボタン
+                    keyId = decideLCDOnOff();
+                    break;
                 default:
                     Log.v(TAG, "onClick() : " + id);
                     break;
@@ -130,17 +157,52 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
         }
     }
 
+    private String decideAccLock()
+    {
+        // アクセサリーロック・ロック解除ボタン
+        accLock = !accLock;
+        return ((accLock) ? "acclock on" : "acclock off");
+    }
+
+    private String decideLightOnOff()
+    {
+        // Light ON/OFFボタン
+        lightOnOff = !lightOnOff;
+        return ((lightOnOff) ? "led on 1" : "led off 1");
+    }
+
+    private String decideLCDOnOff()
+    {
+        // LCD ON/OFFボタン
+        lcdOffOn = !lcdOffOn;
+        if (feedback != null)
+        {
+            feedback.updateLcdOnOff(lcdOffOn);
+        }
+        return ((lcdOffOn) ? "lcd sleep on" : "lcd sleep off");
+    }
+
     private String decideToggle()
     {
         // AEL/AFL ボタン状態から次のボタン状態指示を決める
         // あわせて、ボタン状態の表示更新を行う
-        return ("");
+        toggleButton = !toggleButton;
+        if (feedback != null)
+        {
+            feedback.updateToggleButton(toggleButton);
+        }
+        return ((toggleButton) ? "baf 1" : "baf 0");
     }
 
     private String decideLever()
     {
         // AEL/AFL - C-AF レバー状態から、次のレバー状態指示を決める。
         // あわせて、ボタン状態の表示更新を行う
-        return ("");
+        leverAfl = !leverAfl;
+        if (feedback != null)
+        {
+            feedback.updateAFLlever(leverAfl);
+        }
+        return ((leverAfl) ? "bafl" : "bafc");
     }
 }

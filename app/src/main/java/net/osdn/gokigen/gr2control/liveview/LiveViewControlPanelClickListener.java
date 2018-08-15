@@ -45,7 +45,6 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
             switch (id)
             {
                 case R.id.takemodeTextView:
-                    //  撮影モードは変えられない...なぜ？
                     selectTakeMode(statusList);
                     break;
 
@@ -67,6 +66,10 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
 
                 case R.id.whiteBalanceTextView:
                     selectWhiteBalance(statusList);
+                    break;
+
+                case R.id.isoSensitivityTextView:
+                    selectIsoSensitivity(statusList);
                     break;
 
                 case R.id.setEffectImageView:
@@ -158,6 +161,19 @@ class LiveViewControlPanelClickListener  implements View.OnClickListener
         try
         {
             choiceStatusList(statusList, ICameraStatus.WHITE_BALANCE);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void selectIsoSensitivity(@NonNull ICameraStatus statusList)
+    {
+        Log.v(TAG,"selectIsoSensitivity()");
+        try
+        {
+            choiceStatusList(statusList, ICameraStatus.ISO_SENSITIVITY);
         }
         catch (Exception e)
         {
