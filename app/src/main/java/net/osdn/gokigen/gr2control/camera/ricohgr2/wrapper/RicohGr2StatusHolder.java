@@ -21,6 +21,7 @@ class RicohGr2StatusHolder
     private final ICameraStatusUpdateNotify notifier;
 
     private JSONObject latestResultObject = null;
+    private boolean focused = false;
     private String avStatus = "";
     private String tvStatus = "";
     private String xvStatus = "";
@@ -108,6 +109,7 @@ class RicohGr2StatusHolder
             String meteringMode = latestResultObject.getString("meteringMode");
             String wbMode = latestResultObject.getString("WBMode");
             String battery = latestResultObject.getString("battery");
+            boolean focus = latestResultObject.getBoolean("focused");
 
             if (result.contains("OK"))
             {
@@ -145,6 +147,11 @@ class RicohGr2StatusHolder
                 {
                     batteryStatus = battery;
                     notifier.updateRemainBattery(Integer.parseInt(batteryStatus));
+                }
+                if (focus != focused)
+                {
+                    focused = focus;
+                    notifier.updateFocusedStatus(focused);
                 }
             }
             System.gc();

@@ -3,12 +3,15 @@ package net.osdn.gokigen.gr2control.liveview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -873,6 +876,42 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                     }
                 }
             });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateFocusedStatus(boolean focused)
+    {
+        Activity activity = getActivity();
+        try
+        {
+            if (activity != null)
+            {
+                ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
+                if (focused)
+                {
+                    Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
+                    if (icon != null)
+                    {
+                        DrawableCompat.setTint(icon, Color.GREEN);
+                        view.setImageDrawable(icon);
+                    }
+                }
+                else
+                {
+                    Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_free_black_24dp, null);
+                    if (icon != null)
+                    {
+                        DrawableCompat.setTint(icon, Color.BLACK);
+                        view.setImageDrawable(icon);
+                    }
+                }
+                view.invalidate();
+            }
         }
         catch (Exception e)
         {
