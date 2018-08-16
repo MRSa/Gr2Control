@@ -6,4 +6,7 @@
     <color name="background_dark">#555555</color>
     <color name="background_translucent_white">#88FFFFFF</color>
     <color name="background_translucent_dark">#AA555555</color>
+    <color name="colorBlack">#DD222222</color>
+    <color name="colorWhite">#EEEEEE</color>
+    <color name="colorGray">#CCCCCC</color>
 </resources>
