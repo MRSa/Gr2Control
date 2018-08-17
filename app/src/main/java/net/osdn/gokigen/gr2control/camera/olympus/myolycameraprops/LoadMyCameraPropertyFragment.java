@@ -54,7 +54,7 @@ public class LoadMyCameraPropertyFragment extends ListFragment implements ListVi
             listItems.add(new MyCameraPropertySetItems(0, idHeader, prefTitle, prefDate));
         }
 
-        //String prefDate = preferences.getString(LoadSaveCameraProperties.DATE_KEY, "");
+        //String prefDate = preferences_opc.getString(LoadSaveCameraProperties.DATE_KEY, "");
         //listItems.add(new MyCameraPropertySetItems(0, "000", getString(R.string.auto_save_props), prefDate));
 
         MyCameraPropertyLoadArrayAdapter adapter = new MyCameraPropertyLoadArrayAdapter(getActivity(),  R.layout.column_load, listItems);

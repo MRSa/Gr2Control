@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 
+import net.osdn.gokigen.gr2control.camera.olympus.IOlympusInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.olympus.wrapper.OlympusInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.RicohGr2InterfaceProvider;
@@ -41,13 +42,13 @@ public class CameraInterfaceProvider implements IInterfaceProvider
         //sony = new SonyCameraWrapper(context, provider);
     }
 
-/*
     @Override
-    public IOlympusInterfaceProvider getOlympusInterface()
+    public IOlympusInterfaceProvider getOlympusInterfaceProvider()
     {
         return (olympus);
     }
 
+    /*
     @Override
     public IOlympusLiveViewListener getOlympusLiveViewListener()
     {

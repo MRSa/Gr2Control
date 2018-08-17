@@ -47,4 +47,39 @@
         <item>Partial</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="sound_volume_level">
+        <item >OFF</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+        <item >4</item>
+        <item >5</item>
+    </string-array>
+
+    <string-array name="sound_volume_level_value">
+        <item >OFF</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+        <item >4</item>
+        <item >5</item>
+    </string-array>
+
+    <string-array name="live_view_quality">
+        <item >QVGA (320x240)</item>
+        <item >VGA (640x480)</item>
+        <item >SVGA (800x600)</item>
+        <item >XGA (1024x768)</item>
+        <item >QUAD VGA (1280x960)</item>
+    </string-array>
+
+    <string-array name="live_view_quality_value">
+        <item >QVGA</item>
+        <item >VGA</item>
+        <item >SVGA</item>
+        <item >XGA</item>
+        <item >QUAD_VGA</item>
+    </string-array>
+
 </resources>

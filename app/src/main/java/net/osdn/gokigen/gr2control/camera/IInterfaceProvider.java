@@ -1,5 +1,6 @@
 package net.osdn.gokigen.gr2control.camera;
 
+import net.osdn.gokigen.gr2control.camera.olympus.IOlympusInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 
@@ -27,6 +28,8 @@ public interface IInterfaceProvider
 
     ICameraHardwareStatus getHardwareStatus();
     ICameraRunMode getCameraRunMode();
+
+    IOlympusInterfaceProvider getOlympusInterfaceProvider();
 
     ICameraConnection.CameraConnectionMethod getCammeraConnectionMethod();
     void resetCameraConnectionMethod();

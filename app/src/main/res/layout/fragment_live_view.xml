@@ -142,13 +142,21 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/spacer0Layout"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:background="@color/colorBlack">
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/spacer1Layout"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1"
             android:background="@color/colorBlack">
-
         </LinearLayout>
 
         <LinearLayout
@@ -159,6 +167,28 @@
             android:layout_weight="2"
             android:background="@color/colorBlack">
 
+            <ImageView
+                android:id="@+id/area_spacer1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+<!--
+            <ImageView
+                android:id="@+id/area_spacer2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+-->
             <ImageButton
                 android:id="@+id/shutter_button"
                 android:layout_width="match_parent"
@@ -171,6 +201,28 @@
                 android:src="@drawable/ic_camera_black_24dp"
                 android:gravity="center" />
 
+            <ImageView
+                android:id="@+id/area_spacer3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+<!--
+            <ImageView
+                android:id="@+id/area_spacer4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+-->
         </LinearLayout>
 
         <LinearLayout
@@ -183,9 +235,75 @@
             android:background="@color/colorBlack">
 
             <ImageView
+                android:id="@+id/area_spacer01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/area_spacer02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/area_spacer03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/area_spacer04"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/area_spacer05"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/area_spacer06"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
                 android:id="@+id/focusUnlockImageView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
                 android:clickable="true"
@@ -194,7 +312,6 @@
                 android:src="@drawable/ic_crop_free_black_24dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center" />
-
         </LinearLayout>
 
         <LinearLayout

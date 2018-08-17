@@ -130,4 +130,18 @@
     <string name="exif_metering_mode_title">Metering Mode :</string>
     <string name="exif_custom_process_title">(Custom Image Processing)</string>    
     <string name="exif_with_gps">(with Geolocation)</string>
+
+    <string name="pref_camera_sound_volume">Shutter Sound</string>
+    <string name="pref_take_raw">Take Raw</string>
+
+    <string name="pref_cat_live_view">Live View Settings</string>
+    <string name="pref_live_view_quality">Live View Quality</string>
+
+    <string name="pref_cat_info">Information</string>
+    <string name="pref_focal_length">Focal Length</string>
+    <string name="pref_lens_status">Lens Status</string>
+    <string name="pref_media_status">SD Card Status</string>
+    <string name="pref_camera_version">Camera Version</string>
+    <string name="pref_camerakit_version">Camera kit Version</string>
+
 </resources>

@@ -13,6 +13,7 @@ import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.liveview.IStatusViewDrawer;
 import net.osdn.gokigen.gr2control.logcat.LogCatFragment;
 import net.osdn.gokigen.gr2control.playback.ImageGridViewFragment;
+import net.osdn.gokigen.gr2control.preference.olympus.PreferenceFragment;
 import net.osdn.gokigen.gr2control.preference.ricohgr2.RicohGr2PreferenceFragment;
 
 /**
@@ -198,18 +199,16 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
             {
                 try
                 {
-                    preferenceFragment = RicohGr2PreferenceFragment.newInstance(activity, this);
-/*
+                    //preferenceFragment = RicohGr2PreferenceFragment.newInstance(activity, this);
                     ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
                     if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2) {
-                        preferenceFragment = RicohGr2PreferenceFragment.newInstance(this, this);
-                    } else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY) {
-                        preferenceFragment = SonyPreferenceFragment.newInstance(this, this);
+                        preferenceFragment = RicohGr2PreferenceFragment.newInstance(activity, this);
+                    //} else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY) {
+                    //    preferenceFragment = SonyPreferenceFragment.newInstance(this, this);
                     } else //  if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
                     {
-                        preferenceFragment = PreferenceFragment.newInstance(this, interfaceProvider, this);
+                        preferenceFragment = PreferenceFragment.newInstance(activity, interfaceProvider, this);
                     }
-*/
                 }
                 catch (Exception e)
                 {

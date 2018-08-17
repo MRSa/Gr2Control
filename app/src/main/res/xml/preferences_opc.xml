@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory
+        android:title="@string/pref_cat_application_control">
+
+        <PreferenceScreen
+            android:key="exit_application"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="@string/pref_exit_power_off" />
+
+        <ListPreference
+            android:title="@string/pref_connection_method"
+            android:entryValues="@array/connection_method_value"
+            android:entries="@array/connection_method"
+            android:key="connection_method"
+            android:defaultValue="OPC"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_camera">
+
+        <ListPreference
+            android:title="@string/pref_camera_sound_volume"
+            android:entryValues="@array/sound_volume_level_value"
+            android:entries="@array/sound_volume_level"
+            android:key="sound_volume_level"
+            android:defaultValue="OFF"/>
+
+        <CheckBoxPreference
+            android:key="raw"
+            android:title="@string/pref_take_raw" />
+
+        <CheckBoxPreference
+            android:key="capture_both_camera_and_live_view"
+            android:title="@string/pref_capture_both_camera_and_live_view" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_live_view">
+        <ListPreference
+            android:title="@string/pref_live_view_quality"
+            android:entryValues="@array/live_view_quality_value"
+            android:entries="@array/live_view_quality"
+            android:key="live_view_quality"
+            android:defaultValue="VGA"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_info">
+        <PreferenceScreen
+            android:key="focal_length"
+            android:title="@string/pref_focal_length"
+            android:selectable="false" />
+
+        <PreferenceScreen
+            android:key="lens_status"
+            android:title="@string/pref_lens_status"
+            android:selectable="false" />
+
+        <PreferenceScreen
+            android:key="media_status"
+            android:title="@string/pref_media_status"
+            android:selectable="false" />
+
+        <PreferenceScreen
+            android:key="camera_version"
+            android:title="@string/pref_camera_version"
+            android:selectable="false" />
+
+        <PreferenceScreen
+        android:key="camerakit_version"
+        android:title="@string/pref_camerakit_version"
+        android:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_initialize">
+
+        <CheckBoxPreference
+        android:key="auto_connect_to_camera"
+        android:title="@string/pref_auto_connect_camera"
+        android:summary="@string/pref_summary_auto_connect_camera" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_gokigen">
+
+        <Preference
+            android:key="instruction_link"
+            android:title="@string/pref_instruction_manual"
+            android:summary="https://osdn.net/projects/gokigen/wiki/A01d"
+            android:selectable="true">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://osdn.net/projects/gokigen/wiki/A01d" />
+        </Preference>
+
+        <Preference
+            android:key="privacy_policy"
+            android:title="@string/pref_privacy_policy"
+            android:summary="https://osdn.net/projects/gokigen/wiki/PrivacyPolicy"
+            android:selectable="true">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://osdn.net/projects/gokigen/wiki/PrivacyPolicy" />
+        </Preference>
+
+        <PreferenceScreen
+            android:key="debug_info"
+            android:title="@string/pref_degug_info"
+            android:summary="@string/pref_summary_debug_info" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
