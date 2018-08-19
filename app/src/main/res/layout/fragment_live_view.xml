@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Take"
+                android:text=" "
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14pt" />
@@ -53,7 +53,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="S#"
+                android:text=" "
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14pt" />
@@ -66,7 +66,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="F#"
+                android:text=" "
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14pt" />
@@ -88,7 +88,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="EV#"
+                android:text=" "
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="14pt" />

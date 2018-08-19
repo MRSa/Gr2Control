@@ -214,7 +214,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:text="Take"
+            android:text=" "
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
             android:textSize="12pt" />
@@ -227,10 +227,10 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:text="S#"
+            android:text=" "
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
-            android:textSize="12pt" />
+            android:textSize="10pt" />
 
         <TextView
             android:id="@+id/apertureValueTextView"
@@ -240,10 +240,10 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:text="F#"
+            android:text=" "
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
-            android:textSize="12pt" />
+            android:textSize="10pt" />
 
         <TextView
             android:id="@+id/exposureCompensationTextView"
@@ -253,10 +253,10 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:text="EV#"
+            android:text=" "
             android:textColor="@color/setting_text_color"
             android:textStyle="bold"
-            android:textSize="12pt" />
+            android:textSize="10pt" />
 
         <TextView
             android:id="@+id/whiteBalanceTextView"
