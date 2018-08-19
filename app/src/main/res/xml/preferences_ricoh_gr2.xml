@@ -38,13 +38,6 @@
             android:key="gr2_lcd_sleep"
             android:title="@string/pref_gr2_lcd_sleep" />
 
-        <ListPreference
-            android:title="@string/pref_gr2_display_mode"
-            android:entryValues="@array/gr2_display_mode_value"
-            android:entries="@array/gr2_display_mode"
-            android:key="gr2_display_mode"
-            android:defaultValue="0"/>
-
         <CheckBoxPreference
             android:key="auto_connect_to_camera"
             android:title="@string/pref_auto_connect_camera"
@@ -53,19 +46,11 @@
 
     <PreferenceCategory
         android:title="@string/pref_cat_others">
-<!--
-                <CheckBoxPreference
-                    android:key="share_after_save"
-                    android:title="@string/pref_call_share_after_save" />
 
-                <CheckBoxPreference
-                    android:key="use_custom_splash"
-                    android:title="@string/pref_custom_splash" />
+        <CheckBoxPreference
+            android:key="share_after_save"
+            android:title="@string/pref_call_share_after_save" />
 
-                <PreferenceScreen
-                    android:key="select_splash_image"
-                    android:title="@string/pref_select_splash_image" />
--->
         <CheckBoxPreference
             android:key="use_playback_menu"
             android:title="@string/pref_use_playback_menu"

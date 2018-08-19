@@ -134,6 +134,9 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         {
             editor.putString(IPreferencePropertyAccessor.CONNECTION_METHOD, IPreferencePropertyAccessor.CONNECTION_METHOD_DEFAULT_VALUE);
         }
+        if (!items.containsKey(IPreferencePropertyAccessor.SHARE_AFTER_SAVE)) {
+            editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
+        }
         editor.apply();
     }
 
@@ -338,6 +341,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
+                case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
+                    value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
                 default:
                     String strValue = preferences.getString(key, "");
                     setListPreference(key, key, strValue);
@@ -439,6 +447,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                     setListPreference(IPreferencePropertyAccessor.SOUND_VOLUME_LEVEL, IPreferencePropertyAccessor.SOUND_VOLUME_LEVEL, IPreferencePropertyAccessor.SOUND_VOLUME_LEVEL_DEFAULT_VALUE);
                     setBooleanPreference(IPreferencePropertyAccessor.RAW, IPreferencePropertyAccessor.RAW, true);
                     setBooleanPreference(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, true);
+                    setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
 
                     // カメラキットのバージョン
                     findPreference(IPreferencePropertyAccessor.CAMERAKIT_VERSION).setSummary(OLYCamera.getVersion());

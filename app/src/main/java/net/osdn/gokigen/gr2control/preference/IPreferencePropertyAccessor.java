@@ -27,6 +27,15 @@ public interface IPreferencePropertyAccessor
 
     String SHARE_AFTER_SAVE = "share_after_save";
 
+    String CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW = "capture_both_camera_and_live_view";
+
+    String CONNECTION_METHOD = "connection_method";
+    String CONNECTION_METHOD_DEFAULT_VALUE = "RICOH_GR2";
+
+    String GR2_DISPLAY_CAMERA_VIEW = "gr2_display_camera_view";
+
+    String GR2_LCD_SLEEP = "gr2_lcd_sleep";
+
     String DIGITAL_ZOOM_LEVEL = "digital_zoom_level";
     String DIGITAL_ZOOM_LEVEL_DEFAULT_VALUE = "1.0";
 
@@ -36,19 +45,11 @@ public interface IPreferencePropertyAccessor
     String MAGNIFYING_LIVE_VIEW_SCALE = "magnifying_live_view_scale";
     String MAGNIFYING_LIVE_VIEW_SCALE_DEFAULT_VALUE = "10.0";
 
-    String CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW = "capture_both_camera_and_live_view";
+/*
+    //String GR2_DISPLAY_MODE = "gr2_display_mode";
+    //String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";
 
-    String CONNECTION_METHOD = "connection_method";
-    String CONNECTION_METHOD_DEFAULT_VALUE = "RICOH_GR2";
 
-    String GR2_DISPLAY_MODE = "gr2_display_mode";
-    String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";
-
-    String GR2_DISPLAY_CAMERA_VIEW = "gr2_display_camera_view";
-
-    String GR2_LCD_SLEEP = "gr2_lcd_sleep";
-
-    /*
     int CHOICE_SPLASH_SCREEN = 10;
 
     int SELECT_SAMPLE_IMAGE_CODE = 110;
@@ -63,6 +64,6 @@ public interface IPreferencePropertyAccessor
         void stored(boolean result);
         void restored(boolean result);
     }
-*****/
+*/
 
 }

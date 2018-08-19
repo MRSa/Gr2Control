@@ -120,8 +120,8 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.GR2_LCD_SLEEP)) {
                 editor.putBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false);
             }
-            if (!items.containsKey(IPreferencePropertyAccessor.GR2_DISPLAY_MODE)) {
-                editor.putString(IPreferencePropertyAccessor.GR2_DISPLAY_MODE, IPreferencePropertyAccessor.GR2_DISPLAY_MODE_DEFAULT_VALUE);
+            if (!items.containsKey(IPreferencePropertyAccessor.SHARE_AFTER_SAVE)) {
+                editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
             }
             editor.apply();
         }
@@ -169,6 +169,11 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
+                case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
+                    value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
                 default:
                     String strValue = preferences.getString(key, "");
                     setListPreference(key, key, strValue);
@@ -199,16 +204,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                 }
             });
             connectionMethod.setSummary(connectionMethod.getValue() + " ");
-
-            ListPreference displayMode = (ListPreference) findPreference(IPreferencePropertyAccessor.GR2_DISPLAY_MODE);
-            displayMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    preference.setSummary(newValue + " ");
-                    return (true);
-                }
-            });
-            displayMode.setSummary(displayMode.getValue() + " ");
 
             findPreference("exit_application").setOnPreferenceClickListener(powerOffController);
             findPreference("debug_info").setOnPreferenceClickListener(logCatViewer);
@@ -332,6 +327,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         setBooleanPreference(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, IPreferencePropertyAccessor.USE_PLAYBACK_MENU, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, defaultValue);
                     }
                     catch (Exception e)
                     {

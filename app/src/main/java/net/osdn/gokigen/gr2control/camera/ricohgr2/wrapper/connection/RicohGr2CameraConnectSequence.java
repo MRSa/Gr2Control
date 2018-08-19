@@ -55,34 +55,6 @@ class RicohGr2CameraConnectSequence implements Runnable
                     String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
                     Log.v(TAG, grCommandUrl + " " + response0);
                 }
-
-                // 表示するディスプレイモードを切り替える
-                String dispMode = preferences.getString(IPreferencePropertyAccessor.GR2_DISPLAY_MODE,  IPreferencePropertyAccessor.GR2_DISPLAY_MODE_DEFAULT_VALUE);
-                if (dispMode.contains("1"))
-                {
-                    // Disp. ボタンを 1回 押す
-                    final String postData = "cmd=bdisp";
-                    String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    Log.v(TAG, grCommandUrl + " " + response0);
-
-                }
-                else if (dispMode.contains("2"))
-                {
-                    // Disp. ボタンを 2回 押す
-                    final String postData = "cmd=bdisp";
-                    String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    String response1 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    Log.v(TAG, grCommandUrl + " " + response0 + " " + response1);
-                }
-                else if (dispMode.contains("3"))
-                {
-                    // Disp. ボタンを 3回 押す
-                    final String postData = "cmd=bdisp";
-                    String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    String response1 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    String response2 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    Log.v(TAG, grCommandUrl + " " + response0 + " " + response1 + response2);
-                }
                 onConnectNotify();
             }
             else

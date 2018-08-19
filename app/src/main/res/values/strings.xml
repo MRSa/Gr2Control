@@ -37,7 +37,7 @@
 
     <string name="pref_capture_both_camera_and_live_view">Capture both camera and Live View</string>
 
-    <string name="pref_connection_method">Connection Method</string>
+    <string name="pref_connection_method">Connection Method (Needs restart)</string>
 
     <string name="save_props">Save</string>
     <string name="hint_save_props">Label</string>

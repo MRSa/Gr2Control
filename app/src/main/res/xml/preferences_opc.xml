@@ -49,6 +49,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/pref_cat_others">
+
+        <CheckBoxPreference
+            android:key="share_after_save"
+            android:title="@string/pref_call_share_after_save" />
+
+        <CheckBoxPreference
+            android:key="use_playback_menu"
+            android:title="@string/pref_use_playback_menu" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/pref_cat_info">
         <PreferenceScreen
             android:key="focal_length"
