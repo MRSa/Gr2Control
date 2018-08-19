@@ -28,7 +28,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     private final String TAG = toString();
     private final Activity context;
     private final ILiveImageStatusNotify statusNotify;
-    //private final IStatusViewDrawer statusViewDrawer;
+    private final IStatusViewDrawer statusViewDrawer;
     private final IChangeScene changeScene;
     private final IInterfaceProvider interfaceProvider;
     private final IFocusingControl focusingControl;
@@ -43,7 +43,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     {
         this.context = context;
         this.statusNotify = imageStatusNotify;
-        //this.statusViewDrawer = statusView;
+        this.statusViewDrawer = statusView;
         this.changeScene = changeScene;
         this.interfaceProvider = interfaceProvider;
 
@@ -118,14 +118,12 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     changeScene.changeSceneToConfiguration();
                     break;
 
-
-                    /*
                 case R.id.show_hide_grid_button:
                     // グリッドの ON/OFF
                     statusNotify.toggleShowGridFrame();
                     statusViewDrawer.updateGridIcon();
                     break;
-
+/*
                 case R.id.camera_property_settings_button:
                     // カメラのプロパティ設定
                     changeScene.changeSceneToCameraPropertyList();

@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,7 +65,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     private CameraLiveImageView imageView = null;
 
     private ImageView manualFocus = null;
-    private ImageButton showGrid = null;
+    private ImageView showGrid = null;
     private ImageView connectStatus = null;
     private Button changeLiveViewScale = null;
 
@@ -168,6 +167,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.show_images_button);
             setOnClickListener(view, R.id.camera_power_off_button);
             setOnClickListener(view, R.id.show_preference_button);
+            setOnClickListener(view, R.id.show_hide_grid_button);
 
             if (onPanelClickListener == null)
             {
@@ -347,6 +347,14 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         try
         {
             int id = (imageView.isShowGrid()) ? R.drawable.ic_grid_off_black_24dp : R.drawable.ic_grid_on_black_24dp;
+            if (showGrid == null)
+            {
+                Activity activity = getActivity();
+                if (activity != null)
+                {
+                    showGrid = activity.findViewById(R.id.show_hide_grid_button);
+                }
+            }
             showGrid.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
             showGrid.invalidate();
             imageView.invalidate();
@@ -582,6 +590,9 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 lvListener.setCameraLiveImageView(imageView);
             }
             liveViewControl.startLiveView(isCameraScreen);   // false : ライブビューのみ、 true : カメラ画面をミラー
+
+            // ここでグリッドアイコンを更新する
+            updateGridIcon();
 
             // ステータス監視も実施する
             startWatchStatus();
