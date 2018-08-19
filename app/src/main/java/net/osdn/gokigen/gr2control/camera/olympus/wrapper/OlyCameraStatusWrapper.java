@@ -8,7 +8,9 @@ import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.co.olympus.camerakit.OLYCamera;
 import jp.co.olympus.camerakit.OLYCameraPropertyListener;
@@ -266,15 +268,35 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
             currentWBMode = wbMode;
             updateReceiver.updatedWBMode(currentWBMode);
         }
-        String remainBattery = getPropertyTitle(olyCamera, "BATTERY_LEVEL");
-        if (!remainBattery.equals(currentRemainBattery))
+
+        try
         {
-            currentRemainBattery = remainBattery;
-            int percentage = 0;
-
-            Log.v(TAG, "currentRemainBattery : " + currentRemainBattery);
-
-            updateReceiver.updateRemainBattery(percentage);
+            String remainBattery = olyCamera.getCameraPropertyValue("BATTERY_LEVEL");
+            if (!remainBattery.equals(currentRemainBattery))
+            {
+               Map<String, Integer> batteryIconList = new HashMap<String, Integer>() {
+                    {
+                        put("<BATTERY_LEVEL/UNKNOWN>"       , 0);
+                        put("<BATTERY_LEVEL/CHARGE>"        , 100);
+                        put("<BATTERY_LEVEL/EMPTY>"         , 0);
+                        put("<BATTERY_LEVEL/WARNING>"       , 30);
+                        put("<BATTERY_LEVEL/LOW>"           , 50);
+                        put("<BATTERY_LEVEL/FULL>"          , 100);
+                        put("<BATTERY_LEVEL/EMPTY_AC>"       , 0);
+                        put("<BATTERY_LEVEL/SUPPLY_WARNING>", 30);
+                        put("<BATTERY_LEVEL/SUPPLY_LOW>"    , 50);
+                        put("<BATTERY_LEVEL/SUPPLY_FULL>"   , 100);
+                    }
+                };
+                currentRemainBattery = remainBattery;
+                int percentage = batteryIconList.get(remainBattery);
+                Log.v(TAG, "currentRemainBattery : " + currentRemainBattery + "(" + percentage + ")");
+                updateReceiver.updateRemainBattery(percentage);
+            }
+        }
+        catch (Exception ee)
+        {
+            ee.printStackTrace();
         }
         String shutterSpeed = getPropertyTitle(olyCamera, "SHUTTER");
         if (!shutterSpeed.equals(currentShutterSpeed))

@@ -137,6 +137,9 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         if (!items.containsKey(IPreferencePropertyAccessor.SHARE_AFTER_SAVE)) {
             editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
         }
+        if (!items.containsKey(IPreferencePropertyAccessor.USE_PLAYBACK_MENU)) {
+            editor.putBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, false);
+        }
         editor.apply();
     }
 
@@ -342,6 +345,11 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                     break;
 
                 case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
+                    value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.USE_PLAYBACK_MENU:
                     value = preferences.getBoolean(key, false);
                     Log.v(TAG, " " + key + " , " + value);
                     break;

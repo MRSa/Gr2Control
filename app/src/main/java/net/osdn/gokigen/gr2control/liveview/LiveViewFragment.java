@@ -34,6 +34,7 @@ import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
+import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
@@ -49,7 +50,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     private final String TAG = this.toString();
 
     private ILiveViewControl liveViewControl = null;
-    //private IZoomLensControl zoomLensControl = null;
+    private IZoomLensControl zoomLensControl = null;
     private IInterfaceProvider interfaceProvider = null;
     private IDisplayInjector interfaceInjector = null;
     //private OlympusCameraLiveViewListenerImpl liveViewListener = null;
@@ -168,6 +169,8 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.camera_power_off_button);
             setOnClickListener(view, R.id.show_preference_button);
             setOnClickListener(view, R.id.show_hide_grid_button);
+            setOnClickListener(view, R.id.zoom_in_button);
+            setOnClickListener(view, R.id.zoom_out_button);
 
             if (onPanelClickListener == null)
             {
@@ -289,7 +292,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         this.interfaceProvider = interfaceProvider;
         this.interfaceInjector = interfaceProvider.getDisplayInjector();
         this.liveViewControl = interfaceProvider.getLiveViewControl();
-        //this.zoomLensControl = interfaceProvider.getZoomLensControl();
+        this.zoomLensControl = interfaceProvider.getZoomLensControl();
         this.cameraInformation = interfaceProvider.getCameraInformation();
         this.statusWatcher = interfaceProvider.getCameraStatusWatcher();
     }
@@ -594,6 +597,19 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             // ここでグリッドアイコンを更新する
             updateGridIcon();
 
+            // ここでズームレンズ制御ができるか確認する
+            if ((zoomLensControl != null)&&(zoomLensControl.canZoom()))
+            {
+                //Log.v(TAG, "CAN ZOOM LENS");
+                updateZoomlensControl(true);
+            }
+            else
+            {
+                //Log.v(TAG, "NO ZOOM LENS");
+                updateZoomlensControl(false);
+            }
+
+
             // ステータス監視も実施する
             startWatchStatus();
         }
@@ -624,6 +640,45 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         {
             e.printStackTrace();
         }
+    }
+
+    /**
+     *
+     *
+     *
+     */
+    private void updateZoomlensControl(final boolean isVisible)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // isVisibleがtrueなら、ズームレンズボタンを有効にする
+                Activity activity = getActivity();
+                if (activity != null)
+                {
+                    try
+                    {
+                        View view1 = activity.findViewById(R.id.zoom_out_button);
+                        if (view1 != null)
+                        {
+                            view1.setVisibility((isVisible) ? View.VISIBLE : View.INVISIBLE);
+                            view1.invalidate();
+                        }
+
+                        View view2 = activity.findViewById(R.id.zoom_in_button);
+                        if (view2 != null)
+                        {
+                            view2.setVisibility((isVisible) ? View.VISIBLE : View.INVISIBLE);
+                            view2.invalidate();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -874,6 +929,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 iconId = R.drawable.ic_battery_full_black_24dp;
             }
             final int id = iconId;
+            final boolean isAlert = (percentage < 20);
             activity.runOnUiThread(new Runnable()
             {
                 @Override
@@ -882,8 +938,16 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                     ImageView view = activity.findViewById(R.id.currentBatteryImageView);
                     if (view != null)
                     {
-                        view.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
-                        view.invalidate();
+                        Drawable target = ResourcesCompat.getDrawable(getResources(), id, null);
+                        if (target != null)
+                        {
+                            if (isAlert)
+                            {
+                                DrawableCompat.setTint(target, Color.RED);
+                            }
+                            view.setImageDrawable(target);
+                            view.invalidate();
+                        }
                     }
                 }
             });

@@ -157,6 +157,64 @@
             android:layout_height="0dip"
             android:layout_weight="1"
             android:background="@color/colorBlack">
+
+            <ImageView
+                android:id="@+id/area_spacer001"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/zoom_out_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:visibility="invisible"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_remove_circle_outline_black_24dp"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/area_spacer002"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/zoom_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:visibility="invisible"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_add_circle_outline_black_24dp"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/area_spacer003"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
         </LinearLayout>
 
         <LinearLayout

@@ -123,6 +123,14 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     statusNotify.toggleShowGridFrame();
                     statusViewDrawer.updateGridIcon();
                     break;
+                case R.id.zoom_in_button:
+                    // ズームインのボタンが押された
+                    actionZoomin();
+                    break;
+                case R.id.zoom_out_button:
+                    // ズームアウトのボタンが押された
+                    actionZoomout();
+                    break;
 /*
                 case R.id.camera_property_settings_button:
                     // カメラのプロパティ設定
@@ -142,15 +150,6 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.show_favorite_settings_button:
                     // お気に入り設定のダイアログを表示する
                     showFavoriteDialog();
-                    break;
-
-                case R.id.btn_zoomin:
-                    // ズームインのボタンが押された
-                    actionZoomin();
-                    break;
-                case R.id.btn_zoomout:
-                    // ズームアウトのボタンが押された
-                    actionZoomout();
                     break;
 */
                 default:
