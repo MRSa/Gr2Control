@@ -23,6 +23,8 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
     private final String grCommandUrl = "http://192.168.0.1/_gr";
     private final int sleepMs;
 
+    private boolean useGrCommand = true;
+
     private int timeoutMs = 5000;
     private boolean whileFetching = false;
     private RicohGr2StatusHolder statusHolder;
@@ -172,7 +174,7 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
                 {
                     String response;
                     String postData = key + "=" + value;
-                    if (key.equals("exposureMode"))
+                    if ((useGrCommand)&&(key.equals("exposureMode")))
                     {
                         //  撮影モードを変更するときは、GR専用コマンドを送ることにする。
                         postData = "cmd=" + decideButtonCode(value);
