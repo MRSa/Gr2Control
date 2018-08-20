@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="connection_method">
+        <item>Ricoh GR II</item>
+        <item>OPC(Olympus Air)</item>
+    </string-array>
+
+    <string-array name="connection_method_value">
+        <item >RICOH_GR2</item>
+        <item>OPC</item>
+    </string-array>
+
+    <string-array name="gr2_display_mode">
+        <item >0</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+    </string-array>
+
+    <string-array name="gr2_display_mode_value">
+        <item >0</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+    </string-array>
+
+    <string-array name="exif_exposure_program_value">
+        <item>Unknown</item>
+        <item>Manual</item>
+        <item>Program</item>
+        <item>Aperture priority</item>
+        <item>Shutter priority</item>
+        <item>Creative Program</item>
+        <item>Action Program</item>
+        <item>Portrait mode</item>
+        <item>Landscape mode</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="exif_metering_mode_value">
+        <item>Unknown</item>
+        <item>Average</item>
+        <item>CenterWeightedAverage</item>
+        <item>Spot</item>
+        <item>MutiSpot</item>
+        <item>Pattern</item>
+        <item>Partial</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sound_volume_level">
+        <item >OFF</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+        <item >4</item>
+        <item >5</item>
+    </string-array>
+
+    <string-array name="sound_volume_level_value">
+        <item >OFF</item>
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+        <item >4</item>
+        <item >5</item>
+    </string-array>
+
+    <string-array name="live_view_quality">
+        <item >QVGA (320x240)</item>
+        <item >VGA (640x480)</item>
+        <item >SVGA (800x600)</item>
+        <item >XGA (1024x768)</item>
+        <item >QUAD VGA (1280x960)</item>
+    </string-array>
+
+    <string-array name="live_view_quality_value">
+        <item >QVGA</item>
+        <item >VGA</item>
+        <item >SVGA</item>
+        <item >XGA</item>
+        <item >QUAD_VGA</item>
+    </string-array>
+
+</resources>

@@ -349,18 +349,26 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            int id = (imageView.isShowGrid()) ? R.drawable.ic_grid_off_black_24dp : R.drawable.ic_grid_on_black_24dp;
-            if (showGrid == null)
+            Activity activity = getActivity();
+            if (activity != null)
             {
-                Activity activity = getActivity();
-                if (activity != null)
-                {
+                if (showGrid == null) {
                     showGrid = activity.findViewById(R.id.show_hide_grid_button);
                 }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        int id = (imageView.isShowGrid()) ? R.drawable.ic_grid_off_black_24dp : R.drawable.ic_grid_on_black_24dp;
+                        if (showGrid != null)
+                        {
+                            showGrid.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
+                            showGrid.invalidate();
+                        }
+                        imageView.invalidate();
+                    }
+                });
             }
-            showGrid.setImageDrawable(ResourcesCompat.getDrawable(getResources(), id, null));
-            showGrid.invalidate();
-            imageView.invalidate();
         }
         catch (Exception e)
         {
@@ -959,33 +967,38 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     }
 
     @Override
-    public void updateFocusedStatus(boolean focused)
+    public void updateFocusedStatus(final boolean focused)
     {
         Activity activity = getActivity();
         try
         {
             if (activity != null)
             {
-                ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
-                if (focused)
-                {
-                    Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
-                    if (icon != null)
-                    {
-                        DrawableCompat.setTint(icon, Color.GREEN);
-                        view.setImageDrawable(icon);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
+                        if (focused)
+                        {
+                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
+                            if (icon != null)
+                            {
+                                DrawableCompat.setTint(icon, Color.GREEN);
+                                view.setImageDrawable(icon);
+                            }
+                        }
+                        else
+                        {
+                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_free_black_24dp, null);
+                            if (icon != null)
+                            {
+                                DrawableCompat.setTint(icon, Color.BLACK);
+                                view.setImageDrawable(icon);
+                            }
+                        }
+                        view.invalidate();
                     }
-                }
-                else
-                {
-                    Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_free_black_24dp, null);
-                    if (icon != null)
-                    {
-                        DrawableCompat.setTint(icon, Color.BLACK);
-                        view.setImageDrawable(icon);
-                    }
-                }
-                view.invalidate();
+                });
             }
         }
         catch (Exception e)

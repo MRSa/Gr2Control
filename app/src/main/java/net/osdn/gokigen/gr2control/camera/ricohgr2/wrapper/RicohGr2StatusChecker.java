@@ -170,10 +170,19 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
             public void run() {
                 try
                 {
+                    String response;
                     String postData = key + "=" + value;
-                    String response = SimpleHttpClient.httpPut(statusSetUrl, postData, timeoutMs);
-                    Log.v(TAG, "SET PROPERTY : " + postData + " resp. (" + response.length() + "bytes.)");
-
+                    if (key.equals("exposureMode"))
+                    {
+                        //  撮影モードを変更するときは、GR専用コマンドを送ることにする。
+                        postData = "cmd=" + decideButtonCode(value);
+                        response = SimpleHttpClient.httpPost(grCommandUrl, postData, timeoutMs);
+                        Log.v(TAG, "CHANGE MODE : " + postData + " resp. (" + response.length() + "bytes.)");
+                    } else {
+                        // 通常の変更コマンド
+                        response = SimpleHttpClient.httpPut(statusSetUrl, postData, timeoutMs);
+                        Log.v(TAG, "SET PROPERTY : " + postData + " resp. (" + response.length() + "bytes.)");
+                    }
                     //  GR専用コマンドで、画面表示をリフレッシュ
                     response = SimpleHttpClient.httpPost(grCommandUrl, "cmd=mode refresh", timeoutMs);
                     Log.v(TAG, "refresh resp. (" + response.length() + "bytes.)");
@@ -192,5 +201,43 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
         {
             e.printStackTrace();
         }
+    }
+
+    /**
+     *   撮影モードをGRのダイアルコマンドに変更する
+     *
+     */
+    private String decideButtonCode(String exposureMode)
+    {
+        String buttonCode = "bdial AUTO";
+        if (exposureMode == null)
+        {
+            return (buttonCode);
+        }
+        switch (exposureMode)
+        {
+            case "movie":
+                buttonCode = "bdial MOVIE";
+                break;
+            case "M":
+                buttonCode = "bdial M";
+                break;
+            case "TAV":
+                buttonCode = "bdial TAV";
+                break;
+            case "AV":
+                buttonCode = "bdial AV";
+                break;
+            case "TV":
+                buttonCode = "bdial TV";
+                break;
+            case "P":
+                buttonCode = "bdial P";
+                break;
+            case "auto":
+                buttonCode = "bdial AUTO";
+                break;
+        }
+        return (buttonCode);
     }
 }
