@@ -140,6 +140,15 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         if (!items.containsKey(IPreferencePropertyAccessor.USE_PLAYBACK_MENU)) {
             editor.putBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, false);
         }
+        if (!items.containsKey(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW)) {
+            editor.putBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.GR2_LCD_SLEEP)) {
+            editor.putBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND)) {
+            editor.putBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+        }
         editor.apply();
     }
 

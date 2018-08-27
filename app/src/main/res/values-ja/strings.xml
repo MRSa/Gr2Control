@@ -111,4 +111,7 @@
     <string name="exif_metering_mode_title">測光モード :</string>
     <string name="exif_custom_process_title">(スペシャル・エフェクト使用)</string>
     <string name="exif_with_gps">(位置情報あり)</string>
+    <string name="pref_use_gr2_special_command">GR2専用コマンドの使用</string>
+    <string name="summary_use_gr2_special_command">制御指示の一部にGR2用コマンドを使用します。</string>
+
 </resources>

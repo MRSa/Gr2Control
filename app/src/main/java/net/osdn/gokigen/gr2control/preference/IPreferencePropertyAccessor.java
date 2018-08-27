@@ -36,6 +36,8 @@ public interface IPreferencePropertyAccessor
 
     String GR2_LCD_SLEEP = "gr2_lcd_sleep";
 
+    String USE_GR2_SPECIAL_COMMAND = "use_gr2_special_command";
+
     String DIGITAL_ZOOM_LEVEL = "digital_zoom_level";
     String DIGITAL_ZOOM_LEVEL_DEFAULT_VALUE = "1.0";
 

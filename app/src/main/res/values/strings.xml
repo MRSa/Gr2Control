@@ -144,4 +144,7 @@
     <string name="pref_camera_version">Camera Version</string>
     <string name="pref_camerakit_version">Camera kit Version</string>
 
+    <string name="pref_use_gr2_special_command">Use GR2 Special Command</string>
+    <string name="summary_use_gr2_special_command">Use some GR2 special command.</string>
+
 </resources>

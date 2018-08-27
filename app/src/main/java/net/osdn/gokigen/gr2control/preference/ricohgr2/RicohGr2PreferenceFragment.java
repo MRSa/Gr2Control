@@ -123,6 +123,9 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.SHARE_AFTER_SAVE)) {
                 editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
             }
+            if (!items.containsKey(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND)) {
+                editor.putBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+            }
             editor.apply();
         }
         catch (Exception e)
@@ -171,6 +174,11 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
 
                 case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
                     value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND:
+                    value = preferences.getBoolean(key, true);
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
@@ -328,6 +336,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, defaultValue);
                     }
                     catch (Exception e)
                     {

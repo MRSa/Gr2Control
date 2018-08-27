@@ -62,7 +62,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
         liveViewControl = new RicohGr2LiveViewControl();
         zoomControl = new RicohGr2CameraZoomLensControl();
         buttonControl = new RicohGr2CameraButtonControl();
-        statusChecker = new RicohGr2StatusChecker(500);
+        statusChecker = new RicohGr2StatusChecker(context, 500);
         playbackControl = new RicohGr2PlaybackControl();
         hardwareStatus = new RicohGr2HardwareStatus();
         runMode = new RicohGr2RunMode();

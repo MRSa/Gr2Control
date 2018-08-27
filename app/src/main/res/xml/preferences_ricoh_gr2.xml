@@ -55,6 +55,12 @@
             android:key="use_playback_menu"
             android:title="@string/pref_use_playback_menu"
             />
+
+        <CheckBoxPreference
+            android:key="use_gr2_special_command"
+            android:title="@string/pref_use_gr2_special_command"
+            android:summary="@string/summary_use_gr2_special_command"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory
