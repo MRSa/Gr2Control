@@ -967,7 +967,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     }
 
     @Override
-    public void updateFocusedStatus(final boolean focused)
+    public void updateFocusedStatus(final boolean focused, final boolean focusLocked)
     {
         Activity activity = getActivity();
         try
@@ -989,10 +989,15 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                         }
                         else
                         {
-                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_crop_free_black_24dp, null);
+                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_focus_free_black_24dp, null);
                             if (icon != null)
                             {
-                                DrawableCompat.setTint(icon, Color.BLACK);
+                                int color = Color.BLACK;
+                                if (focusLocked)
+                                {
+                                    color = Color.RED;
+                                }
+                                DrawableCompat.setTint(icon, color);
                                 view.setImageDrawable(icon);
                             }
                         }

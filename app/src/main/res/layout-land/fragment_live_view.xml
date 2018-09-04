@@ -216,7 +216,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="visible"
-                android:src="@drawable/ic_crop_free_black_24dp"
+                android:src="@drawable/ic_focus_free_black_24dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center" />
 

@@ -13,7 +13,7 @@ public interface ICameraStatusUpdateNotify
     void updatedMeteringMode(String meteringMode);
     void updatedWBMode(String wbMode);
     void updateRemainBattery(int percentage);
-    void updateFocusedStatus(boolean focused);
+    void updateFocusedStatus(boolean focused, boolean focusLocked);
     void updateIsoSensitivity(String sv);
     void updateWarning(String warning);
     void updateStorageStatus(String status);

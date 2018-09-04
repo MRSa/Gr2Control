@@ -42,6 +42,5 @@ public interface ICameraStatus
     String EXPREV = "xv";
     String FLASH_XV = "flashxv";
 
-
-
+    String TAKE_MODE_MOVIE = "movie";
 }

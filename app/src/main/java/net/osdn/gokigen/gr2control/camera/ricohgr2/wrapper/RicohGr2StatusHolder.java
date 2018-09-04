@@ -22,6 +22,7 @@ class RicohGr2StatusHolder
 
     private JSONObject latestResultObject = null;
     private boolean focused = false;
+    private boolean focusLocked = false;
     private String avStatus = "";
     private String tvStatus = "";
     private String xvStatus = "";
@@ -86,6 +87,29 @@ class RicohGr2StatusHolder
         return ("");
     }
 
+    private String getStatusString(JSONObject obj, String name)
+    {
+        try
+        {
+            return (obj.getString(name));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ("");
+    }
+
+    private boolean getBooleanStatus(JSONObject obj, String name)
+    {
+        try {
+            return (obj.getBoolean(name));
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return (false);
+    }
+
     /**
      *
      *
@@ -101,15 +125,16 @@ class RicohGr2StatusHolder
         try
         {
             latestResultObject = new JSONObject(replyString);
-            String result = latestResultObject.getString("errMsg");
-            String av = latestResultObject.getString("av");
-            String tv = latestResultObject.getString("tv");
-            String xv = latestResultObject.getString("xv");
-            String exposureMode = latestResultObject.getString("exposureMode");
-            String meteringMode = latestResultObject.getString("meteringMode");
-            String wbMode = latestResultObject.getString("WBMode");
-            String battery = latestResultObject.getString("battery");
-            boolean focus = latestResultObject.getBoolean("focused");
+            String result = getStatusString(latestResultObject,"errMsg");
+            String av = getStatusString(latestResultObject,"av");
+            String tv = getStatusString(latestResultObject,"tv");
+            String xv = getStatusString(latestResultObject,"xv");
+            String exposureMode = getStatusString(latestResultObject,"exposureMode");
+            String meteringMode = getStatusString(latestResultObject,"meteringMode");
+            String wbMode = getStatusString(latestResultObject,"WBMode");
+            String battery = getStatusString(latestResultObject,"battery");
+            boolean focus = getBooleanStatus(latestResultObject,"focused");
+            boolean focusLock = getBooleanStatus(latestResultObject,"focusLocked");
 
             if (result.contains("OK"))
             {
@@ -148,10 +173,11 @@ class RicohGr2StatusHolder
                     batteryStatus = battery;
                     notifier.updateRemainBattery(Integer.parseInt(batteryStatus));
                 }
-                if (focus != focused)
+                if ((focus != focused)||(focusLock != focusLocked))
                 {
                     focused = focus;
-                    notifier.updateFocusedStatus(focused);
+                    focusLocked = focusLock;
+                    notifier.updateFocusedStatus(focused, focusLocked);
                 }
             }
             System.gc();

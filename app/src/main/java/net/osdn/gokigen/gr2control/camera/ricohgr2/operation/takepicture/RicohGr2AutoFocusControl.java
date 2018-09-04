@@ -20,6 +20,8 @@ public class RicohGr2AutoFocusControl
     private static final String TAG = RicohGr2AutoFocusControl.class.getSimpleName();
     private final IIndicatorControl indicator;
     private final IAutoFocusFrameDisplay frameDisplayer;
+    private final boolean useGrCommand;
+    private String autoFocusUrl = "http://192.168.0.1/v1/lens/focus";
     private String lockAutoFocusUrl = "http://192.168.0.1/v1/lens/focus/lock";
     private String unlockAutoFocusUrl = "http://192.168.0.1/v1/lens/focus/unlock";
     private int timeoutMs = 6000;
@@ -28,10 +30,11 @@ public class RicohGr2AutoFocusControl
      *
      *
      */
-    public RicohGr2AutoFocusControl(@NonNull final IAutoFocusFrameDisplay frameDisplayer, final IIndicatorControl indicator)
+    public RicohGr2AutoFocusControl(boolean useGrCommand, @NonNull final IAutoFocusFrameDisplay frameDisplayer, final IIndicatorControl indicator)
     {
         this.frameDisplayer = frameDisplayer;
         this.indicator = indicator;
+        this.useGrCommand = useGrCommand;
     }
 
     /**
@@ -55,9 +58,10 @@ public class RicohGr2AutoFocusControl
 
                         //int posX = (int) (Math.round(point.x * 100.0));
                         //int posY = (int) (Math.round(point.y * 100.0));
+                        String focusUrl = (useGrCommand) ? lockAutoFocusUrl : autoFocusUrl;
                         String postData = "pos=" + ( (int) (Math.round(point.x * 100.0))) + "," + ((int) (Math.round(point.y * 100.0)));
                         Log.v(TAG, "AF (" + postData + ")");
-                        String result = SimpleHttpClient.httpPost(lockAutoFocusUrl, postData, timeoutMs);
+                        String result = SimpleHttpClient.httpPost(focusUrl, postData, timeoutMs);
                         if ((result == null)||(result.length() < 1))
                         {
                             Log.v(TAG, "setTouchAFPosition() reply is null.");

@@ -1,16 +1,13 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
-import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +34,9 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
      *
      *
      */
-    RicohGr2StatusChecker(@NonNull Activity context, int sleepMs)
+    RicohGr2StatusChecker(int sleepMs, boolean useGrCommand)
     {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        useGrCommand = preferences.getBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+        this.useGrCommand = useGrCommand;
         this.sleepMs = sleepMs;
     }
 

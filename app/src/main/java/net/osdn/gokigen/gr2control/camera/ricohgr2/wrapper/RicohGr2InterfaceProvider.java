@@ -1,7 +1,9 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
@@ -29,6 +31,7 @@ import net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.connection.RicohGr2Co
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
+import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 /**
  *
@@ -45,6 +48,8 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     private final RicohGr2PlaybackControl playbackControl;
     private final RicohGr2HardwareStatus hardwareStatus;
     private final RicohGr2RunMode runMode;
+    private final boolean useGrCommand;
+
     private RicohGr2LiveViewControl liveViewControl;
     private RicohGr2CameraCaptureControl captureControl;
     private RicohGr2CameraZoomLensControl zoomControl;
@@ -56,13 +61,16 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
      */
     public RicohGr2InterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
     {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        useGrCommand = preferences.getBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+
         //this.activity = context;
         //this.provider = provider;
         gr2Connection = new RicohGr2Connection(context, provider);
-        liveViewControl = new RicohGr2LiveViewControl();
+        liveViewControl = new RicohGr2LiveViewControl(useGrCommand);
         zoomControl = new RicohGr2CameraZoomLensControl();
         buttonControl = new RicohGr2CameraButtonControl();
-        statusChecker = new RicohGr2StatusChecker(context, 500);
+        statusChecker = new RicohGr2StatusChecker(500, useGrCommand);
         playbackControl = new RicohGr2PlaybackControl();
         hardwareStatus = new RicohGr2HardwareStatus();
         runMode = new RicohGr2RunMode();
@@ -77,8 +85,8 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     public void injectDisplay(IAutoFocusFrameDisplay frameDisplayer, IIndicatorControl indicator, IFocusingModeNotify focusingModeNotify)
     {
         Log.v(TAG, "injectDisplay()");
-        focusControl = new RicohGr2CameraFocusControl(frameDisplayer, indicator);
-        captureControl = new RicohGr2CameraCaptureControl(frameDisplayer);
+        focusControl = new RicohGr2CameraFocusControl(useGrCommand, frameDisplayer, indicator);
+        captureControl = new RicohGr2CameraCaptureControl(useGrCommand, frameDisplayer, statusChecker);
     }
 
     @Override

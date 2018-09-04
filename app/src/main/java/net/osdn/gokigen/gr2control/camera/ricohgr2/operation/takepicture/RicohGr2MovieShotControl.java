@@ -9,20 +9,21 @@ import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 /**
  *
  *
- *
  */
-public class RicohGr2SingleShotControl
+public class RicohGr2MovieShotControl
 {
     private static final String TAG = RicohGr2SingleShotControl.class.getSimpleName();
-    private final String shootUrl = "http://192.168.0.1/v1/camera/shoot";
+    private final String shootStartUrl = "http://192.168.0.1/v1/camera/shoot/start";
+    private final String shootStopUrl = "http://192.168.0.1/v1/camera/shoot/finish";
     private final IAutoFocusFrameDisplay frameDisplayer;
     private int timeoutMs = 6000;
+    private boolean isMovieRecording = false;
 
     /**
      *
      *
      */
-    public RicohGr2SingleShotControl(@NonNull IAutoFocusFrameDisplay frameDisplayer)
+    public RicohGr2MovieShotControl(@NonNull IAutoFocusFrameDisplay frameDisplayer)
     {
         this.frameDisplayer = frameDisplayer;
     }
@@ -31,9 +32,9 @@ public class RicohGr2SingleShotControl
      *
      *
      */
-    public void singleShot(final boolean isCamera)
+    public void toggleMovie()
     {
-        Log.v(TAG, "singleShot()");
+        Log.v(TAG, "toggleMovie()");
         try
         {
             Thread thread = new Thread(new Runnable()
@@ -43,11 +44,11 @@ public class RicohGr2SingleShotControl
                 {
                     try
                     {
-                        String postData = (isCamera) ? "af=camera" : "af=on";
-                        String result = SimpleHttpClient.httpPost(shootUrl, postData, timeoutMs);
+                        String postData = "";
+                        String result = SimpleHttpClient.httpPost((isMovieRecording)? shootStopUrl : shootStartUrl , postData, timeoutMs);
                         if ((result == null)||(result.length() < 1))
                         {
-                            Log.v(TAG, "singleShot() reply is null.");
+                            Log.v(TAG, "toggleMovie() reply is null.");
                         }
                     }
                     catch (Exception e)
@@ -64,5 +65,4 @@ public class RicohGr2SingleShotControl
             e.printStackTrace();
         }
     }
-
 }
