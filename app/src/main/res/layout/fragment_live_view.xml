@@ -296,18 +296,7 @@
                 android:id="@+id/area_spacer01"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:scaleType="fitCenter"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/area_spacer02"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -331,7 +320,7 @@
                 android:id="@+id/area_spacer03"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -342,29 +331,7 @@
                 android:id="@+id/area_spacer04"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:scaleType="fitCenter"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/area_spacer05"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:scaleType="fitCenter"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/area_spacer06"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -381,6 +348,19 @@
                 android:focusable="true"
                 android:visibility="visible"
                 android:src="@drawable/ic_focus_free_black_24dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/specialButtonImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"
+                android:src="@drawable/ic_check_box_black_24dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center" />
         </LinearLayout>

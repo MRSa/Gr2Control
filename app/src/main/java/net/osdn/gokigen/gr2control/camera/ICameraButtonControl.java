@@ -4,6 +4,7 @@ public interface ICameraButtonControl
 {
     void pushedButton(String code);
 
+    String SPECIAL_GREEN_BUTTON = "btn_green";
 
     String FRONT_LEFT = "bjogleft";
     String FRONT_RIGHT = "bjogright";

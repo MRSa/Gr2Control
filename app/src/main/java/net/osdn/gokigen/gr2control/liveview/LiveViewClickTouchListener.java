@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import net.osdn.gokigen.gr2control.R;
+import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
@@ -130,6 +131,10 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.zoom_out_button:
                     // ズームアウトのボタンが押された
                     actionZoomout();
+                    break;
+                case R.id.specialButtonImageView:
+                    // スペシャルボタンが押された
+                    pushedSpecialButton();
                     break;
 /*
                 case R.id.camera_property_settings_button:
@@ -317,6 +322,15 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     }
 
     /**
+     *   スペシャルボタンが押された時の処理
+     *
+     */
+    private void pushedSpecialButton()
+    {
+        showFavoriteDialog();
+    }
+
+    /**
      *   お気に入り設定ダイアログの表示
      *
      */
@@ -325,17 +339,25 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         Log.v(TAG, "showFavoriteDialog()");
         try
         {
-            if (interfaceProvider.getCammeraConnectionMethod() != ICameraConnection.CameraConnectionMethod.OPC)
+            if (cameraConnection.getConnectionStatus() != ICameraConnection.CameraConnectionStatus.CONNECTED)
             {
-                // OPCカメラでない場合には、「OPCカメラのみ有効です」表示をして画面遷移させない
-                Toast.makeText(context, context.getText(R.string.only_opc_feature), Toast.LENGTH_SHORT).show();
+                // カメラと接続されていない時には、何もしない
                 return;
             }
 
-            if (cameraConnection.getConnectionStatus() == ICameraConnection.CameraConnectionStatus.CONNECTED)
+            if (interfaceProvider.getCammeraConnectionMethod() == ICameraConnection.CameraConnectionMethod.OPC)
             {
-                //  お気に入り設定のダイアログを表示する
+                //  OPCカメラの場合には、お気に入り設定のダイアログを表示する
                 dialogKicker.showFavoriteSettingDialog();
+                return;
+            }
+
+
+            ICameraButtonControl btnCtl = interfaceProvider.getButtonControl();
+            if (btnCtl != null)
+            {
+                // 'GREEN' ボタンが押されたこととする
+                btnCtl.pushedButton(ICameraButtonControl.SPECIAL_GREEN_BUTTON);
             }
         }
         catch (Exception e)

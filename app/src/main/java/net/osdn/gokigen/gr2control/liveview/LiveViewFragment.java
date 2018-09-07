@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -35,6 +36,8 @@ import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
+import net.osdn.gokigen.gr2control.camera.olympus.myolycameraprops.LoadSaveCameraProperties;
+import net.osdn.gokigen.gr2control.camera.olympus.myolycameraprops.LoadSaveMyCameraPropertyDialog;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
@@ -171,6 +174,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.show_hide_grid_button);
             setOnClickListener(view, R.id.zoom_in_button);
             setOnClickListener(view, R.id.zoom_out_button);
+            setOnClickListener(view, R.id.specialButtonImageView);
 
             if (onPanelClickListener == null)
             {
@@ -633,16 +637,8 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         try
         {
             Log.v(TAG, "showFavoriteSettingDialog()");
-/*
-            LoadSaveMyCameraPropertyDialog dialog = new LoadSaveMyCameraPropertyDialog();
-            dialog.setTargetFragment(this, COMMAND_MY_PROPERTY);
-            dialog.setPropertyOperationsHolder(new LoadSaveCameraProperties(getActivity(), interfaceProvider.getOlympusInterface()));
-            FragmentManager manager = getFragmentManager();
-            if (manager != null)
-            {
-                dialog.show(manager, "my_dialog");
-            }
-*/
+            LoadSaveMyCameraPropertyDialog dialog = LoadSaveMyCameraPropertyDialog.newInstance(new LoadSaveCameraProperties(getActivity(), interfaceProvider.getOlympusInterfaceProvider()));
+            dialog.show(getChildFragmentManager(), "favorite_dialog");
         }
         catch (Exception e)
         {

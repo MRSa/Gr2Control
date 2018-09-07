@@ -22,7 +22,14 @@ public class LoadSaveMyCameraPropertyDialog extends DialogFragment implements Ta
     private FragmentTabHost tabHost = null;
     private ViewPager viewPager = null;
 
-    public void setPropertyOperationsHolder(ILoadSaveCameraProperties holder)
+    public static LoadSaveMyCameraPropertyDialog newInstance(ILoadSaveCameraProperties holder)
+    {
+        LoadSaveMyCameraPropertyDialog instance = new LoadSaveMyCameraPropertyDialog();
+        instance.setPropertyOperationsHolder(holder);
+        return (instance);
+    }
+
+    private void setPropertyOperationsHolder(ILoadSaveCameraProperties holder)
     {
         propertyOperations = holder;
     }
