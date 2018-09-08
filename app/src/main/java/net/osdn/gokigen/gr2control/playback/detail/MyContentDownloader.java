@@ -39,6 +39,7 @@ class MyContentDownloader implements IDownloadContentCallback
     private final IPlaybackControl playbackControl;
     private static final String RAW_SUFFIX_1 = ".DNG";
     private static final String RAW_SUFFIX_2 = ".ORF";
+    private static final String RAW_SUFFIX_3 = ".PEF";
     private static final String MOVIE_SUFFIX = ".MOV";
     private static final String JPEG_SUFFIX = ".JPG";
     private ProgressDialog downloadDialog = null;
@@ -86,7 +87,11 @@ class MyContentDownloader implements IDownloadContentCallback
             }
             else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_2))
             {
-                mimeType = "image/image/x-olympus-orf";
+                mimeType = "image/x-olympus-orf";
+            }
+            else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_3))
+            {
+                mimeType = "image/x-pentax-pef";
             }
             else if (targetFileName.toUpperCase().contains(MOVIE_SUFFIX))
             {
@@ -178,7 +183,7 @@ class MyContentDownloader implements IDownloadContentCallback
                 outputStream.close();
                 outputStream = null;
             }
-            if ((!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_1))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_2)))
+            if ((!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_1))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_2))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_3)))
             {
                 // ギャラリーに受信したファイルを登録する
                 long now = System.currentTimeMillis();

@@ -146,6 +146,7 @@ public class ImagePagerViewFragment extends Fragment
 		boolean doDownload = false;
         boolean getInformation = false;
 		boolean isSmallSize = false;
+		boolean isRaw = false;
         String specialSuffix = null;
         if ((item.getItemId() == R.id.action_get_information)||(item.getItemId() == R.id.action_get_information_raw))
         {
@@ -167,7 +168,7 @@ public class ImagePagerViewFragment extends Fragment
         else if (item.getItemId() == R.id.action_download_raw)
         {
             doDownload = true;
-            specialSuffix = playbackControl.getRawFileSuffix();
+            isRaw = true;
 		}
 
 		if (getInformation)
@@ -193,22 +194,14 @@ public class ImagePagerViewFragment extends Fragment
 		{
 			try
 			{
-                ICameraFileInfo file = (contentList.get(contentIndex)).getFileInfo();
-				String path = file.getDirectoryPath() + "/" + file.getFilename();
-				String upperCasePath = path.toUpperCase();
-				String suffix = (specialSuffix == null) ? upperCasePath.substring(upperCasePath.lastIndexOf(".")) : specialSuffix;
-				Calendar calendar = Calendar.getInstance();
-				String filename = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(calendar.getTime()) + suffix;
-
 				//  ダイアログを表示して保存する
-				saveImageWithDialog(filename, isSmallSize);
+				saveImageWithDialog(isRaw, isSmallSize);
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-
 		return (super.onOptionsItemSelected(item));
 	}
 
@@ -484,12 +477,12 @@ public class ImagePagerViewFragment extends Fragment
 	/**
 	 *   デバイスに画像ファイルをダウンロード（保存）する
 	 *
-	 * @param filename       ファイル名（カメラ内の）
+	 * @param isRaw           RAWファイルをダウンロードするか
 	 * @param isSmallSize    小さいサイズの量にするか
      */
-	public void saveImageWithDialog(final String filename, final boolean isSmallSize)
+	public void saveImageWithDialog(final boolean isRaw, final boolean isSmallSize)
 	{
-        Log.v(TAG, "saveImageWithDialog() : " + filename + " (small : " + isSmallSize + ")");
+        Log.v(TAG, "saveImageWithDialog() : raw : " + isRaw + " (small : " + isSmallSize + ")");
         try
         {
             final Activity activity = getActivity();
@@ -499,8 +492,12 @@ public class ImagePagerViewFragment extends Fragment
                     @Override
                     public void run() {
                         MyContentDownloader contentDownloader = new MyContentDownloader(activity, playbackControl);
-                        ICameraFileInfo fileInfo = (contentList.get(contentIndex)).getFileInfo();
-                        contentDownloader.startDownload(fileInfo,  (filename.endsWith(playbackControl.getRawFileSuffix())) ? playbackControl.getRawFileSuffix() : null, isSmallSize);
+                        ImageContentInfoEx infoEx = contentList.get(contentIndex);
+                        if (infoEx != null)
+                        {
+                            ICameraFileInfo fileInfo = infoEx.getFileInfo();
+                            contentDownloader.startDownload(fileInfo, (isRaw) ? infoEx.getRawSuffix() : null, isSmallSize);
+                        }
                     }
                 });
                 thread.start();

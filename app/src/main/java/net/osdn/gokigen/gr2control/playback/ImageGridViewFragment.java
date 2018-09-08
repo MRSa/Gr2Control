@@ -284,24 +284,25 @@ public class ImageGridViewFragment extends Fragment
                     String path = item.getFilename().toLowerCase(Locale.getDefault());
                     if ((path.toLowerCase().endsWith(JPEG_SUFFIX))||(path.toLowerCase().endsWith(MOVIE_SUFFIX)))
                     {
-                        contentItems.add(new ImageContentInfoEx(item, false));
+                        contentItems.add(new ImageContentInfoEx(item, false, ""));
                     }
                     else if (path.toLowerCase().endsWith(DNG_RAW_SUFFIX))
                     {
-                        //rawItems.put(path, new ImageContentInfoEx(item, true));
-                        contentItems.add(new ImageContentInfoEx(item, true));
+                        //rawItems.put(path, new ImageContentInfoEx(item, true, DNG_RAW_SUFFIX));
+                        contentItems.add(new ImageContentInfoEx(item, true, DNG_RAW_SUFFIX));
                     }
                     else if (path.toLowerCase().endsWith(OLYMPUS_RAW_SUFFIX))
                     {
-                        rawItems.put(path, new ImageContentInfoEx(item, true));
+                        rawItems.put(path, new ImageContentInfoEx(item, true, OLYMPUS_RAW_SUFFIX));
                     }
                     else if (path.toLowerCase().endsWith(PENTAX_RAW_PEF_SUFFIX))
                     {
-                        //rawItems.put(path, new ImageContentInfoEx(item, true));
-                        contentItems.add(new ImageContentInfoEx(item, true));
+                        //rawItems.put(path, new ImageContentInfoEx(item, true, PENTAX_RAW_PEF_SUFFIX));
+                        contentItems.add(new ImageContentInfoEx(item, true, PENTAX_RAW_PEF_SUFFIX));
                     }
                 }
 
+                //List<ImageContentInfoEx> appendRawContents = new ArrayList<>();
                 for (ImageContentInfoEx item : contentItems)
                 {
                     String path = item.getFileInfo().getFilename().toLowerCase(Locale.getDefault());
@@ -312,9 +313,14 @@ public class ImageGridViewFragment extends Fragment
                         ImageContentInfoEx raw1 = rawItems.get(target1);
                         if (raw1 != null)
                         {
-                        	// RAW は、JPEGファイルがあった場合にのみリストする
-                            item.setHasRaw(true);
+                        	// JPEGファイルとRAWファイルがあるので、それをマークする
+                            item.setHasRaw(true, DNG_RAW_SUFFIX);
                             Log.v(TAG, "DETECT RAW FILE: " + target1);
+                        }
+                        else
+                        {
+                            // RAWだけあった場合、一覧に追加する
+                            appendRawContents.add(rawItems.get(path));
                         }
 */
                         String target2 = path.replace(JPEG_SUFFIX, OLYMPUS_RAW_SUFFIX);
@@ -322,7 +328,7 @@ public class ImageGridViewFragment extends Fragment
                         if (raw2 != null)
                         {
                             // RAW は、JPEGファイルがあった場合にのみリストする
-                            item.setHasRaw(true);
+                            item.setHasRaw(true, OLYMPUS_RAW_SUFFIX);
                             Log.v(TAG, "DETECT RAW FILE: " + target2);
                         }
 /*
@@ -331,12 +337,18 @@ public class ImageGridViewFragment extends Fragment
                         if (raw3 != null)
                         {
                             // RAW は、JPEGファイルがあった場合にのみリストする
-                            item.setHasRaw(true);
+                            item.setHasRaw(true, PENTAX_RAW_PEF_SUFFIX);
                             Log.v(TAG, "DETECT RAW FILE: " + target3);
+                        }
+                        else
+                        {
+                            // RAWだけあった場合、一覧に追加する
+                            appendRawContents.add(rawItems.get(path));
                         }
 */
                     }
                 }
+                //contentItems.addAll(appendRawContents);
                 contentList = contentItems;
 
 				runOnUiThread(new Runnable() {
