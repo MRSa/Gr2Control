@@ -54,8 +54,9 @@ public class ImageGridViewFragment extends Fragment
 	private final String TAG = this.toString();
     private final String MOVIE_SUFFIX = ".mov";
     private final String JPEG_SUFFIX = ".jpg";
-    private final String RAW_SUFFIX_1 = ".dng";
-	private final String RAW_SUFFIX_2 = ".orf";
+    private final String DNG_RAW_SUFFIX = ".dng";
+	private final String OLYMPUS_RAW_SUFFIX = ".orf";
+	private final String PENTAX_RAW_PEF_SUFFIX = ".pef";
 
 
     private GridView gridView;
@@ -285,15 +286,20 @@ public class ImageGridViewFragment extends Fragment
                     {
                         contentItems.add(new ImageContentInfoEx(item, false));
                     }
-                    else if (path.toLowerCase().endsWith(RAW_SUFFIX_1))
+                    else if (path.toLowerCase().endsWith(DNG_RAW_SUFFIX))
+                    {
+                        //rawItems.put(path, new ImageContentInfoEx(item, true));
+                        contentItems.add(new ImageContentInfoEx(item, true));
+                    }
+                    else if (path.toLowerCase().endsWith(OLYMPUS_RAW_SUFFIX))
                     {
                         rawItems.put(path, new ImageContentInfoEx(item, true));
                     }
-                    else if (path.toLowerCase().endsWith(RAW_SUFFIX_2))
+                    else if (path.toLowerCase().endsWith(PENTAX_RAW_PEF_SUFFIX))
                     {
-                        rawItems.put(path, new ImageContentInfoEx(item, true));
+                        //rawItems.put(path, new ImageContentInfoEx(item, true));
+                        contentItems.add(new ImageContentInfoEx(item, true));
                     }
-
                 }
 
                 for (ImageContentInfoEx item : contentItems)
@@ -301,7 +307,8 @@ public class ImageGridViewFragment extends Fragment
                     String path = item.getFileInfo().getFilename().toLowerCase(Locale.getDefault());
                     if (path.toLowerCase().endsWith(JPEG_SUFFIX))
                     {
-                        String target1 = path.replace(JPEG_SUFFIX, RAW_SUFFIX_1);
+/*
+                        String target1 = path.replace(JPEG_SUFFIX, DNG_RAW_SUFFIX);
                         ImageContentInfoEx raw1 = rawItems.get(target1);
                         if (raw1 != null)
                         {
@@ -309,7 +316,8 @@ public class ImageGridViewFragment extends Fragment
                             item.setHasRaw(true);
                             Log.v(TAG, "DETECT RAW FILE: " + target1);
                         }
-                        String target2 = path.replace(JPEG_SUFFIX, RAW_SUFFIX_2);
+*/
+                        String target2 = path.replace(JPEG_SUFFIX, OLYMPUS_RAW_SUFFIX);
                         ImageContentInfoEx raw2 = rawItems.get(target2);
                         if (raw2 != null)
                         {
@@ -317,6 +325,16 @@ public class ImageGridViewFragment extends Fragment
                             item.setHasRaw(true);
                             Log.v(TAG, "DETECT RAW FILE: " + target2);
                         }
+/*
+                        String target3 = path.replace(JPEG_SUFFIX, PENTAX_RAW_PEF_SUFFIX);
+                        ImageContentInfoEx raw3 = rawItems.get(target3);
+                        if (raw3 != null)
+                        {
+                            // RAW は、JPEGファイルがあった場合にのみリストする
+                            item.setHasRaw(true);
+                            Log.v(TAG, "DETECT RAW FILE: " + target3);
+                        }
+*/
                     }
                 }
                 contentList = contentItems;
