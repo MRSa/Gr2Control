@@ -906,7 +906,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
      *
      */
     @Override
-    public void updateRemainBattery(int percentage)
+    public void updateRemainBattery(final int percentage)
     {
         try
         {
@@ -933,7 +933,6 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 iconId = R.drawable.ic_battery_full_black_24dp;
             }
             final int id = iconId;
-            final boolean isAlert = (percentage < 20);
             activity.runOnUiThread(new Runnable()
             {
                 @Override
@@ -945,9 +944,12 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                         Drawable target = ResourcesCompat.getDrawable(getResources(), id, null);
                         if (target != null)
                         {
-                            if (isAlert)
+                            if (percentage <= 20)
                             {
                                 DrawableCompat.setTint(target, Color.RED);
+                            } else if (percentage <= 40)
+                            {
+                                DrawableCompat.setTint(target, Color.YELLOW);
                             }
                             view.setImageDrawable(target);
                             view.invalidate();
