@@ -23,7 +23,7 @@ public class SimpleHttpClient
 {
     private static final String TAG = SimpleHttpClient.class.getSimpleName();
     private static final int DEFAULT_TIMEOUT = 10 * 1000; // [ms]
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = 131072 * 2; // 256kB
 
     public SimpleHttpClient()
     {
