@@ -79,7 +79,7 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
      *
      */
     @Override
-    public void stoptStatusWatch()
+    public void stopStatusWatch()
     {
         Log.v(TAG, "stoptStatusWatch()");
         whileFetching = false;

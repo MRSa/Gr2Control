@@ -191,7 +191,7 @@ public class OlyCameraStatusWrapper implements ICameraStatus, ICameraStatusWatch
     }
 
     @Override
-    public void stoptStatusWatch()
+    public void stopStatusWatch()
     {
         this.updateReceiver = null;
     }

@@ -705,7 +705,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         if (statusWatcher != null)
         {
-            statusWatcher.stoptStatusWatch();
+            statusWatcher.stopStatusWatch();
         }
     }
 
