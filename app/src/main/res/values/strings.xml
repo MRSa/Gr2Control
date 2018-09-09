@@ -147,4 +147,7 @@
     <string name="pref_use_gr2_special_command">Use GR2 Special Command</string>
     <string name="summary_use_gr2_special_command">Use some GR2 special command.</string>
 
+    <string name="dialog_confirm_title_output_log">Share debug log</string>
+    <string name="dialog_confirm_message_output_log">Share the debug log, OK?</string>
+
 </resources>

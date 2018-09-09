@@ -1,5 +1,7 @@
 package net.osdn.gokigen.gr2control.logcat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -173,6 +175,16 @@ public class LogCatFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
         Log.v(TAG, "LogCatFragment::onActivityCreated()");
         setHasOptionsMenu(true);
+
+        Activity activity = getActivity();
+        if (activity != null)
+        {
+            ListView view = getListView();
+            if (view != null)
+            {
+                getListView().setOnItemLongClickListener(new LogCatExporter(activity));
+            }
+        }
     }
 
     @Override
@@ -180,6 +192,7 @@ public class LogCatFragment extends ListFragment
     {
         adapter = new ArrayAdapter<>(inflater.getContext(), android.R.layout.simple_list_item_1, dataItems);
         setListAdapter(adapter);
+
         return (super.onCreateView(inflater, container, savedInstanceState));
     }
 }
