@@ -357,7 +357,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
             if (btnCtl != null)
             {
                 // 'GREEN' ボタンが押されたこととする
-                btnCtl.pushedButton(ICameraButtonControl.SPECIAL_GREEN_BUTTON);
+                btnCtl.pushedButton(ICameraButtonControl.SPECIAL_GREEN_BUTTON, false);
             }
         }
         catch (Exception e)

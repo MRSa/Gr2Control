@@ -2,7 +2,7 @@ package net.osdn.gokigen.gr2control.camera;
 
 public interface ICameraButtonControl
 {
-    void pushedButton(String code);
+    boolean pushedButton(String code, boolean isLongPress);
 
     String SPECIAL_GREEN_BUTTON = "btn_green";
 

@@ -22,23 +22,22 @@ public class RicohGr2CameraButtonControl implements ICameraButtonControl
      *
      */
     @Override
-    public void pushedButton(String code)
+    public boolean pushedButton(String code, boolean isLongPress)
     {
-        pushButton(code);
+        return (pushButton(code, isLongPress));
     }
 
     /**
      *
      *
      */
-    private void pushButton(@NonNull final String keyName)
+    private boolean pushButton(@NonNull final String keyName, final boolean isLongPress)
     {
         Log.v(TAG, "pushButton()");
         if (keyName.equals(ICameraButtonControl.SPECIAL_GREEN_BUTTON))
         {
             // Greenボタンの処理を入れる
-            processGreenButton();
-            return;
+            return (processGreenButton(isLongPress));
         }
         try
         {
@@ -54,6 +53,11 @@ public class RicohGr2CameraButtonControl implements ICameraButtonControl
                     try
                     {
                         String cmd = "cmd=" + keyName;
+                        if (isLongPress)
+                        {
+                            // ボタン長押しの場合...
+                            cmd = cmd + " 1";
+                        }
                         String result = SimpleHttpClient.httpPost(buttonControlUrl, cmd, timeoutMs);
                         if ((result == null)||(result.length() < 1)) {
                             Log.v(TAG, "pushButton() reply is null. " + cmd);
@@ -73,9 +77,10 @@ public class RicohGr2CameraButtonControl implements ICameraButtonControl
         {
             e.printStackTrace();
         }
+        return (true);
     }
 
-    private void processGreenButton()
+    private boolean processGreenButton(boolean isLongPress)
     {
         Log.v(TAG, "processGreenButton()");
         try
@@ -111,5 +116,6 @@ public class RicohGr2CameraButtonControl implements ICameraButtonControl
         {
             e.printStackTrace();
         }
+        return (true);
     }
 }

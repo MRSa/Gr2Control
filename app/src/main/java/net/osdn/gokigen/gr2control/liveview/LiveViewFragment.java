@@ -277,6 +277,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             if (button != null)
             {
                 button.setOnClickListener(onKeyPanelClickListener);
+                button.setOnLongClickListener(onKeyPanelClickListener);
             }
         }
         catch (Exception e)

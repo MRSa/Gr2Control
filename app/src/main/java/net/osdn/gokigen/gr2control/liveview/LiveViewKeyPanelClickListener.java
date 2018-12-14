@@ -14,7 +14,7 @@ import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
  *
  *
  */
-class LiveViewKeyPanelClickListener  implements View.OnClickListener
+class LiveViewKeyPanelClickListener  implements View.OnClickListener, View.OnLongClickListener
 {
     private final String TAG = toString();
     private final IInterfaceProvider interfaceProvider;
@@ -32,7 +32,7 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
         void updateToggleButton(boolean isOn);
         void updateLcdOnOff(boolean isOn);
         void updateAFLlever(boolean isCaf);
-    };
+    }
 
     LiveViewKeyPanelClickListener(@NonNull IInterfaceProvider interfaceProvider, @Nullable KeyPanelFeedback feedback, @Nullable Vibrator vibrator)
     {
@@ -44,6 +44,13 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
     @Override
     public void onClick(View view)
     {
+        onButtonClick(view, false);
+    }
+
+
+    private boolean onButtonClick(View view, boolean isLongPress)
+    {
+        boolean ret = true;
         try
         {
             String keyId = "";
@@ -135,7 +142,8 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
                     keyId = decideLCDOnOff();
                     break;
                 default:
-                    Log.v(TAG, "onClick() : " + id);
+                    Log.v(TAG, "onClick() : " + id + " [long:" + isLongPress + "]");
+                    ret = false;
                     break;
             }
             if (keyId.length() > 1)
@@ -143,7 +151,7 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
                 ICameraButtonControl buttonControl = interfaceProvider.getButtonControl();
                 if (buttonControl != null)
                 {
-                    buttonControl.pushedButton(keyId);
+                    ret = buttonControl.pushedButton(keyId, isLongPress);
                     if (vibrator != null)
                     {
                         vibrator.vibrate(30);
@@ -154,7 +162,31 @@ class LiveViewKeyPanelClickListener  implements View.OnClickListener
         catch (Exception e)
         {
             e.printStackTrace();
+            ret = false;
         }
+        return (ret);
+    }
+
+    /**
+     *    ボタンの長押し処理
+     *
+     */
+    @Override
+    public boolean onLongClick(View view)
+    {
+        try
+        {
+            int id = view.getId();
+            if ((id == R.id.button_function_1)||(id == R.id.button_function_3))
+            {
+                return (onButtonClick(view, true));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (false);
     }
 
     private String decideAccLock()
