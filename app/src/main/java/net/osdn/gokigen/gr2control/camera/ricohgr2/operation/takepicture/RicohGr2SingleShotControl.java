@@ -43,7 +43,8 @@ public class RicohGr2SingleShotControl
                 {
                     try
                     {
-                        String postData = (isCamera) ? "af=camera" : "af=on";
+                        //String postData = (isCamera) ? "af=camera" : "af=on";
+                        String postData = (isCamera) ? "af=camera" : "";
                         String result = SimpleHttpClient.httpPost(shootUrl, postData, timeoutMs);
                         if ((result == null)||(result.length() < 1))
                         {
