@@ -38,6 +38,8 @@ public interface IPreferencePropertyAccessor
 
     String USE_GR2_SPECIAL_COMMAND = "use_gr2_special_command";
 
+    String PENTAX_CAPTURE_AFTER_AF = "pentax_capture_after_auto_focus";
+
     String DIGITAL_ZOOM_LEVEL = "digital_zoom_level";
     String DIGITAL_ZOOM_LEVEL_DEFAULT_VALUE = "1.0";
 

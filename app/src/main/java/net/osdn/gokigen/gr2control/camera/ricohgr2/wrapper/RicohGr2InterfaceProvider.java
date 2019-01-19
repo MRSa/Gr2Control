@@ -49,6 +49,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     private final RicohGr2HardwareStatus hardwareStatus;
     private final RicohGr2RunMode runMode;
     private final boolean useGrCommand;
+    private final boolean pentaxCaptureAfterAf;
 
     private RicohGr2LiveViewControl liveViewControl;
     private RicohGr2CameraCaptureControl captureControl;
@@ -63,6 +64,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         useGrCommand = preferences.getBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+        pentaxCaptureAfterAf = preferences.getBoolean(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
 
         //this.activity = context;
         //this.provider = provider;
@@ -86,7 +88,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     {
         Log.v(TAG, "injectDisplay()");
         focusControl = new RicohGr2CameraFocusControl(useGrCommand, frameDisplayer, indicator);
-        captureControl = new RicohGr2CameraCaptureControl(useGrCommand, frameDisplayer, statusChecker);
+        captureControl = new RicohGr2CameraCaptureControl(useGrCommand, pentaxCaptureAfterAf, frameDisplayer, statusChecker);
     }
 
     @Override

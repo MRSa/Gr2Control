@@ -126,6 +126,9 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND)) {
                 editor.putBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
             }
+            if (!items.containsKey(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF)) {
+                editor.putBoolean(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
+            }
             editor.apply();
         }
         catch (Exception e)
@@ -179,6 +182,11 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
 
                 case IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND:
                     value = preferences.getBoolean(key, true);
+                    Log.v(TAG, " " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF:
+                    value = preferences.getBoolean(key, false);
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
@@ -337,6 +345,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
                     }
                     catch (Exception e)
                     {

@@ -61,6 +61,13 @@
             android:title="@string/pref_use_gr2_special_command"
             android:summary="@string/summary_use_gr2_special_command"
             />
+
+        <CheckBoxPreference
+            android:key="pentax_capture_after_auto_focus"
+            android:title="@string/pref_pentax_capture_after_auto_focus"
+            android:summary="@string/summary_pentax_capture_after_auto_focus"
+            />
+
     </PreferenceCategory>
 
     <PreferenceCategory

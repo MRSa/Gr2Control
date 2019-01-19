@@ -18,14 +18,16 @@ public class RicohGr2CameraCaptureControl implements ICaptureControl
     private final RicohGr2MovieShotControl movieShotControl;
     private final ICameraStatus cameraStatus;
     private final boolean useGrCommand;
+    private final boolean captureAfterAf;
 
     /**
      *
      *
      */
-    public RicohGr2CameraCaptureControl(boolean useGrCommand, @NonNull IAutoFocusFrameDisplay frameDisplayer, @NonNull ICameraStatus cameraStatus)
+    public RicohGr2CameraCaptureControl(boolean useGrCommand, boolean captureAfterAf, @NonNull IAutoFocusFrameDisplay frameDisplayer, @NonNull ICameraStatus cameraStatus)
     {
         this.useGrCommand = useGrCommand;
+        this.captureAfterAf = captureAfterAf;
         this.cameraStatus = cameraStatus;
         singleShotControl = new RicohGr2SingleShotControl(frameDisplayer);
         movieShotControl = new RicohGr2MovieShotControl(frameDisplayer);
@@ -46,7 +48,7 @@ public class RicohGr2CameraCaptureControl implements ICaptureControl
             }
             else
             {
-                singleShotControl.singleShot(useGrCommand);
+                singleShotControl.singleShot(useGrCommand, captureAfterAf);
             }
         }
         catch (Exception e)

@@ -31,7 +31,7 @@ public class RicohGr2SingleShotControl
      *
      *
      */
-    public void singleShot(final boolean isCamera)
+    public void singleShot(final boolean isCamera, final boolean isDriveAutoFocus)
     {
         Log.v(TAG, "singleShot()");
         try
@@ -43,8 +43,17 @@ public class RicohGr2SingleShotControl
                 {
                     try
                     {
-                        //String postData = (isCamera) ? "af=camera" : "af=on";
-                        String postData = (isCamera) ? "af=camera" : "";
+                        String postData = "";
+                        if ((isCamera)&&(isDriveAutoFocus))
+                        {
+                            // RICOH GR II
+                            postData = "af=camera";
+                        }
+                        else if ((!isCamera)&&(isDriveAutoFocus))
+                        {
+                            // PENTAX DSLR
+                            postData = "af=on";
+                        }
                         String result = SimpleHttpClient.httpPost(shootUrl, postData, timeoutMs);
                         if ((result == null)||(result.length() < 1))
                         {
