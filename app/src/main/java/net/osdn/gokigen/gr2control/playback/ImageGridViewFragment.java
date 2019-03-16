@@ -380,6 +380,7 @@ public class ImageGridViewFragment extends Fragment
     {
 		ImageView imageView;
 		ImageView iconView;
+		ImageView selectView;
 	}
 	
 	private class GridViewAdapter extends BaseAdapter
@@ -433,8 +434,9 @@ public class ImageGridViewFragment extends Fragment
 				viewHolder = new GridCellViewHolder();
 				viewHolder.imageView = convertView.findViewById(R.id.imageViewY);
 				viewHolder.iconView = convertView.findViewById(R.id.imageViewZ);
+                viewHolder.selectView = convertView.findViewById(R.id.imageViewX);
 
-				convertView.setTag(viewHolder);
+                convertView.setTag(viewHolder);
 			}
             else
             {
@@ -445,16 +447,18 @@ public class ImageGridViewFragment extends Fragment
             ICameraFileInfo item = (infoEx != null) ? infoEx.getFileInfo() : null;
 			if (item == null)
             {
-				viewHolder.imageView.setImageDrawable(null);
+                viewHolder.imageView.setImageResource(R.drawable.ic_satellite_grey_24dp);
 				viewHolder.iconView.setImageDrawable(null);
+                viewHolder.selectView.setImageDrawable(null);
 				return convertView;
 			}
 			String path = new File(item.getDirectoryPath(), item.getFilename()).getPath();
 			Bitmap thumbnail = imageCache.get(path);
 			if (thumbnail == null)
             {
-				viewHolder.imageView.setImageDrawable(null);
+                viewHolder.imageView.setImageResource(R.drawable.ic_satellite_grey_24dp);
 				viewHolder.iconView.setImageDrawable(null);
+                viewHolder.selectView.setImageDrawable(null);
 				if (!gridViewIsScrolling)
                 {
 					if (executor.isShutdown())
