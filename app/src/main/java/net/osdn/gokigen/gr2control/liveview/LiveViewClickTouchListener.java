@@ -2,12 +2,9 @@ package net.osdn.gokigen.gr2control.liveview;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
@@ -19,6 +16,9 @@ import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 /**
  *

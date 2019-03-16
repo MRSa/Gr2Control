@@ -2,7 +2,6 @@ package net.osdn.gokigen.gr2control.camera.olympus.cameraproperty;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +11,8 @@ import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.olympus.wrapper.property.IOlyCameraPropertyProvider;
 
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
 
 public class CameraPropertyValueSelector implements ListView.OnItemClickListener, ListView.OnLongClickListener, DialogInterface.OnClickListener
 {

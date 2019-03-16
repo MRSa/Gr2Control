@@ -2,8 +2,6 @@ package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
@@ -32,6 +30,9 @@ import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 /**
  *

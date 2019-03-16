@@ -2,7 +2,6 @@ package net.osdn.gokigen.gr2control.logcat;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +9,8 @@ import android.widget.ArrayAdapter;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
+
+import androidx.annotation.NonNull;
 
 class LogCatExporter implements AdapterView.OnItemLongClickListener
 {

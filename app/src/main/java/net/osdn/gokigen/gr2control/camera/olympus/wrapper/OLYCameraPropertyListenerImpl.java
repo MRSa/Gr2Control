@@ -33,7 +33,7 @@ public class OLYCameraPropertyListenerImpl implements OLYCameraPropertyListener,
      *
      *
      */
-    public void setFocusingControl(IFocusingModeNotify focusCallback)
+    void setFocusingControl(IFocusingModeNotify focusCallback)
     {
         this.focusCallback = focusCallback;
     }

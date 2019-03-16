@@ -1,7 +1,6 @@
 package net.osdn.gokigen.gr2control.playback.detail;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -10,14 +9,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
@@ -33,6 +25,13 @@ import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class ImagePagerViewFragment extends Fragment
 {
@@ -328,7 +327,7 @@ public class ImagePagerViewFragment extends Fragment
 		
 	}
 
-	private class ImagePageChangeListener implements OnPageChangeListener
+	private class ImagePageChangeListener implements ViewPager.OnPageChangeListener
 	{
 
 		@Override

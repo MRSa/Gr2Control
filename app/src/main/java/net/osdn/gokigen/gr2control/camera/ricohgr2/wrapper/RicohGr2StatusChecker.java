@@ -1,7 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
-import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
@@ -11,6 +9,8 @@ import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  *

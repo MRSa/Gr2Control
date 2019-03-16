@@ -2,8 +2,6 @@ package net.osdn.gokigen.gr2control.liveview;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
@@ -12,6 +10,9 @@ import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 /**
  *

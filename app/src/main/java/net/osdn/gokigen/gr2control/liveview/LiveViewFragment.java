@@ -7,15 +7,16 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -976,31 +977,32 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
-                        if (focused)
+                        try
                         {
-                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
-                            if (icon != null)
-                            {
-                                DrawableCompat.setTint(icon, Color.GREEN);
-                                view.setImageDrawable(icon);
-                            }
-                        }
-                        else
-                        {
-                            Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_focus_free_black_24dp, null);
-                            if (icon != null)
-                            {
-                                int color = Color.BLACK;
-                                if (focusLocked)
-                                {
-                                    color = Color.RED;
+                            ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
+                            if (focused) {
+                                Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
+                                if (icon != null) {
+                                    DrawableCompat.setTint(icon, Color.GREEN);
+                                    view.setImageDrawable(icon);
                                 }
-                                DrawableCompat.setTint(icon, color);
-                                view.setImageDrawable(icon);
+                            } else {
+                                Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_focus_free_black_24dp, null);
+                                if (icon != null) {
+                                    int color = Color.BLACK;
+                                    if (focusLocked) {
+                                        color = Color.RED;
+                                    }
+                                    DrawableCompat.setTint(icon, color);
+                                    view.setImageDrawable(icon);
+                                }
                             }
+                            view.invalidate();
                         }
-                        view.invalidate();
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }

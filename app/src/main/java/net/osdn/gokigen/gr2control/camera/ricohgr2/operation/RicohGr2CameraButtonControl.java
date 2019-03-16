@@ -1,10 +1,11 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.operation;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
+
+import androidx.annotation.NonNull;
 
 /**
  *

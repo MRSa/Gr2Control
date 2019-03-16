@@ -1,8 +1,9 @@
 package net.osdn.gokigen.gr2control.camera.playback;
 
-import android.support.annotation.NonNull;
 
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
+
+import androidx.annotation.NonNull;
 
 /**
  *   画像再生・取得用インタフェース

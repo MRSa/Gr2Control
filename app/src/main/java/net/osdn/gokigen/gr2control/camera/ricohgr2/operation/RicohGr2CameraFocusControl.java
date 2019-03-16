@@ -1,7 +1,6 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.operation;
 
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -9,6 +8,8 @@ import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.takepicture.RicohGr2AutoFocusControl;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
+
+import androidx.annotation.NonNull;
 
 /**
  *

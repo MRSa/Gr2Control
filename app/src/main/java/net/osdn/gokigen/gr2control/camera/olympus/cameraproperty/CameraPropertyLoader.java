@@ -58,7 +58,7 @@ public class CameraPropertyLoader implements Runnable
         Log.v(TAG, "CameraPropertyLoader::run() END");
     }
 
-    public void resetProperty()
+    void resetProperty()
     {
         Log.v(TAG, "CameraPropertyLoader::resetProperty() START");
 
@@ -75,7 +75,7 @@ public class CameraPropertyLoader implements Runnable
      *   プロパティ一覧を応答
      *
      */
-    public ArrayList<CameraPropertyArrayItem> getItemList()
+    ArrayList<CameraPropertyArrayItem> getItemList()
     {
         return (propertyItems);
     }

@@ -1,6 +1,6 @@
 package net.osdn.gokigen.gr2control.camera.playback;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class ProgressEvent
 {

@@ -1,12 +1,12 @@
 package net.osdn.gokigen.gr2control.camera.playback;
 
-import android.support.annotation.NonNull;
-
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 public class CameraFileInfo implements ICameraFileInfo, ICameraFileInfoSetter
 {

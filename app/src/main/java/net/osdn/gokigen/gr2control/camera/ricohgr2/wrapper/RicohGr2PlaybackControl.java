@@ -1,7 +1,6 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
@@ -20,6 +19,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  *

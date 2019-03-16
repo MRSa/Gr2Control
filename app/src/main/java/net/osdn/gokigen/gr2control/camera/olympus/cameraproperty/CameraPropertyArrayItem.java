@@ -1,7 +1,7 @@
 package net.osdn.gokigen.gr2control.camera.olympus.cameraproperty;
 
 
-public class CameraPropertyArrayItem
+class CameraPropertyArrayItem
 {
     private int iconResource;
     private final String propertyName;
@@ -24,53 +24,53 @@ public class CameraPropertyArrayItem
         initialIconResource = iconId1;
     }
 
-    public boolean isChanged()
+    boolean isChanged()
     {
         return (!propertyValue.equals(initialValue));
     }
 
-    public String getPropertyName()
+    String getPropertyName()
     {
         return (propertyName);
     }
 
-    public String getPropertyTitle()
+    String getPropertyTitle()
     {
         return (propertyTitle);
     }
 
-    public String getInitialValue()
+    String getInitialValue()
     {
         return (initialValue);
     }
 
-    public int getIconResource()
+    int getIconResource()
     {
         return (iconResource);
     }
 
-    public void setIconResource(int iconId)
+    void setIconResource(int iconId)
     {
         iconResource = iconId;
     }
 
-    public String getPropertyValueTitle()
+    String getPropertyValueTitle()
     {
         return (propertyValueTitle);
     }
 
-    public String getPropertyValue()
+    String getPropertyValue()
     {
         return (propertyValue);
     }
 
-    public void setPropertyValue(String valueTitle, String value)
+    void setPropertyValue(String valueTitle, String value)
     {
         propertyValueTitle = valueTitle;
         propertyValue = value;
     }
 
-    public void resetValue()
+    void resetValue()
     {
         propertyValue = initialValue;
         propertyValueTitle = initialValueTitle;

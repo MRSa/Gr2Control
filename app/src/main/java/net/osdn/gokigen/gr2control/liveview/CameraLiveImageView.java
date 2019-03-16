@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.media.ExifInterface;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -35,6 +34,8 @@ import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.exifinterface.media.ExifInterface;
 
 
 /**
@@ -200,7 +201,14 @@ public class CameraLiveImageView extends View implements IImageDataReceiver, IAu
             int orientation = ExifInterface.ORIENTATION_UNDEFINED;
             if ((metadata != null)&&(metadata.containsKey(EXIF_ORIENTATION)))
             {
-                orientation = Integer.parseInt((String) metadata.get(EXIF_ORIENTATION));
+                try
+                {
+                    orientation = Integer.parseInt((String) metadata.get(EXIF_ORIENTATION));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
             switch (orientation)
             {
@@ -952,7 +960,7 @@ public class CameraLiveImageView extends View implements IImageDataReceiver, IAu
     public void toggleShowGridFrame()
     {
         showGridFeature = !showGridFeature;
-        SharedPreferences preferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IPreferencePropertyAccessor.SHOW_GRID_STATUS, showGridFeature);
         editor.apply();

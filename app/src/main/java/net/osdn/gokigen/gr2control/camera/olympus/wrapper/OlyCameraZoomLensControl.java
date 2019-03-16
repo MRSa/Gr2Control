@@ -2,12 +2,12 @@ package net.osdn.gokigen.gr2control.camera.olympus.wrapper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
+import androidx.preference.PreferenceManager;
 import jp.co.olympus.camerakit.OLYCamera;
 
 /**

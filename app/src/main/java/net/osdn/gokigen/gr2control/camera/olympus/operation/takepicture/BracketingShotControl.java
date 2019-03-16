@@ -1,4 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.olympus.operation.takepicture;
+
 import android.graphics.PointF;
 import android.util.Log;
 

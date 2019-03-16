@@ -1,12 +1,13 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.operation;
 
 import android.content.Context;
-import android.support.v7.preference.Preference;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
+
+import androidx.preference.Preference;
 
 public class CameraPowerOffRicohGr2 implements Preference.OnPreferenceClickListener, ConfirmationDialog.Callback
 {

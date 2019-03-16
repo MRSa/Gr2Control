@@ -1,14 +1,15 @@
 package net.osdn.gokigen.gr2control.liveview;
 
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  *

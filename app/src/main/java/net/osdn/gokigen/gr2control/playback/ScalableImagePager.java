@@ -1,11 +1,12 @@
 package net.osdn.gokigen.gr2control.playback;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
 import net.osdn.gokigen.gr2control.playback.detail.ScalableImageView;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  *

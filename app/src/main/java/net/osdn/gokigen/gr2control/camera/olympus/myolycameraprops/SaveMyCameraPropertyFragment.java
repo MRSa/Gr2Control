@@ -3,7 +3,6 @@ package net.osdn.gokigen.gr2control.camera.olympus.myolycameraprops;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,8 @@ import net.osdn.gokigen.gr2control.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.fragment.app.ListFragment;
 
 public class SaveMyCameraPropertyFragment extends ListFragment
 {
@@ -24,7 +25,7 @@ public class SaveMyCameraPropertyFragment extends ListFragment
         return (inflater.inflate(R.layout.list_camera_properties, container, false));
     }
 
-    public void setDismissInterface(ILoadSaveMyCameraPropertyDialogDismiss dismiss)
+    void setDismissInterface(ILoadSaveMyCameraPropertyDialogDismiss dismiss)
     {
         this.dialogDismiss = dismiss;
     }

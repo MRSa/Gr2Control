@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
@@ -8,6 +7,8 @@ import net.osdn.gokigen.gr2control.camera.utils.SimpleHttpClient;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleLiveviewSlicer;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.CameraLiveViewListenerImpl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
+
+import androidx.annotation.NonNull;
 
 /**
  *

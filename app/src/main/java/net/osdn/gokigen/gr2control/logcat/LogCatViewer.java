@@ -1,12 +1,13 @@
 package net.osdn.gokigen.gr2control.logcat;
 
-import android.support.v7.preference.Preference;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
+import androidx.preference.Preference;
 
-public class LogCatViewer implements android.support.v7.preference.Preference.OnPreferenceClickListener
+
+public class LogCatViewer implements Preference.OnPreferenceClickListener
 {
     private final String TAG = toString();
     private final IChangeScene changeScene;

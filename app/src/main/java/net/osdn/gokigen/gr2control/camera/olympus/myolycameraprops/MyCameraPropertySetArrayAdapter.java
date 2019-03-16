@@ -1,7 +1,6 @@
 package net.osdn.gokigen.gr2control.camera.olympus.myolycameraprops;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,8 @@ import android.widget.Toast;
 import net.osdn.gokigen.gr2control.R;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 class MyCameraPropertySetArrayAdapter  extends ArrayAdapter<MyCameraPropertySetItems>
 {

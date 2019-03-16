@@ -2,10 +2,11 @@ package net.osdn.gokigen.gr2control.scene;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 
 import net.osdn.gokigen.gr2control.R;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 public class ConfirmationDialog extends DialogFragment
 {

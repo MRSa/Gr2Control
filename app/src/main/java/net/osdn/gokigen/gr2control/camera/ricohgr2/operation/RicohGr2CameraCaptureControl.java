@@ -1,12 +1,12 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.operation;
 
-import android.support.annotation.NonNull;
-
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.takepicture.RicohGr2MovieShotControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.takepicture.RicohGr2SingleShotControl;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
+
+import androidx.annotation.NonNull;
 
 /**
  *

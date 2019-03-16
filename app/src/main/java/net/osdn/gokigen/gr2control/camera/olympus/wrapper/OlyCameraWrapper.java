@@ -3,8 +3,6 @@ package net.osdn.gokigen.gr2control.camera.olympus.wrapper;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
@@ -16,6 +14,8 @@ import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import jp.co.olympus.camerakit.OLYCamera;
 import jp.co.olympus.camerakit.OLYCameraLiveViewListener;
 

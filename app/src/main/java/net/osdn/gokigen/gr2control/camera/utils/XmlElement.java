@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.utils;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Xml;
 
@@ -11,6 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 public class XmlElement
 {

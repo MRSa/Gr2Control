@@ -17,13 +17,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
@@ -48,6 +42,13 @@ import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallba
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
 import net.osdn.gokigen.gr2control.playback.detail.ImagePagerViewFragment;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 public class ImageGridViewFragment extends Fragment
 {

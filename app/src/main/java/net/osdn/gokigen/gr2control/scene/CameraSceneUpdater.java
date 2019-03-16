@@ -1,9 +1,5 @@
 package net.osdn.gokigen.gr2control.scene;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
@@ -15,6 +11,11 @@ import net.osdn.gokigen.gr2control.logcat.LogCatFragment;
 import net.osdn.gokigen.gr2control.playback.ImageGridViewFragment;
 import net.osdn.gokigen.gr2control.preference.olympus.PreferenceFragment;
 import net.osdn.gokigen.gr2control.preference.ricohgr2.RicohGr2PreferenceFragment;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  *

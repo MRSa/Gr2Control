@@ -2,7 +2,6 @@ package net.osdn.gokigen.gr2control.camera.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,6 +12,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import androidx.annotation.NonNull;
 
 /**
  *

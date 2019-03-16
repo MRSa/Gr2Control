@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
@@ -20,6 +19,7 @@ import net.osdn.gokigen.gr2control.camera.ICameraStatusReceiver;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import androidx.appcompat.app.AlertDialog;
 import jp.co.olympus.camerakit.OLYCamera;
 import jp.co.olympus.camerakit.OLYCameraConnectionListener;
 import jp.co.olympus.camerakit.OLYCameraKitException;

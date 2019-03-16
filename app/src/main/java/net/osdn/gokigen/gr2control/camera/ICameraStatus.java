@@ -1,8 +1,8 @@
 package net.osdn.gokigen.gr2control.camera;
 
-import android.support.annotation.NonNull;
-
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  *

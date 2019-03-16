@@ -6,11 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  *  イメージを表示する ... ImageViewerSampleから持ってくる
