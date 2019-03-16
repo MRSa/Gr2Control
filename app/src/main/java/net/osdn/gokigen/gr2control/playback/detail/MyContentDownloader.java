@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
@@ -33,7 +35,7 @@ import androidx.preference.PreferenceManager;
  *   コンテントのダウンロード
  *
  */
-class MyContentDownloader implements IDownloadContentCallback
+public class MyContentDownloader implements IDownloadContentCallback
 {
     private final String TAG = toString();
     private final Activity activity;
@@ -53,7 +55,7 @@ class MyContentDownloader implements IDownloadContentCallback
      *   コンストラクタ
      *
      */
-    MyContentDownloader(@NonNull Activity activity, @NonNull final IPlaybackControl playbackControl)
+    public MyContentDownloader(@NonNull Activity activity, @NonNull final IPlaybackControl playbackControl)
     {
         this.activity = activity;
         this.playbackControl = playbackControl;
@@ -63,7 +65,7 @@ class MyContentDownloader implements IDownloadContentCallback
      *   ダウンロードの開始
      *
      */
-    void startDownload(final ICameraFileInfo fileInfo, String replaceJpegSuffix, boolean isSmallSize)
+    public void startDownload(final ICameraFileInfo fileInfo, final String appendTitle, String replaceJpegSuffix, boolean isSmallSize)
     {
         if (fileInfo == null)
         {
@@ -85,18 +87,26 @@ class MyContentDownloader implements IDownloadContentCallback
             if (targetFileName.toUpperCase().contains(RAW_SUFFIX_1))
             {
                 mimeType = "image/x-adobe-dng";
+                isSmallSize = false;
             }
             else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_2))
             {
                 mimeType = "image/x-olympus-orf";
+                isSmallSize = false;
             }
             else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_3))
             {
                 mimeType = "image/x-pentax-pef";
+                isSmallSize = false;
             }
             else if (targetFileName.toUpperCase().contains(MOVIE_SUFFIX))
             {
                 mimeType =  "video/mp4";
+                isSmallSize = false;
+            }
+            else
+            {
+                mimeType = "image/jpeg";
             }
 
             ////// ダイアログの表示
@@ -104,7 +114,7 @@ class MyContentDownloader implements IDownloadContentCallback
                 @Override
                 public void run() {
                     downloadDialog = new ProgressDialog(activity);
-                    downloadDialog.setTitle(activity.getString(R.string.dialog_download_file_title));
+                    downloadDialog.setTitle(activity.getString(R.string.dialog_download_file_title) + appendTitle);
                     downloadDialog.setMessage(activity.getString(R.string.dialog_download_message) + " " + targetFileName);
                     downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     downloadDialog.setCancelable(false);
@@ -226,7 +236,9 @@ class MyContentDownloader implements IDownloadContentCallback
                     {
                         downloadDialog.dismiss();
                     }
-                    Toast.makeText(activity, activity.getString(R.string.download_control_save_success) + " " + targetFileName, Toast.LENGTH_SHORT).show();
+                    View view = activity.findViewById(R.id.fragment1);
+                    Snackbar.make(view, activity.getString(R.string.download_control_save_success) + " " + targetFileName, Snackbar.LENGTH_SHORT).show();
+                    //Toast.makeText(activity, activity.getString(R.string.download_control_save_success) + " " + targetFileName, Toast.LENGTH_SHORT).show();
                     System.gc();
                 }
             });

@@ -2,12 +2,46 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:compat="http://schemas.android.com/apk/res-auto" >
 
+
+    <item
+        android:id="@+id/action_select_all"
+        compat:showAsAction="ifRoom"
+        android:icon="@drawable/ic_select_all_grey_24dp"
+        android:title="@string/action_select_all"
+        android:visible="true" />
+
     <item
         android:id="@+id/action_refresh"
         compat:showAsAction="ifRoom"
-        android:icon="@drawable/ic_refresh_black_24dp"
+        android:icon="@drawable/ic_refresh_grey_24dp"
         android:title="@string/action_refresh"
-        android:visible="false" />
+        android:visible="true" />
+
+    <item android:id="@+id/action_batch_download_with_raw"
+        compat:showAsAction="ifRoom"
+        android:icon="@drawable/ic_file_download_white_24dp"
+        android:title="@string/action_download"
+        android:visible="true" >
+        <menu>
+            <item
+                android:id="@+id/action_batch_download_original_size_raw"
+                compat:showAsAction="never"
+                android:title="@string/action_download_original_size"/>
+
+            <item
+                android:id="@+id/action_batch_download_640x480_raw"
+                compat:showAsAction="never"
+                android:title="@string/action_batch_download_640x480"/>
+
+            <!---->
+            <item
+                android:id="@+id/action_batch_download_raw"
+                compat:showAsAction="never"
+                android:visible="false"
+                android:title="@string/action_batch_download_raw"/>
+            <!---->
+        </menu>
+    </item>
 
     <item
         android:id="@+id/action_datetime_synchronize"

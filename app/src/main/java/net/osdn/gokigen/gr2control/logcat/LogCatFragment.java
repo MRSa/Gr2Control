@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 
 import net.osdn.gokigen.gr2control.R;
 
@@ -119,7 +119,8 @@ public class LogCatFragment extends ListFragment
                                     view.setSelection(dataItems.size());
 
                                     // 更新終了通知
-                                    Toast.makeText(getActivity(), getString(R.string.finish_refresh), Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getActivity().findViewById(R.id.fragment1), getString(R.string.finish_refresh), Snackbar.LENGTH_SHORT).show();
+                                    //Toast.makeText(getActivity(), getString(R.string.finish_refresh), Toast.LENGTH_SHORT).show();
                                 }
                                 catch (Exception ee)
                                 {

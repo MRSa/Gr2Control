@@ -479,7 +479,7 @@ public class ImagePagerViewFragment extends Fragment
 	 * @param isRaw           RAWファイルをダウンロードするか
 	 * @param isSmallSize    小さいサイズの量にするか
      */
-	public void saveImageWithDialog(final boolean isRaw, final boolean isSmallSize)
+	private void saveImageWithDialog(final boolean isRaw, final boolean isSmallSize)
 	{
         Log.v(TAG, "saveImageWithDialog() : raw : " + isRaw + " (small : " + isSmallSize + ")");
         try
@@ -495,7 +495,7 @@ public class ImagePagerViewFragment extends Fragment
                         if (infoEx != null)
                         {
                             ICameraFileInfo fileInfo = infoEx.getFileInfo();
-                            contentDownloader.startDownload(fileInfo, (isRaw) ? infoEx.getRawSuffix() : null, isSmallSize);
+                            contentDownloader.startDownload(fileInfo, "", (isRaw) ? infoEx.getRawSuffix() : null, isSmallSize);
                         }
                     }
                 });

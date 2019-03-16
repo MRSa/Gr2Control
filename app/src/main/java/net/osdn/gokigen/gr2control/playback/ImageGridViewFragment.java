@@ -2,6 +2,7 @@ package net.osdn.gokigen.gr2control.playback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallba
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
 import net.osdn.gokigen.gr2control.playback.detail.ImagePagerViewFragment;
+import net.osdn.gokigen.gr2control.playback.detail.MyContentDownloader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -59,7 +61,7 @@ public class ImageGridViewFragment extends Fragment
 	private final String OLYMPUS_RAW_SUFFIX = ".orf";
 	private final String PENTAX_RAW_PEF_SUFFIX = ".pef";
 
-
+	private MyContentDownloader contentDownloader;
     private GridView gridView;
 	private boolean gridViewIsScrolling;
 	private IPlaybackControl playbackControl;
@@ -80,6 +82,15 @@ public class ImageGridViewFragment extends Fragment
 	{
 		this.playbackControl = playbackControl;
 		this.runMode = runMode;
+		Activity activity = getActivity();
+		if (activity != null)
+		{
+            this.contentDownloader = new MyContentDownloader(getActivity(), playbackControl);
+        }
+        else
+        {
+            this.contentDownloader = null;
+        }
 	}
 
 	@Override
@@ -101,7 +112,9 @@ public class ImageGridViewFragment extends Fragment
 		
 		gridView = view.findViewById(R.id.gridView1);
 		gridView.setAdapter(new GridViewAdapter(inflater));
-		gridView.setOnItemClickListener(new GridViewOnItemClickListener());
+        GridViewOnItemClickListener listener = new GridViewOnItemClickListener();
+		gridView.setOnItemClickListener(listener);
+        gridView.setOnItemLongClickListener(listener);
 		gridView.setOnScrollListener(new GridViewOnScrollListener());
 		
 		return (view);
@@ -132,9 +145,26 @@ public class ImageGridViewFragment extends Fragment
 			refresh();
 			return (true);
 		}
+        if (id == R.id.action_batch_download_original_size_raw)
+        {
+            // オリジナルサイズのダウンロード
+            startDownloadBatch(false);
+            return (true);
+        }
+        if (id == R.id.action_batch_download_640x480_raw)
+        {
+            // 小さいサイズのダウンロード
+            startDownloadBatch(true);
+            return (true);
+        }
+        if (id == R.id.action_select_all)
+        {
+            selectUnselectAll();
+            return (true);
+        }
 		return (super.onOptionsItemSelected(item));
 	}
-	
+
 	@Override
 	public void onResume()
 	{
@@ -376,7 +406,131 @@ public class ImageGridViewFragment extends Fragment
         Log.v(TAG, "refreshImpl() end");
     }
 
-	private static class GridCellViewHolder
+    /**
+     *   全選択・全選択解除
+     *
+     */
+    private void selectUnselectAll()
+    {
+        if ((contentList == null)||(contentList.size() == 0))
+        {
+            // 選択されていない時は終わる。
+            return;
+        }
+
+        int nofSelected = 0;
+        for (ImageContentInfoEx content : contentList)
+        {
+            if (content.isSelected())
+            {
+                nofSelected++;
+            }
+        }
+
+        // 全部選択されているときは全選択解除・そうでない時は全選択
+        boolean setSelected = (nofSelected != contentList.size());
+        for (ImageContentInfoEx content : contentList)
+        {
+            content.setSelected(setSelected);
+        }
+
+        // グリッドビューの再描画
+        redrawGridView();
+    }
+
+    private void redrawGridView()
+    {
+        // グリッドビューの再描画
+        Activity activity = getActivity();
+        if (activity != null)
+        {
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (gridView != null)
+                    {
+                        gridView.invalidateViews();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     *    一括ダウンロードの開始
+     *
+     * @param isSmall  小さいサイズ(JPEG)
+     */
+    private void startDownloadBatch(final boolean isSmall)
+    {
+        try
+        {
+            // 念のため、contentDownloader がなければ作る
+            if (contentDownloader == null)
+            {
+                Activity activity = getActivity();
+                if (activity == null)
+                {
+                    // activityが取れない時には終わる。
+                    return;
+                }
+                this.contentDownloader = new MyContentDownloader(getActivity(), playbackControl);
+            }
+            Thread thread = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        // ダウンロード枚数を取得
+                        int totalSize = 0;
+                        for (ImageContentInfoEx content : contentList)
+                        {
+                            if (content.isSelected())
+                            {
+                                totalSize++;
+                            }
+                        }
+                        if (totalSize == 0)
+                        {
+                            // 画像が選択されていなかった...終了する
+                            return;
+                        }
+                        int count = 1;
+                        for (ImageContentInfoEx content : contentList)
+                        {
+                            if (content.isSelected())
+                            {
+                                contentDownloader.startDownload(content.getFileInfo(), " (" + count + "/" + totalSize + ") ", null, isSmall);
+                                count++;
+
+                                // 画像の選択を落とす
+                                content.setSelected(false);
+                            }
+                        }
+
+                        // グリッドビューの再描画
+                        redrawGridView();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static class GridCellViewHolder
     {
 		ImageView imageView;
 		ImageView iconView;
@@ -458,7 +612,6 @@ public class ImageGridViewFragment extends Fragment
             {
                 viewHolder.imageView.setImageResource(R.drawable.ic_satellite_grey_24dp);
 				viewHolder.iconView.setImageDrawable(null);
-                viewHolder.selectView.setImageDrawable(null);
 				if (!gridViewIsScrolling)
                 {
 					if (executor.isShutdown())
@@ -484,14 +637,23 @@ public class ImageGridViewFragment extends Fragment
 					viewHolder.iconView.setImageDrawable(null);
 				}
 			}
+			if (infoEx.isSelected())
+            {
+                viewHolder.selectView.setImageResource(R.drawable.ic_check_green_24dp);
+            }
+            else
+            {
+                viewHolder.selectView.setImageDrawable(null);
+            }
 			return convertView;
 		}
 	}
 	
-	private class GridViewOnItemClickListener implements AdapterView.OnItemClickListener
+	private class GridViewOnItemClickListener implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener
     {
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
 	        ImagePagerViewFragment fragment = ImagePagerViewFragment.newInstance(playbackControl, runMode, contentList, position);
             FragmentActivity activity = getActivity();
 	        if (activity != null)
@@ -502,7 +664,48 @@ public class ImageGridViewFragment extends Fragment
                 transaction.commit();
             }
 		}
-	}
+
+        @Override
+        public boolean onItemLongClick(final AdapterView<?> parent, View view, int position, long id)
+        {
+            try
+            {
+                if (contentList == null)
+                {
+                    return (false);
+                }
+                ImageContentInfoEx infoEx = contentList.get(position);
+                if (infoEx != null)
+                {
+                    boolean isChecked = infoEx.isSelected();
+                    infoEx.setSelected(!isChecked);
+                }
+                view.invalidate();
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            GridViewAdapter adapter = (GridViewAdapter) parent.getAdapter();
+                            adapter.notifyDataSetChanged();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return (true);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return (false);
+        }
+    }
 	
 	private class GridViewOnScrollListener implements AbsListView.OnScrollListener
     {

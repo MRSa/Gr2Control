@@ -78,8 +78,11 @@
     <string name="action_download_original_size">オリジナルサイズ</string>
     <string name="action_download_640x480">小さいサイズ</string>
     <string name="action_download_raw">RAW</string>
+    <string name="action_batch_download_640x480">小さいサイズ(JPEG)</string>
+    <string name="action_batch_download_raw">オリジナルサイズ(RAWも取得)</string>
     <string name="action_delete_picture">削除</string>
     <string name="dialog_get_information_title">画像の情報</string>
+    <string name="action_select_all">全選択/全選択解除</string>
     <string name="label_aelock">AEL/AFL</string>
     <string name="label_c_af">C-AF</string>
     <string name="white_balance">WB</string>
