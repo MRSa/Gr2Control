@@ -124,7 +124,9 @@ public class MyContentDownloader implements IDownloadContentCallback
             String path = fileInfo.getDirectoryPath() + "/" + targetFileName;
 
             final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + activity.getString(R.string.app_name2) + "/";
-            String outputFileName =  extendName + "_" + targetFileName;
+            String suffix = targetFileName.substring(targetFileName.indexOf("."));
+            String picName = targetFileName.substring(0, targetFileName.indexOf("."));
+            String outputFileName = picName + "_" +  extendName + suffix;
             filepath = new File(directoryPath.toLowerCase(), outputFileName.toLowerCase()).getPath();
             try
             {
