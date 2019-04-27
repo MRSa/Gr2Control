@@ -120,4 +120,7 @@
     <string name="summary_use_gr2_special_command">制御指示の一部にGR2用コマンドを使用します。</string>
     <string name="dialog_confirm_title_output_log">ログの共有</string>
     <string name="dialog_confirm_message_output_log">デバッグログを共有します。</string>
+
+    <string name="select_radio_date">日付</string>
+    <string name="select_radio_path">パス</string>
 </resources>

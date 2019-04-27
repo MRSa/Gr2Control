@@ -156,4 +156,6 @@
     <string name="dialog_confirm_title_output_log">Share debug log</string>
     <string name="dialog_confirm_message_output_log">Share the debug log, OK?</string>
 
+    <string name="select_radio_date">Date</string>
+    <string name="select_radio_path">Path</string>
 </resources>
