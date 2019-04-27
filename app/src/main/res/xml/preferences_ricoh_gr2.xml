@@ -54,6 +54,8 @@
         <CheckBoxPreference
             android:key="use_playback_menu"
             android:title="@string/pref_use_playback_menu"
+            android:summary="@string/summary_use_playback_menu"
+
             />
 
         <CheckBoxPreference

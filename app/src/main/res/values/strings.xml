@@ -69,6 +69,7 @@
     <string name="pref_cat_others">Others</string>
     <string name="pref_call_share_after_save">Share after Save</string>
     <string name="pref_use_playback_menu">Use playback screen menu</string>
+    <string name="summary_use_playback_menu">Normally to keep ON.</string>
 
 
     <string name="pref_cat_gokigen">GOKIGEN</string>
@@ -148,10 +149,10 @@
     <string name="pref_camerakit_version">Camera kit Version</string>
 
     <string name="pref_use_gr2_special_command">Use GR2 Special Command</string>
-    <string name="summary_use_gr2_special_command">Use some GR2 special command.</string>
+    <string name="summary_use_gr2_special_command">If you use GR3 or PENTAX DSLR, please OFF this parameter.</string>
 
     <string name="pref_pentax_capture_after_auto_focus">Capture after AF(PENTAX)</string>
-    <string name="summary_pentax_capture_after_auto_focus">Capture after AF.(for PENTAX DSLR, need restart)</string>
+    <string name="summary_pentax_capture_after_auto_focus">Capture after AF.(for GR3/PENTAX DSLR, need restart)</string>
 
     <string name="dialog_confirm_title_output_log">Share debug log</string>
     <string name="dialog_confirm_message_output_log">Share the debug log, OK?</string>

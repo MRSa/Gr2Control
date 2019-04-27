@@ -43,15 +43,16 @@
     <string name="pref_gr2_display_mode">ディスプレイモード</string>
     <string name="pref_gr2_display_camera_view">ディスプレイミラーモード</string>
     <string name="pref_gr2_display_camera_view_summary">カメラのLCD画面をそのまま表示します。</string>
-    <string name="pref_pentax_capture_after_auto_focus">AF動作後に撮影(PENTAX)</string>
-    <string name="summary_pentax_capture_after_auto_focus">AF動作後に撮影します。(PENTAX DSLR, 再起動が必要)</string>
+    <string name="pref_pentax_capture_after_auto_focus">AF動作後に撮影(GR3/PENTAX)</string>
+    <string name="summary_pentax_capture_after_auto_focus">AF動作後に撮影します。(GR3/PENTAX一眼用、有効にするには再起動が必要です)</string>
     <string name="pref_gr2_lcd_sleep">接続時にカメラのLCDをオフにする</string>
     <string name="pref_cat_camera">カメラ設定</string>
     <string name="pref_cat_initialize">起動時設定</string>
     <string name="pref_auto_connect_camera">カメラに自動接続</string>
-    <string name="pref_summary_auto_connect_camera">通常、チェックを入れたままご使用ください</string>
+    <string name="pref_summary_auto_connect_camera">通常、チェックを入れたままご使用ください。</string>
     <string name="pref_cat_others">その他</string>
     <string name="pref_use_playback_menu">画像一覧画面にコマンドメニューを表示</string>
+    <string name="summary_use_playback_menu">通常はチェックを入れたままご使用ください。</string>
     <string name="pref_call_share_after_save">画像保存後に共有する</string>
     <string name="pref_cat_gokigen">GOKIGEN Project</string>
     <string name="pref_instruction_manual">操作説明</string>
@@ -117,7 +118,7 @@
     <string name="exif_custom_process_title">(スペシャル・エフェクト使用)</string>
     <string name="exif_with_gps">(位置情報あり)</string>
     <string name="pref_use_gr2_special_command">GR2専用コマンドの使用</string>
-    <string name="summary_use_gr2_special_command">制御指示の一部にGR2用コマンドを使用します。</string>
+    <string name="summary_use_gr2_special_command">GR3またはPENTAX一眼を使用する場合はOFFにしてください。(制御指示にGR2専用コマンドを使用します。)</string>
     <string name="dialog_confirm_title_output_log">ログの共有</string>
     <string name="dialog_confirm_message_output_log">デバッグログを共有します。</string>
 
