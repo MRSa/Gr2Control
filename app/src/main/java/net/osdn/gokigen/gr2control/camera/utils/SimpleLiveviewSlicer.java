@@ -267,7 +267,8 @@ public class SimpleLiveviewSlicer
     public Payload nextPayloadForMotionJpeg()
     {
         int searchIndex = 0;
-        int[] endmarker = { 0xff, 0xd9, 0x0d, 0x0a, 0x0d, 0x0a };
+        //int[] endmarker = { 0xff, 0xd9, 0x0d, 0x0a, 0x0d, 0x0a };
+        int[] endmarker = { 0xff, 0xd9 };
         Payload payload = null;
         try
         {
