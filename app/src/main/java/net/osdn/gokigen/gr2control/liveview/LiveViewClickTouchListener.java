@@ -399,6 +399,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)||(keyCode == KeyEvent.KEYCODE_CAMERA)))
             {
                 pushedShutterButton();
+                return (true);
             }
         }
         catch (Exception e)
