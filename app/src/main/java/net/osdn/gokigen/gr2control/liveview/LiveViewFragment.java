@@ -163,6 +163,10 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             imageView.setOnClickListener(onClickTouchListener);
             imageView.setOnTouchListener(onClickTouchListener);
 
+            // キーイベントを拾うことにする
+            view.setOnKeyListener(onClickTouchListener);
+            view.setFocusableInTouchMode(true);
+
             setOnClickListener(view, R.id.hideControlPanelTextView);
             setOnClickListener(view, R.id.showControlPanelTextView);
             setOnClickListener(view, R.id.showKeyPanelImageView);
@@ -969,7 +973,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     @Override
     public void updateFocusedStatus(final boolean focused, final boolean focusLocked)
     {
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         try
         {
             if (activity != null)
@@ -979,7 +983,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
                     public void run() {
                         try
                         {
-                            ImageView view = getActivity().findViewById(R.id.focusUnlockImageView);
+                            ImageView view = activity.findViewById(R.id.focusUnlockImageView);
                             if (focused) {
                                 Drawable icon = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_center_focus_strong_black_24dp, null);
                                 if (icon != null) {

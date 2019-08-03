@@ -3,6 +3,7 @@ package net.osdn.gokigen.gr2control.liveview;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -24,7 +25,7 @@ import androidx.preference.PreferenceManager;
  *
  *
  */
-class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchListener
+class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener
 {
     private final String TAG = toString();
     private final Activity context;
@@ -382,5 +383,28 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         }
         Log.v(TAG, "onTouch() : " + id + " (" + motionEvent.getX() + "," + motionEvent.getY() + ")");
         return ((id == R.id.cameraLiveImageView)&&(focusingControl.driveAutoFocus(motionEvent)));
+    }
+
+    /**
+     *   ボタンを押したときの対応
+     *
+     */
+    @Override
+    public boolean onKey(View view, int keyCode, @NonNull KeyEvent keyEvent)
+    {
+        Log.v(TAG, "onKey() : " + keyCode);
+        try
+        {
+            if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN)&&
+                    ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)||(keyCode == KeyEvent.KEYCODE_CAMERA)))
+            {
+                pushedShutterButton();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (false);
     }
 }
