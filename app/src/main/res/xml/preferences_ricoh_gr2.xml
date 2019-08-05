@@ -70,6 +70,13 @@
             android:summary="@string/summary_pentax_capture_after_auto_focus"
             />
 
+        <EditTextPreference
+            android:key="ricoh_get_pics_list_timeout"
+            android:title="@string/pref_ricoh_get_pics_list_timeout"
+            android:defaultValue="5"
+            android:inputType="number"
+            android:summary="@string/pref_summary_ricoh_get_pics_list_timeout" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

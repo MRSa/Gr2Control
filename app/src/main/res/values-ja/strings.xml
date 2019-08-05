@@ -124,4 +124,7 @@
 
     <string name="select_radio_date">日付</string>
     <string name="select_radio_path">パス</string>
+
+    <string name="pref_ricoh_get_pics_list_timeout">撮影画像一覧取得時のタイムアウト（単位：秒）</string>
+    <string name="pref_summary_ricoh_get_pics_list_timeout">カメラ内の画像が多い場合は数を増やしてください。</string>
 </resources>

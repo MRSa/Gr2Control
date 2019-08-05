@@ -49,6 +49,9 @@ public interface IPreferencePropertyAccessor
     String MAGNIFYING_LIVE_VIEW_SCALE = "magnifying_live_view_scale";
     String MAGNIFYING_LIVE_VIEW_SCALE_DEFAULT_VALUE = "10.0";
 
+    String RICOH_GET_PICS_LIST_TIMEOUT = "ricoh_get_pics_list_timeout";
+    String RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE = "5";
+
 /*
     //String GR2_DISPLAY_MODE = "gr2_display_mode";
     //String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";
