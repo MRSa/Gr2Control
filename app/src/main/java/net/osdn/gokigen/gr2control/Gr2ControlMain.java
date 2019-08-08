@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import net.osdn.gokigen.gr2control.camera.CameraInterfaceProvider;
@@ -32,6 +33,7 @@ public class Gr2ControlMain extends AppCompatActivity
     private final String TAG = toString();
     private IInterfaceProvider interfaceProvider = null;
     private CameraSceneUpdater scenceUpdater = null;
+    private  LiveViewFragment liveViewFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -120,12 +122,14 @@ public class Gr2ControlMain extends AppCompatActivity
             scenceUpdater = CameraSceneUpdater.newInstance(this);
             interfaceProvider = CameraInterfaceProvider.newInstance(this, scenceUpdater);
 
-            LiveViewFragment fragment = LiveViewFragment.newInstance(scenceUpdater, interfaceProvider);
-            scenceUpdater.registerInterface(fragment, interfaceProvider);
-
-            fragment.setRetainInstance(true);
+            if (liveViewFragment == null)
+            {
+                liveViewFragment = LiveViewFragment.newInstance(scenceUpdater, interfaceProvider);
+                scenceUpdater.registerInterface(liveViewFragment, interfaceProvider);
+            }
+            liveViewFragment.setRetainInstance(true);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment1, fragment);
+            transaction.replace(R.id.fragment1, liveViewFragment);
             transaction.commitAllowingStateLoss();
         }
         catch (Exception e)
@@ -157,5 +161,27 @@ public class Gr2ControlMain extends AppCompatActivity
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log.v(TAG, "onKeyDown()" + " " + keyCode);
+        try
+        {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN)&&
+                    ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)||(keyCode == KeyEvent.KEYCODE_CAMERA)))
+            {
+                if (liveViewFragment != null)
+                {
+                    return (liveViewFragment.handleKeyDown(keyCode, event));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (super.onKeyDown(keyCode, event));
     }
 }

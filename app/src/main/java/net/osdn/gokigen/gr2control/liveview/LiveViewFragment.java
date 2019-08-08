@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1091,5 +1092,10 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         {
             e.printStackTrace();
         }
+    }
+
+    public boolean handleKeyDown(int keyCode, KeyEvent event)
+    {
+        return (onClickTouchListener.onKey(null, keyCode, event));
     }
 }
