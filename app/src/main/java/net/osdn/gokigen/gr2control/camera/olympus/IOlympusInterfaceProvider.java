@@ -30,13 +30,10 @@ public interface IOlympusInterfaceProvider
     ICaptureControl getCaptureControl();
     ICameraButtonControl getButtonControl();
     IDisplayInjector getDisplayInjector();
-
     IOlyCameraPropertyProvider getCameraPropertyProvider();
-
     ICameraStatus getCameraStatusListHolder();
     ICameraStatusWatcher getCameraStatusWatcher();
     IPlaybackControl getPlaybackControl();
-
     ICameraHardwareStatus getHardwareStatus();
     ICameraRunMode getCameraRunMode();
 }

@@ -33,7 +33,6 @@ public interface IRicohGr2InterfaceProvider
     ICameraButtonControl getButtonControl();
     ICameraStatusWatcher getCameraStatusWatcher();
     IPlaybackControl getPlaybackControl();
-
     ICameraHardwareStatus getHardwareStatus();
     ICameraRunMode getCameraRunMode();
 }

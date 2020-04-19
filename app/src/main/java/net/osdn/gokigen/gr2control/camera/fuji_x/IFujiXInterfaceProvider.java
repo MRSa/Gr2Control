@@ -1,5 +1,7 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x;
 
+import androidx.annotation.NonNull;
+
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraHardwareStatus;
@@ -11,8 +13,12 @@ import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommunication;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
+import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 
 /**
@@ -21,7 +27,7 @@ import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
  */
 public interface IFujiXInterfaceProvider
 {
-    ICameraConnection getRicohGr2CameraConnection();
+    ICameraConnection getCameraConnection();
     ILiveViewControl getLiveViewControl();
     ILiveViewListener getLiveViewListener();
     IFocusingControl getFocusingControl();
@@ -36,4 +42,13 @@ public interface IFujiXInterfaceProvider
 
     ICameraHardwareStatus getHardwareStatus();
     ICameraRunMode getCameraRunMode();
+
+
+    IFujiXCommunication getLiveviewCommunication();
+    IFujiXCommunication getAsyncEventCommunication();
+    IFujiXCommunication getCommandCommunication();
+    IFujiXCommandCallback getStatusHolder();
+    ICameraStatusUpdateNotify getStatusListener();
+    IFujiXCommandPublisher getCommandPublisher();
+    void setAsyncEventReceiver(@NonNull IFujiXCommandCallback receiver);
 }

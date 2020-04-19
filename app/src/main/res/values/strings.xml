@@ -16,6 +16,7 @@
     <string name="dialog_message_exit">Exit Application</string>
 
 
+    <string name="dialog_title_connect_failed_fuji">Connect failed(FUJI)</string>
     <string name="dialog_title_connect_failed">Connect failed</string>
     <string name="dialog_title_button_retry">Retry</string>
     <string name="dialog_title_button_network_settings">WiFi Settings</string>
@@ -191,5 +192,22 @@
 
     <string name="pref_wifi_settings">WIFI Settings</string>
     <string name="pref_summary_wifi_settings"> </string>
+
+    <string name="connect_prepare">Preparing&#8230;</string>
+    <string name="connect_connecting">connecting&#8230;</string>
+    <string name="connect_connecting1">Connecting&#8230;(1/12)</string>
+    <string name="connect_connecting2">Connecting&#8230;(2/12)</string>
+    <string name="connect_connecting3">Connecting&#8230;(3/12)</string>
+    <string name="connect_connecting4">Connecting&#8230;(4/12)</string>
+    <string name="connect_connecting5">Connecting&#8230;(5/12)</string>
+    <string name="connect_connecting6">Connecting&#8230;(6/12)</string>
+    <string name="connect_connecting7">Connecting&#8230;(7/12)</string>
+    <string name="connect_connecting8">Connecting&#8230;(8/12)</string>
+    <string name="connect_connecting9">Connecting&#8230;(9/12)</string>
+    <string name="connect_connecting10">Connecting&#8230;(10/12)</string>
+    <string name="connect_connecting11">Connecting&#8230;(11/12)</string>
+    <string name="connect_connecting12">Connecting&#8230;(12/12)</string>
+    <string name="connect_connect_finished">Connect Finished.</string>
+    <string name="connect_receive_unknown_message">RECEIVED UNKNOWN ID MESSAGE</string>
 
 </resources>
