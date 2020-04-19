@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/info_edit_data"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            >
+            <LinearLayout
+                android:id="@+id/mode_change_button_area"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="button"
+                    android:id="@+id/change_to_liveview"
+                    android:text="@string/dialog_button_liveview"
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    android:textSize="6pt" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="button"
+                    android:id="@+id/change_to_playback"
+                    android:text="@string/dialog_button_playback"
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    android:textSize="6pt" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/method_name"
+                android:tag="title"
+                android:maxWidth="130dp"
+                android:minWidth="130dp"
+                android:layout_gravity="start">
+            </TextView>
+
+            <EditText android:id="@+id/edit_http_header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/http_dialog_http_url_hint"
+                />
+
+            <EditText android:id="@+id/edit_method"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/http_dialog_method_hint"
+                />
+
+            <EditText android:id="@+id/edit_service"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/http_dialog_service_hint"
+                />
+
+            <EditText android:id="@+id/edit_command"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/http_dialog_command_hint"
+                />
+
+            <EditText android:id="@+id/edit_parameter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="textMultiLine"
+                android:hint="@string/http_dialog_parameter_hint"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="button"
+                android:id="@+id/send_message_button"
+                android:text="@string/dialog_send_message"
+                android:layout_gravity="center"
+                android:textSize="6pt" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/olympuspen_command_response_value"
+                android:text="@string/blank"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

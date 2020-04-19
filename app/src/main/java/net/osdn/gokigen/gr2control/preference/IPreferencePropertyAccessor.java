@@ -52,6 +52,15 @@ public interface IPreferencePropertyAccessor
     String RICOH_GET_PICS_LIST_TIMEOUT = "ricoh_get_pics_list_timeout";
     String RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE = "5";
 
+    String FUJI_X_DISPLAY_CAMERA_VIEW = "fujix_display_camera_view";
+
+    String FUJI_X_FOCUS_XY = "fujix_focus_xy";
+    String FUJI_X_FOCUS_XY_DEFAULT_VALUE = "7,7";
+
+    String FUJI_X_LIVEVIEW_WAIT = "fujix_liveview_wait";
+    String FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE = "80";
+
+
 /*
     //String GR2_DISPLAY_MODE = "gr2_display_mode";
     //String GR2_DISPLAY_MODE_DEFAULT_VALUE = "0";

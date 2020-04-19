@@ -15,6 +15,11 @@
             android:key="connection_method"
             android:defaultValue="OPC"/>
 
+        <PreferenceScreen
+            android:key="wifi_settings"
+            android:title="@string/pref_wifi_settings"
+            android:summary="@string/pref_summary_wifi_settings" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

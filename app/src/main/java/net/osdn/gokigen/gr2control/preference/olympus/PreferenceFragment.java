@@ -2,8 +2,10 @@ package net.osdn.gokigen.gr2control.preference.olympus;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
@@ -36,9 +38,10 @@ import jp.co.olympus.camerakit.OLYCamera;
  *   SettingFragment
  *
  */
-public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceSynchronizer.IPropertySynchronizeCallback
+public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceSynchronizer.IPropertySynchronizeCallback, Preference.OnPreferenceClickListener
 {
     private final String TAG = toString();
+    private AppCompatActivity context = null;
     private IOlyCameraPropertyProvider propertyInterface = null;
     private ICameraHardwareStatus hardwareStatusInterface = null;
     private ICameraRunMode changeRunModeExecutor = null;
@@ -70,13 +73,22 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     private void setInterface(@NonNull AppCompatActivity context, @NonNull IInterfaceProvider factory, @NonNull IChangeScene changeScene)
     {
         Log.v(TAG, "setInterface()");
-        this.propertyInterface = factory.getOlympusInterfaceProvider().getCameraPropertyProvider();
-        this.changeRunModeExecutor = factory.getCameraRunMode();
-        hardwareStatusInterface = factory.getHardwareStatus();
-        powerOffController = new CameraPowerOff(context, changeScene);
-        powerOffController.prepare();
-        logCatViewer = new LogCatViewer(changeScene);
-        logCatViewer.prepare();
+        try
+        {
+            this.propertyInterface = factory.getOlympusInterfaceProvider().getCameraPropertyProvider();
+            this.changeRunModeExecutor = factory.getCameraRunMode();
+            hardwareStatusInterface = factory.getHardwareStatus();
+            powerOffController = new CameraPowerOff(context, changeScene);
+            powerOffController.prepare();
+            logCatViewer = new LogCatViewer(changeScene);
+            logCatViewer.prepare();
+
+            this.context = context;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -84,22 +96,28 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
      *
      */
     @Override
-    public void onAttach(Context activity)
+    public void onAttach(@NonNull Context activity)
     {
         super.onAttach(activity);
         Log.v(TAG, "onAttach()");
-
-        // Preference をつかまえる
-        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (preferenceSynchronizer == null)
+        try
         {
-            preferenceSynchronizer = new PreferenceSynchronizer(this.propertyInterface, preferences, this);
+            // Preference をつかまえる
+            preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            if (preferenceSynchronizer == null)
+            {
+                preferenceSynchronizer = new PreferenceSynchronizer(this.propertyInterface, preferences, this);
+            }
+
+            // Preference を初期設定する
+            initializePreferences();
+
+            preferences.registerOnSharedPreferenceChangeListener(this);
         }
-
-        // Preference を初期設定する
-        initializePreferences();
-
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -167,6 +185,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         //super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_opc);
 
+        try
         {
             final HashMap<String, String> sizeTable = new HashMap<>();
             sizeTable.put("QVGA", "(320x240)");
@@ -195,9 +214,15 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                 }
             });
             connectionMethod.setSummary(connectionMethod.getValue() + " ");
+
+            findPreference("exit_application").setOnPreferenceClickListener(powerOffController);
+            findPreference("debug_info").setOnPreferenceClickListener(logCatViewer);
+            findPreference("wifi_settings").setOnPreferenceClickListener(this);
         }
-        findPreference("exit_application").setOnPreferenceClickListener(powerOffController);
-        findPreference("debug_info").setOnPreferenceClickListener(logCatViewer);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -205,26 +230,33 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
      */
     private void setHardwareSummary()
     {
-        // レンズ状態
-        findPreference("lens_status").setSummary(hardwareStatusInterface.getLensMountStatus());
-
-        // メディア状態
-        findPreference("media_status").setSummary(hardwareStatusInterface.getMediaMountStatus());
-
-        // 焦点距離
-        String focalLength;
-        float minLength = hardwareStatusInterface.getMinimumFocalLength();
-        float maxLength = hardwareStatusInterface.getMaximumFocalLength();
-        float actualLength = hardwareStatusInterface.getActualFocalLength();
-        if (minLength == maxLength)
+        try
         {
-            focalLength = String.format(Locale.ENGLISH, "%3.0fmm", actualLength);
+            // レンズ状態
+            findPreference("lens_status").setSummary(hardwareStatusInterface.getLensMountStatus());
+
+            // メディア状態
+            findPreference("media_status").setSummary(hardwareStatusInterface.getMediaMountStatus());
+
+            // 焦点距離
+            String focalLength;
+            float minLength = hardwareStatusInterface.getMinimumFocalLength();
+            float maxLength = hardwareStatusInterface.getMaximumFocalLength();
+            float actualLength = hardwareStatusInterface.getActualFocalLength();
+            if (minLength == maxLength)
+            {
+                focalLength = String.format(Locale.ENGLISH, "%3.0fmm", actualLength);
+            }
+            else
+            {
+                focalLength = String.format(Locale.ENGLISH, "%3.0fmm - %3.0fmm (%3.0fmm)", minLength, maxLength, actualLength);
+            }
+            findPreference("focal_length").setSummary(focalLength);
         }
-        else
+        catch (Exception e)
         {
-            focalLength = String.format(Locale.ENGLISH, "%3.0fmm - %3.0fmm (%3.0fmm)", minLength, maxLength, actualLength);
+            e.printStackTrace();
         }
-        findPreference("focal_length").setSummary(focalLength);
 
         // カメラのバージョン
         try
@@ -275,16 +307,21 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     {
         super.onResume();
         Log.v(TAG, "onResume() Start");
-
-        // 撮影モードかどうかを確認して、撮影モードではなかったら撮影モードに切り替える
-        if ((changeRunModeExecutor != null) && (!changeRunModeExecutor.isRecordingMode()))
+        try
         {
-            // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。
-            changeRunModeExecutor.changeRunMode(true);
+            // 撮影モードかどうかを確認して、撮影モードではなかったら撮影モードに切り替える
+            if ((changeRunModeExecutor != null) && (!changeRunModeExecutor.isRecordingMode()))
+            {
+                // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。
+                changeRunModeExecutor.changeRunMode(true);
+            }
+            synchronizeCameraProperties(true);
         }
-        synchronizeCameraProperties(true);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         Log.v(TAG, "onResume() End");
-
     }
 
     /**
@@ -487,5 +524,30 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
                 }
             }
         });
+    }
+
+
+    @Override
+    public boolean onPreferenceClick(Preference preference)
+    {
+        try
+        {
+            String preferenceKey = preference.getKey();
+            if (preferenceKey.contains("wifi_settings"))
+            {
+                // Wifi 設定画面を表示する
+                Log.v(TAG, " onPreferenceClick : " + preferenceKey);
+                if (context != null)
+                {
+                    context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                }
+            }
+            return (true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (false);
     }
 }

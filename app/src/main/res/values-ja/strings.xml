@@ -9,6 +9,7 @@
     <string name="dialog_positive_execute">OK</string>
     <string name="dialog_negative_cancel">Cancel</string>
     <string name="dialog_message_power_off">カメラの電源を切り、アプリケーションを終了します。</string>
+    <string name="dialog_message_exit">アプリケーションを終了します。</string>
     <string name="dialog_title_button_retry">再試行</string>
     <string name="dialog_title_connect_failed">接続失敗</string>
     <string name="dialog_title_button_network_settings">WiFi設定</string>
@@ -127,4 +128,29 @@
 
     <string name="pref_ricoh_get_pics_list_timeout">撮影画像一覧取得時のタイムアウト（単位：秒）</string>
     <string name="pref_summary_ricoh_get_pics_list_timeout">カメラ内の画像が多い場合は数を増やしてください。</string>
+
+    <string name="pref_exit_only">アプリ終了</string>
+    <string name="pref_fujix_display_camera_view">LVをカメラでも表示</string>
+    <string name="pref_fujix_display_camera_view_summary">お試し：ライブビューをカメラ画面で同時表示します</string>
+    <string name="pref_fujix_focus_xy">フォーカス点数 (default: 7,7)</string>
+    <string name="pref_summary_fujix_focus_xy">フォーカス点数を指定します</string>
+    <string name="pref_fujix_liveview_wait">LV画像受信待ち間隔(default: 80)</string>
+    <string name="pref_summary_fujix_liveview_wait">ライブビュー画像受信間隔を指定します</string>
+    <string name="pref_special_thanks">Special Thanks to</string>
+
+    <string name="dialog_http_command_title_command">HTTPmessage送信</string>
+    <string name="http_dialog_service_hint">(service)</string>
+    <string name="http_dialog_method_hint">GET/POST/PUT</string>
+    <string name="http_method_string">GET</string>
+    <string name="http_service_string">get_camprop.cgi</string>
+    <string name="http_dialog_command_hint">(command)</string>
+    <string name="http_dialog_parameter_hint">(paramenter)</string>
+    <string name="http_dialog_http_url_hint">http://192.168.1.1/</string>
+    <string name="dialog_send_message">送信</string>
+    <string name="dialog_button_liveview">ライブビュー</string>
+    <string name="dialog_button_playback">画像参照</string>
+
+    <string name="pref_wifi_settings">WiFi設定</string>
+    <string name="pref_summary_wifi_settings"> </string>
+
 </resources>

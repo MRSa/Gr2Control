@@ -13,6 +13,8 @@
     <string name="dialog_negative_cancel">Cancel</string>
 
     <string name="dialog_message_power_off">Power Off</string>
+    <string name="dialog_message_exit">Exit Application</string>
+
 
     <string name="dialog_title_connect_failed">Connect failed</string>
     <string name="dialog_title_button_retry">Retry</string>
@@ -34,6 +36,18 @@
 
     <string name="pref_cat_application_control">App. Control</string>
     <string name="pref_exit_power_off">Exit Application(and Camera OFF)</string>
+    <string name="pref_exit_only">Exit Application</string>
+
+    <string name="pref_fujix_display_camera_view">Use Camera Display</string>
+    <string name="pref_fujix_display_camera_view_summary">EXPERIMENTAL: Shows liveview screen both camera and smartphone.</string>
+
+    <string name="pref_fujix_focus_xy">Number of Focus Point X,Y (default: 7,7)</string>
+    <string name="pref_summary_fujix_focus_xy"> </string>
+
+    <string name="pref_fujix_liveview_wait">Liveview receive wait (default: 80)</string>
+    <string name="pref_summary_fujix_liveview_wait"> </string>
+
+    <string name="pref_special_thanks">Special Thanks to</string>
 
     <string name="pref_capture_both_camera_and_live_view">Capture both camera and Live View</string>
 
@@ -162,4 +176,20 @@
 
     <string name="pref_ricoh_get_pics_list_timeout">Get Pics List Timeout(unit: sec.)</string>
     <string name="pref_summary_ricoh_get_pics_list_timeout">If the camera has many number of Pics, increase number.</string>
+
+    <string name="dialog_http_command_title_command">HTTP Send</string>
+    <string name="http_dialog_service_hint">(service)</string>
+    <string name="http_dialog_method_hint">GET/POST/PUT</string>
+    <string name="http_method_string">GET</string>
+    <string name="http_service_string">get_camprop.cgi</string>
+    <string name="http_dialog_command_hint">(command)</string>
+    <string name="http_dialog_parameter_hint">(paramenter)</string>
+    <string name="http_dialog_http_url_hint">http://192.168.1.1/</string>
+    <string name="dialog_send_message">Send</string>
+    <string name="dialog_button_liveview">to LiveView</string>
+    <string name="dialog_button_playback">to Playback</string>
+
+    <string name="pref_wifi_settings">WIFI Settings</string>
+    <string name="pref_summary_wifi_settings"> </string>
+
 </resources>

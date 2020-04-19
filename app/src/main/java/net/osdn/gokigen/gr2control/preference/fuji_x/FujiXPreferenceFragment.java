@@ -1,4 +1,4 @@
-package net.osdn.gokigen.gr2control.preference.ricohgr2;
+package net.osdn.gokigen.gr2control.preference.fuji_x;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.CameraPowerOffRicohGr2;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.CameraPowerOffFujiX;
 import net.osdn.gokigen.gr2control.logcat.LogCatViewer;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
@@ -24,21 +24,21 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener
+public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener
 {
     private final String TAG = toString();
     private AppCompatActivity context = null;
     private SharedPreferences preferences = null;
-    private CameraPowerOffRicohGr2 powerOffController = null;
+    private CameraPowerOffFujiX powerOffController = null;
     private LogCatViewer logCatViewer = null;
 
     /**
      *
      *
      */
-    public static RicohGr2PreferenceFragment newInstance(@NonNull AppCompatActivity context, @NonNull IChangeScene changeScene)
+    public static FujiXPreferenceFragment newInstance(@NonNull AppCompatActivity context, @NonNull IChangeScene changeScene)
     {
-        RicohGr2PreferenceFragment instance = new RicohGr2PreferenceFragment();
+        FujiXPreferenceFragment instance = new FujiXPreferenceFragment();
         instance.prepare(context, changeScene);
 
         // パラメータはBundleにまとめておく
@@ -58,7 +58,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     {
         try
         {
-            powerOffController = new CameraPowerOffRicohGr2(context, changeScene);
+            powerOffController = new CameraPowerOffFujiX(context, changeScene);
             powerOffController.prepare();
 
             logCatViewer = new LogCatViewer(changeScene);
@@ -120,23 +120,17 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.CONNECTION_METHOD)) {
                 editor.putString(IPreferencePropertyAccessor.CONNECTION_METHOD, IPreferencePropertyAccessor.CONNECTION_METHOD_DEFAULT_VALUE);
             }
-            if (!items.containsKey(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW)) {
-                editor.putBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);
-            }
-            if (!items.containsKey(IPreferencePropertyAccessor.GR2_LCD_SLEEP)) {
-                editor.putBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false);
+            if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW)) {
+                editor.putBoolean(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, false);
             }
             if (!items.containsKey(IPreferencePropertyAccessor.SHARE_AFTER_SAVE)) {
                 editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
             }
-            if (!items.containsKey(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND)) {
-                editor.putBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
+            if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_FOCUS_XY)) {
+                editor.putString(IPreferencePropertyAccessor.FUJI_X_FOCUS_XY, IPreferencePropertyAccessor.FUJI_X_FOCUS_XY_DEFAULT_VALUE);
             }
-            if (!items.containsKey(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF)) {
-                editor.putBoolean(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
-            }
-            if (!items.containsKey(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT)) {
-                editor.putString(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT, IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE);
+            if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT)) {
+                editor.putString(IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT, IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE);
             }
             editor.apply();
         }
@@ -166,7 +160,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
 
                 case IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW:
                     value = preferences.getBoolean(key, true);
-                    Log.v(TAG, " BOTH LV : " + key + " , " + value);
+                    Log.v(TAG, " CAPTURE BOTH CAMERA AND LIVE VIEW : " + key + " , " + value);
                     break;
 
                 case IPreferencePropertyAccessor.USE_PLAYBACK_MENU:
@@ -174,29 +168,14 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                     Log.v(TAG, " " + key + " , " + value);
                     break;
 
-                case IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW:
-                    value = preferences.getBoolean(key, true);
-                    Log.v(TAG, " GR2 DISPLAY : " + key + " , " + value);
-                    break;
-
-                case IPreferencePropertyAccessor.GR2_LCD_SLEEP:
+                case IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW:
                     value = preferences.getBoolean(key, false);
-                    Log.v(TAG, " GR2 LCD : " + key + " , " + value);
+                    Log.v(TAG, " DISPLAY CAMERA VIEW : " + key + " , " + value);
                     break;
 
                 case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
                     value = preferences.getBoolean(key, false);
-                    Log.v(TAG, " SHARE : " + key + " , " + value);
-                    break;
-
-                case IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND:
-                    value = preferences.getBoolean(key, true);
-                    Log.v(TAG, " GR2 SPECIAL : " + key + " , " + value);
-                    break;
-
-                case IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF:
-                    value = preferences.getBoolean(key, false);
-                    Log.v(TAG, " PENTAX AFTER AF : " + key + " , " + value);
+                    Log.v(TAG, " SHARE AFTER SAVE : " + key + " , " + value);
                     break;
 
                 default:
@@ -218,7 +197,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
         try
         {
             //super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences_ricoh_gr2);
+            addPreferencesFromResource(R.xml.preferences_fuji_x);
 
             ListPreference connectionMethod = findPreference(IPreferencePropertyAccessor.CONNECTION_METHOD);
             if (connectionMethod != null)
@@ -232,23 +211,20 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                 });
                 connectionMethod.setSummary(connectionMethod.getValue() + " ");
             }
-
-            Preference exitApplication = findPreference("exit_application");
-            if (exitApplication != null)
+            Preference exitPreference = findPreference("exit_application");
+            if (exitPreference != null)
             {
-                exitApplication.setOnPreferenceClickListener(powerOffController);
+                exitPreference.setOnPreferenceClickListener(powerOffController);
             }
-
-            Preference debug = findPreference("debug_info");
-            if (debug != null)
+            Preference debugPreference = findPreference("debug_info");
+            if (debugPreference != null)
             {
-                debug.setOnPreferenceClickListener(logCatViewer);
+                debugPreference.setOnPreferenceClickListener(logCatViewer);
             }
-
-            Preference wifi = findPreference("wifi_settings");
-            if (wifi != null)
+            Preference wifiPreference = findPreference("wifi_settings");
+            if (wifiPreference != null)
             {
-                wifi.setOnPreferenceClickListener(this);
+                wifiPreference.setOnPreferenceClickListener(this);
             }
         }
         catch (Exception e)
@@ -338,8 +314,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
         try
         {
             CheckBoxPreference pref = findPreference(pref_key);
-            if (pref != null)
-            {
+            if (pref != null) {
                 boolean value = preferences.getBoolean(key, defaultValue);
                 pref.setChecked(value);
             }
@@ -369,11 +344,8 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                         setBooleanPreference(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, IPreferencePropertyAccessor.USE_PLAYBACK_MENU, defaultValue);
-                        setBooleanPreference(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, defaultValue);
-                        setBooleanPreference(IPreferencePropertyAccessor.GR2_LCD_SLEEP, IPreferencePropertyAccessor.GR2_LCD_SLEEP, defaultValue);
+                        setBooleanPreference(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, false);
                         setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, defaultValue);
-                        setBooleanPreference(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, defaultValue);
-                        setBooleanPreference(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
                     }
                     catch (Exception e)
                     {
@@ -383,7 +355,6 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             });
         }
     }
-
 
     @Override
     public boolean onPreferenceClick(Preference preference)

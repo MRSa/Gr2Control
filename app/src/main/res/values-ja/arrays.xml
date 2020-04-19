@@ -3,11 +3,13 @@
     <string-array name="connection_method">
         <item>Ricoh GR II / PENTAX DSLR</item>
         <item>OPC(Olympus Air)</item>
+        <item>Fujifilm X</item>
     </string-array>
 
     <string-array name="connection_method_value">
-        <item >RICOH_GR2</item>
+        <item>RICOH_GR2</item>
         <item>OPC</item>
+        <item>FUJI_X</item>
     </string-array>
 
     <string-array name="gr2_display_mode">

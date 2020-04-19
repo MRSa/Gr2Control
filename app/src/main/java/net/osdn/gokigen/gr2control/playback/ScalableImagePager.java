@@ -38,7 +38,7 @@ public class ScalableImagePager extends ViewPager
         for (int position = 0; position < getChildCount(); position++)
         {
             View view = getChildAt(position);
-            float viewportCenterX = getScrollX() + getWidth() / 2;
+            float viewportCenterX = getScrollX() + getWidth() / 2.0f;
             float contentLeftX = view.getX();
             float contentRightX =  view.getX() + view.getWidth();
             if (contentLeftX < viewportCenterX && contentRightX > viewportCenterX)
