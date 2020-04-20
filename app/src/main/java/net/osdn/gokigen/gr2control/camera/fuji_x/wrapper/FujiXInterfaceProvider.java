@@ -22,16 +22,18 @@ import net.osdn.gokigen.gr2control.camera.IFocusingModeNotify;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
 import net.osdn.gokigen.gr2control.camera.fuji_x.IFujiXInterfaceProvider;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXButtonControl;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXCaptureControl;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXFocusingControl;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXHardwareStatus;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXZoomControl;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.FujiXAsyncResponseReceiver;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.FujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommunication;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXConnection;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraButtonControl;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraCaptureControl;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraFocusControl;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraZoomLensControl;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2HardwareStatus;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.connection.RicohGr2Connection;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
@@ -41,19 +43,28 @@ import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplayInjector
 {
     private final String TAG = toString();
-    //private final Activity activity;
+
+    private static final int STREAM_PORT = 55742;
+    private static final int ASYNC_RESPONSE_PORT = 55741;
+    private static final int CONTROL_PORT = 55740;
+    private static final String CAMERA_IP = "192.168.0.1";
+
+    private final Activity activity;
     //private final ICameraStatusReceiver provider;
-    private final RicohGr2Connection gr2Connection;
-    private final RicohGr2CameraButtonControl buttonControl;
+    private final FujiXCommandPublisher commandPublisher;
+    private final FujiXLiveViewControl liveViewControl;
+    private final FujiXAsyncResponseReceiver asyncReceiver;
+    private final FujiXConnection fujiXConnection;
+
+    private final FujiXButtonControl buttonControl;
     private final FujiXStatusChecker statusChecker;
     private final FujiXPlaybackControl playbackControl;
-    private final RicohGr2HardwareStatus hardwareStatus;
+    private final FujiXHardwareStatus hardwareStatus;
     private final FujiXRunMode runMode;
+    private final FujiXZoomControl zoomControl;
 
-    private FujiXLiveViewControl liveViewControl;
-    private RicohGr2CameraCaptureControl captureControl;
-    private RicohGr2CameraZoomLensControl zoomControl;
-    private RicohGr2CameraFocusControl focusControl;
+    private FujiXCaptureControl captureControl = null;
+    private FujiXFocusingControl focusControl = null;
 
     /**
      *
@@ -75,15 +86,17 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
         {
             e.printStackTrace();
         }
-        //this.activity = context;
+        this.activity = context;
         //this.provider = provider;
-        gr2Connection = new RicohGr2Connection(context, provider);
-        liveViewControl = new FujiXLiveViewControl();
-        zoomControl = new RicohGr2CameraZoomLensControl();
-        buttonControl = new RicohGr2CameraButtonControl();
+        this.commandPublisher = new FujiXCommandPublisher(CAMERA_IP, CONTROL_PORT);
+        fujiXConnection = new FujiXConnection(context, provider, this);
+        liveViewControl = new FujiXLiveViewControl(context, CAMERA_IP, STREAM_PORT);
+        asyncReceiver = new FujiXAsyncResponseReceiver(CAMERA_IP, ASYNC_RESPONSE_PORT);
+        zoomControl = new FujiXZoomControl();
+        buttonControl = new FujiXButtonControl();
         statusChecker = new FujiXStatusChecker(500);
         playbackControl = new FujiXPlaybackControl(communicationTimeoutMs);
-        hardwareStatus = new RicohGr2HardwareStatus();
+        hardwareStatus = new FujiXHardwareStatus();
         runMode = new FujiXRunMode();
     }
 
@@ -96,14 +109,14 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     public void injectDisplay(IAutoFocusFrameDisplay frameDisplayer, IIndicatorControl indicator, IFocusingModeNotify focusingModeNotify)
     {
         Log.v(TAG, "injectDisplay()");
-        focusControl = new RicohGr2CameraFocusControl(true, frameDisplayer, indicator);
-        captureControl = new RicohGr2CameraCaptureControl(true, false, frameDisplayer, statusChecker);
+        focusControl = new FujiXFocusingControl(activity, commandPublisher, frameDisplayer, indicator);
+        captureControl = new FujiXCaptureControl(commandPublisher, frameDisplayer);
     }
 
     @Override
     public ICameraConnection getCameraConnection()
     {
-        return (gr2Connection);
+        return (fujiXConnection);
     }
 
     @Override
@@ -211,19 +224,20 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     }
 
     @Override
-    public ICameraStatusUpdateNotify getStatusListener() {
+    public ICameraStatusUpdateNotify getStatusListener()
+    {
         return null;
     }
 
     @Override
     public IFujiXCommandPublisher getCommandPublisher()
     {
-        return null;
+        return (commandPublisher);
     }
 
     @Override
     public void setAsyncEventReceiver(@NonNull IFujiXCommandCallback receiver)
     {
-
+        asyncReceiver.setEventSubscriber(receiver);
     }
 }

@@ -2,6 +2,7 @@ package net.osdn.gokigen.gr2control.liveview;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -20,6 +21,8 @@ import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 /**
  *
@@ -65,6 +68,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     public void onClick(View view)
     {
         int id = view.getId();
+        boolean isVibrate = true;
         //Log.v(TAG, "onClick() : " + id);
         try
         {
@@ -73,94 +77,117 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.hideControlPanelTextView:
                     // 制御パネルを隠す
                     showHideControlPanel(false);
+                    isVibrate = false;
                     break;
 
                 case R.id.showControlPanelTextView:
                     // 制御パネルを表示する
                     showHideControlPanel(true);
+                    isVibrate = false;
                     break;
 
                 case R.id.showKeyPanelImageView:
                     // キーパネルを表示する
                     showHideKeyPanel(true);
+                    isVibrate = false;
                     break;
 
                 case R.id.hideKeyPanelTextView:
                     // キーパネルを隠す
                     showHideKeyPanel(false);
+                    isVibrate = false;
                     break;
 
                 case R.id.connect_disconnect_button:
                     // カメラと接続・切断のボタンが押された
                     changeScene.changeCameraConnection();
+                    //isVibrate = true;
                     break;
 
                 case R.id.shutter_button:
                     // シャッターボタンが押された (撮影)
                     pushedShutterButton();
+                    isVibrate = false;
                     break;
 
                 case R.id.focusUnlockImageView:
                     // フォーカスアンロックボタンが押された
                     pushedFocusUnlock();
+                    isVibrate = false;
                     break;
 
                 case R.id.show_images_button:
                     // 画像一覧表示ボタンが押された...画像一覧画面を開く
                     changeScene.changeScenceToImageList();
+                    //isVibrate = true;
                     break;
 
                 case R.id.camera_power_off_button:
                     // 電源ボタンが押された...終了してよいか確認して、終了する
                     confirmExitApplication();
+                    //isVibrate = true;
                     break;
 
                 case R.id.show_preference_button:
                     // カメラの設定
                     changeScene.changeSceneToConfiguration();
+                    //isVibrate = true;
                     break;
 
                 case R.id.show_hide_grid_button:
                     // グリッドの ON/OFF
                     statusNotify.toggleShowGridFrame();
                     statusViewDrawer.updateGridIcon();
+                    isVibrate = false;
                     break;
                 case R.id.zoom_in_button:
                     // ズームインのボタンが押された
                     actionZoomin();
+                    isVibrate = false;
                     break;
                 case R.id.zoom_out_button:
                     // ズームアウトのボタンが押された
                     actionZoomout();
+                    isVibrate = false;
                     break;
                 case R.id.specialButtonImageView:
                     // スペシャルボタンが押された
                     pushedSpecialButton();
+                    isVibrate = false;
                     break;
 /*
                 case R.id.camera_property_settings_button:
                     // カメラのプロパティ設定
                     changeScene.changeSceneToCameraPropertyList();
+                    isVibrate = false;
                     break;
 
                 case R.id.focusing_button:
                     // AF と MFの切り替えボタンが押された
                     changeFocusingMode();
+                    isVibrate = false;
                     break;
 
                 case R.id.live_view_scale_button:
                     //  ライブビューの倍率を更新する
                     statusViewDrawer.updateLiveViewScale(true);
+                    isVibrate = false;
                     break;
 
                 case R.id.show_favorite_settings_button:
                     // お気に入り設定のダイアログを表示する
                     showFavoriteDialog();
+                    isVibrate = false;
                     break;
 */
                 default:
                     Log.v(TAG, "onClick() : " + id);
+                    isVibrate = false;
                     break;
+            }
+            if (isVibrate)
+            {
+                vibrate();
             }
         }
         catch (Exception e)
@@ -229,7 +256,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         {
             // 確認ダイアログの生成と表示
             ConfirmationDialog dialog = ConfirmationDialog.newInstance(context);
-            dialog.show(R.string.dialog_title_confirmation, R.string.dialog_message_power_off, new ConfirmationDialog.Callback() {
+            dialog.show(R.string.dialog_title_confirmation, R.string.dialog_message_exit, new ConfirmationDialog.Callback() {
                 @Override
                 public void confirm()
                 {
@@ -407,5 +434,25 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
             e.printStackTrace();
         }
         return (false);
+    }
+
+
+    /**
+     *
+     *
+     */
+    private void vibrate()
+    {
+        try {
+            Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+            if (vibrator != null)
+            {
+                vibrator.vibrate(50);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

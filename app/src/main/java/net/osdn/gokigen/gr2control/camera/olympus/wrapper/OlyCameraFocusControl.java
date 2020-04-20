@@ -69,4 +69,10 @@ public class OlyCameraFocusControl implements IFocusingControl
         }
     }
 
+    @Override
+    public void halfPressShutter(boolean isPressed)
+    {
+
+    }
+
 }
