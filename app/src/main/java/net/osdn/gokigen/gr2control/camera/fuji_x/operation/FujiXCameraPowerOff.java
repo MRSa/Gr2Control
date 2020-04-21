@@ -9,7 +9,7 @@ import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
 import androidx.preference.Preference;
 
-public class CameraPowerOffFujiX implements Preference.OnPreferenceClickListener, ConfirmationDialog.Callback
+public class FujiXCameraPowerOff implements Preference.OnPreferenceClickListener, ConfirmationDialog.Callback
 {
 
     private final Context context;
@@ -20,7 +20,7 @@ public class CameraPowerOffFujiX implements Preference.OnPreferenceClickListener
      *   コンストラクタ
      *
      */
-    public CameraPowerOffFujiX(Context context, IChangeScene changeScene)
+    public FujiXCameraPowerOff(Context context, IChangeScene changeScene)
     {
         this.context = context;
         this.changeScene = changeScene;

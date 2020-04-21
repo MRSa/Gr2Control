@@ -30,7 +30,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
     private static final int BUFFER_SIZE = 2048 * 1280;
     private static final int ERROR_LIMIT = 30;
     private boolean isStart = false;
-    private boolean logcat = false;
+    private boolean logcat = true;
 
     FujiXLiveViewControl(@NonNull Activity activity, String ip, int portNumber)
     {

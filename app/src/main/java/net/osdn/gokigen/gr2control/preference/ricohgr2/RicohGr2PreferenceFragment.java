@@ -8,7 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
-import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.CameraPowerOffRicohGr2;
+import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraPowerOff;
 import net.osdn.gokigen.gr2control.logcat.LogCatViewer;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
@@ -29,7 +29,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     private final String TAG = toString();
     private AppCompatActivity context = null;
     private SharedPreferences preferences = null;
-    private CameraPowerOffRicohGr2 powerOffController = null;
+    private RicohGr2CameraPowerOff powerOffController = null;
     private LogCatViewer logCatViewer = null;
 
     /**
@@ -58,7 +58,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
     {
         try
         {
-            powerOffController = new CameraPowerOffRicohGr2(context, changeScene);
+            powerOffController = new RicohGr2CameraPowerOff(context, changeScene);
             powerOffController.prepare();
 
             logCatViewer = new LogCatViewer(changeScene);

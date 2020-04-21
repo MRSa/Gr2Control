@@ -8,7 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
-import net.osdn.gokigen.gr2control.camera.fuji_x.operation.CameraPowerOffFujiX;
+import net.osdn.gokigen.gr2control.camera.fuji_x.operation.FujiXCameraPowerOff;
 import net.osdn.gokigen.gr2control.logcat.LogCatViewer;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
@@ -29,7 +29,7 @@ public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implement
     private final String TAG = toString();
     private AppCompatActivity context = null;
     private SharedPreferences preferences = null;
-    private CameraPowerOffFujiX powerOffController = null;
+    private FujiXCameraPowerOff powerOffController = null;
     private LogCatViewer logCatViewer = null;
 
     /**
@@ -58,7 +58,7 @@ public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implement
     {
         try
         {
-            powerOffController = new CameraPowerOffFujiX(context, changeScene);
+            powerOffController = new FujiXCameraPowerOff(context, changeScene);
             powerOffController.prepare();
 
             logCatViewer = new LogCatViewer(changeScene);

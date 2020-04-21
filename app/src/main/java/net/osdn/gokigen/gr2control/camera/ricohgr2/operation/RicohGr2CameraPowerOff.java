@@ -9,7 +9,7 @@ import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
 import androidx.preference.Preference;
 
-public class CameraPowerOffRicohGr2 implements Preference.OnPreferenceClickListener, ConfirmationDialog.Callback
+public class RicohGr2CameraPowerOff implements Preference.OnPreferenceClickListener, ConfirmationDialog.Callback
 {
 
     private final Context context;
@@ -20,7 +20,7 @@ public class CameraPowerOffRicohGr2 implements Preference.OnPreferenceClickListe
      *   コンストラクタ
      *
      */
-    public CameraPowerOffRicohGr2(Context context, IChangeScene changeScene)
+    public RicohGr2CameraPowerOff(Context context, IChangeScene changeScene)
     {
         this.context = context;
         this.changeScene = changeScene;
