@@ -127,7 +127,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
     {
         Map<String, ?> items = preferences.getAll();
         SharedPreferences.Editor editor = preferences.edit();
-
+        if (!items.containsKey(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT))
+        {
+            editor.putString(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT, IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE);
+        }
         if (!items.containsKey(IPreferencePropertyAccessor.LIVE_VIEW_QUALITY))
         {
             editor.putString(IPreferencePropertyAccessor.LIVE_VIEW_QUALITY, IPreferencePropertyAccessor.LIVE_VIEW_QUALITY_DEFAULT_VALUE);
@@ -169,6 +172,18 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
         }
         if (!items.containsKey(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF)) {
             editor.putBoolean(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW)) {
+            editor.putBoolean(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, false);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_FOCUS_XY)) {
+            editor.putString(IPreferencePropertyAccessor.FUJI_X_FOCUS_XY, IPreferencePropertyAccessor.FUJI_X_FOCUS_XY_DEFAULT_VALUE);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT)) {
+            editor.putString(IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT, IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE);
+        }
+        if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT)) {
+            editor.putString(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT, IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT_DEFAULT_VALUE);
         }
         editor.apply();
     }

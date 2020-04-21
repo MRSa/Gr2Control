@@ -60,6 +60,9 @@ public interface IPreferencePropertyAccessor
     String FUJI_X_LIVEVIEW_WAIT = "fujix_liveview_wait";
     String FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE = "80";
 
+    String FUJI_X_COMMAND_POLLING_WAIT = "fujix_command_polling_wait";
+    String FUJI_X_COMMAND_POLLING_WAIT_DEFAULT_VALUE = "500";
+
 
 /*
     //String GR2_DISPLAY_MODE = "gr2_display_mode";

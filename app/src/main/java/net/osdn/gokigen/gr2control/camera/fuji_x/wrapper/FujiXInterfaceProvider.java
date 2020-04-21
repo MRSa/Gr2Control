@@ -94,7 +94,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
         asyncReceiver = new FujiXAsyncResponseReceiver(CAMERA_IP, ASYNC_RESPONSE_PORT);
         zoomControl = new FujiXZoomControl();
         buttonControl = new FujiXButtonControl();
-        statusChecker = new FujiXStatusChecker(500);
+        statusChecker = new FujiXStatusChecker(context, commandPublisher);
         playbackControl = new FujiXPlaybackControl(communicationTimeoutMs);
         hardwareStatus = new FujiXHardwareStatus();
         runMode = new FujiXRunMode();
@@ -203,30 +203,24 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
 
     @Override
     public IFujiXCommunication getLiveviewCommunication() {
-        return null;
+        return (liveViewControl);
     }
 
     @Override
     public IFujiXCommunication getAsyncEventCommunication() {
-        return null;
+        return (asyncReceiver);
     }
 
     @Override
     public IFujiXCommunication getCommandCommunication()
     {
-        return (null);
-    }
-
-    @Override
-    public IFujiXCommandCallback getStatusHolder()
-    {
-        return null;
+        return (commandPublisher);
     }
 
     @Override
     public ICameraStatusUpdateNotify getStatusListener()
     {
-        return null;
+        return statusChecker.getStatusListener();
     }
 
     @Override

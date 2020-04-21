@@ -48,6 +48,9 @@
     <string name="pref_fujix_liveview_wait">Liveview receive wait (default: 80)</string>
     <string name="pref_summary_fujix_liveview_wait"> </string>
 
+    <string name="pref_fujix_command_polling_wait">Status polling wait (default: 500)</string>
+    <string name="pref_summary_fujix_command_polling_wait"> </string>
+
     <string name="pref_special_thanks">Special Thanks to</string>
 
     <string name="pref_capture_both_camera_and_live_view">Capture both camera and Live View</string>

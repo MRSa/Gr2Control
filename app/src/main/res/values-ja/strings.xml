@@ -137,6 +137,8 @@
     <string name="pref_summary_fujix_focus_xy">フォーカス点数を指定します</string>
     <string name="pref_fujix_liveview_wait">LV画像受信待ち間隔(default: 80)</string>
     <string name="pref_summary_fujix_liveview_wait">ライブビュー画像受信間隔を指定します</string>
+    <string name="pref_fujix_command_polling_wait">コマンド間隔(default: 500)</string>
+    <string name="pref_summary_fujix_command_polling_wait">カメラ状態の確認間隔を調整します</string>
     <string name="pref_special_thanks">Special Thanks to</string>
 
     <string name="dialog_http_command_title_command">HTTPmessage送信</string>

@@ -43,11 +43,9 @@ public interface IFujiXInterfaceProvider
     ICameraHardwareStatus getHardwareStatus();
     ICameraRunMode getCameraRunMode();
 
-
     IFujiXCommunication getLiveviewCommunication();
     IFujiXCommunication getAsyncEventCommunication();
     IFujiXCommunication getCommandCommunication();
-    IFujiXCommandCallback getStatusHolder();
     ICameraStatusUpdateNotify getStatusListener();
     IFujiXCommandPublisher getCommandPublisher();
     void setAsyncEventReceiver(@NonNull IFujiXCommandCallback receiver);

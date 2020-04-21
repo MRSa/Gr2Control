@@ -41,6 +41,12 @@
             android:summary="@string/pref_summary_fujix_focus_xy" />
 
         <EditTextPreference
+            android:key="fujix_command_polling_wait"
+            android:title="@string/pref_fujix_command_polling_wait"
+            android:defaultValue="500"
+            android:summary="@string/pref_summary_fujix_command_polling_wait" />
+
+        <EditTextPreference
             android:key="fujix_liveview_wait"
             android:title="@string/pref_fujix_liveview_wait"
             android:defaultValue="80"

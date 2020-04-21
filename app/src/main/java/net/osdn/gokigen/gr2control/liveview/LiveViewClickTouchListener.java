@@ -256,7 +256,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
         {
             // 確認ダイアログの生成と表示
             ConfirmationDialog dialog = ConfirmationDialog.newInstance(context);
-            dialog.show(R.string.dialog_title_confirmation, R.string.dialog_message_exit, new ConfirmationDialog.Callback() {
+            dialog.show(R.string.dialog_title_confirmation, R.string.dialog_message_power_off, new ConfirmationDialog.Callback() {
                 @Override
                 public void confirm()
                 {
