@@ -12,9 +12,9 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommunica
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.CameraLiveViewListenerImpl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.Arrays;
 
 import static net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT;
 import static net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor.FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE;
@@ -26,11 +26,10 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
     private final int portNumber;
     private final CameraLiveViewListenerImpl liveViewListener;
     private int waitMs = 0;
-    private static final int DATA_HEADER_OFFSET = 18;
+    //private static final int DATA_HEADER_OFFSET = 18;
     private static final int BUFFER_SIZE = 2048 * 1280;
     private static final int ERROR_LIMIT = 30;
     private boolean isStart = false;
-    private boolean logcat = true;
 
     FujiXLiveViewControl(@NonNull Activity activity, String ip, int portNumber)
     {
@@ -42,7 +41,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
         {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
             String waitMsStr = preferences.getString(FUJI_X_LIVEVIEW_WAIT, FUJI_X_LIVEVIEW_WAIT_DEFAULT_VALUE);
-            logcat("waitMS : " + waitMsStr);
+            Log.v(TAG, "waitMS : " + waitMsStr);
             int wait = Integer.parseInt(waitMsStr);
             if ((wait >= 20)&&(wait <= 800))
             {
@@ -98,8 +97,8 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
     {
         isStart = false;
     }
-
-    private void startReceive(Socket socket)
+/*
+    private void startReceivePrevious(Socket socket)
     {
         String lvHeader = "[LV]";
         int lvHeaderDumpBytes = 24;
@@ -125,10 +124,16 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
                 boolean findJpeg = false;
                 int length_bytes;
                 int read_bytes = isr.read(byteArray, 0, BUFFER_SIZE);
+                Log.v(TAG, " >>>  READ LIVEVIEW <<< " + read_bytes + " bytes...");
+                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 if (read_bytes > DATA_HEADER_OFFSET)
                 {
+                    // 先頭データ(64バイト分)をダンプ
+                    dump_bytes("[lv]", byteArray, 64);
+
                     // メッセージボディの先頭にあるメッセージ長分は読み込む
                     length_bytes = ((((int) byteArray[3]) & 0xff) << 24) + ((((int) byteArray[2]) & 0xff) << 16) + ((((int) byteArray[1]) & 0xff) << 8) + (((int) byteArray[0]) & 0xff);
+
                     if ((byteArray[18] == (byte)0xff)&&(byteArray[19] == (byte)0xd8))
                     {
                         findJpeg = true;
@@ -148,6 +153,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
                     {
                         // ウェイトを短めに入れてマーカーを拾うまで待つ
                         Thread.sleep(waitMs/4);
+                        Log.v(TAG, " NOT FOUND MARKER...");
                         continue;
                     }
                 }
@@ -183,7 +189,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
             e.printStackTrace();
         }
     }
-
+*/
 
     @Override
     public void updateDigitalZoom()
@@ -232,50 +238,127 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
         isStart = false;
     }
 
-    /**
-     *   デバッグ用：ログにバイト列を出力する
-     *
-     */
-    private void dump_bytes(String header, byte[] data, int dumpBytes)
+    private void startReceive(Socket socket)
     {
-        if (!logcat)
+        //String lvHeader = "[LV]";
+        //int lvHeaderDumpBytes = 24;
+
+        int errorCount = 0;
+        InputStream isr;
+        byte[] byteArray;
+        try
         {
-            // ログ出力しないモードだった
+            isr = socket.getInputStream();
+            byteArray = new byte[BUFFER_SIZE + 32];
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.v(TAG, "===== startReceive() aborted.");
             return;
         }
 
-        int index = 0;
-        StringBuffer message;
-        if (dumpBytes <= 0)
+        boolean findJpeg = false;
+        boolean finishJpeg = false;
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        while (isStart)
         {
-            dumpBytes = 24;
-        }
-        message = new StringBuffer();
-        for (int point = 0; point < dumpBytes; point++)
-        {
-            byte item = data[point];
-            index++;
-            message.append(String.format("%02x ", item));
-            if (index >= 8)
+            try
             {
-                Log.v(TAG, header + " " + message);
-                index = 0;
-                message = new StringBuffer();
+                int read_bytes = isr.read(byteArray, 0, BUFFER_SIZE);
+                int index = 0;
+                int lastIndex = read_bytes - 1;
+                if (!findJpeg)
+                {
+                    while (index < (read_bytes - 1))
+                    {
+                        if ((byteArray[index] == (byte) 0xff) && (byteArray[index + 1] == (byte) 0xd8))
+                        {
+                            findJpeg = true;
+                            //Log.v(TAG, " ----- FIND TOP : " + index + " " + lastIndex);
+                            break;
+                        }
+                        index++;
+                    }
+                    //Log.v(TAG, " =-=-= ");
+                }
+                if (findJpeg)
+                {
+                    while (lastIndex > 0)
+                    {
+                        if ((byteArray[lastIndex - 1] == (byte) 0xff) && (byteArray[lastIndex] == (byte) 0xd9))
+                        {
+                            finishJpeg = true;
+                            //Log.v(TAG, " ----- FIND BOTTOM : " + index + " " + lastIndex);
+                            break;
+                        }
+                        lastIndex--;
+                    }
+                    //Log.v(TAG, " ===== ");
+                }
+                if (finishJpeg)
+                {
+                    try
+                    {
+                        //Log.v(TAG, " WRITE BUFFER : " + index + " " + lastIndex);
+                        if (index < lastIndex)
+                        {
+                            byteStream.write(byteArray, index, lastIndex);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    if (!findJpeg)
+                    {
+                        try
+                        {
+                            byteStream.write(byteArray, index, read_bytes);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    //Log.v(TAG, " ----- CONTINUE : " + findJpeg + " " + finishJpeg + " " + read_bytes);
+                    continue;
+                }
+                {
+                    byte[] imageData = byteStream.toByteArray();
+                    //dump_bytes("[lv]", imageData, 64);
+                    //dump_bytes("[LV]", Arrays.copyOfRange(imageData, imageData.length - 64, imageData.length), 64);
+                    liveViewListener.onUpdateLiveView(imageData, null);
+                    //liveViewListener.onUpdateLiveView(Arrays.copyOfRange(byteArray, DATA_HEADER_OFFSET, read_bytes - DATA_HEADER_OFFSET), null);
+                    errorCount = 0;
+                    findJpeg = false;
+                    finishJpeg = false;
+                    byteStream = new ByteArrayOutputStream();
+                }
+                Thread.sleep(waitMs);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                errorCount++;
+            }
+            if (errorCount > ERROR_LIMIT)
+            {
+                // エラーが連続でたくさん出たらループをストップさせる
+                isStart = false;
             }
         }
-        if (index != 0)
+        try
         {
-            Log.v(TAG, header + " " + message);
+            isr.close();
+            socket.close();
         }
-        System.gc();
-    }
-
-    private void logcat(String message)
-    {
-        if (logcat)
+        catch (Exception e)
         {
-            Log.v(TAG, message);
+            e.printStackTrace();
         }
     }
-
 }
