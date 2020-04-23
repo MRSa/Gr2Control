@@ -6,7 +6,7 @@ import android.util.Log;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.CameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IContentInfoCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
+import net.osdn.gokigen.gr2control.camera.playback.ICameraContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  *
@@ -58,7 +59,7 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentList(@NonNull IDownloadContentListCallback callback)
+    public void downloadContentList(@NonNull ICameraContentListCallback callback)
     {
         List<ICameraFileInfo> fileList = new ArrayList<>();
         String imageListurl = "http://192.168.0.1/v1/photos?limit=3000";
@@ -155,9 +156,9 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void getContentInfo(@NonNull String path, @NonNull IContentInfoCallback callback)
+    public void getContentInfo(@Nullable String path, @NonNull String name, @NonNull IContentInfoCallback callback)
     {
-        String url = getPhotoUrl + path + "/info";
+        String url = getPhotoUrl + name + "/info";
         Log.v(TAG, "getContentInfo() GET URL : " + url);
         try
         {
@@ -174,11 +175,11 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentScreennail(@NonNull String path, @NonNull IDownloadThumbnailImageCallback callback)
+    public void downloadContentScreennail(@Nullable String path, @NonNull String name, @NonNull IDownloadThumbnailImageCallback callback)
     {
         //Log.v(TAG, "downloadContentScreennail() : " + path);
         String suffix = "?size=view";
-        String url = getPhotoUrl + path + suffix;
+        String url = getPhotoUrl + name + suffix;
         Log.v(TAG, "downloadContentScreennail() GET URL : " + url);
         try
         {
@@ -194,15 +195,15 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentThumbnail(@NonNull String path, @NonNull IDownloadThumbnailImageCallback callback)
+    public void downloadContentThumbnail(@Nullable String path, @NonNull String name, @NonNull IDownloadThumbnailImageCallback callback)
     {
         //Log.v(TAG, "downloadContentThumbnail() : " + path);
         String suffix = "?size=view";
-        if (path.contains(".JPG"))
+        if (name.contains(".JPG"))
         {
             suffix = "?size=thumb";
         }
-        String url = getPhotoUrl + path + suffix;
+        String url = getPhotoUrl + name + suffix;
         Log.v(TAG, "downloadContentThumbnail() GET URL : " + url);
         try
         {
@@ -219,15 +220,15 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
    }
 
     @Override
-    public void downloadContent(@NonNull String  path, boolean isSmallSize, @NonNull final IDownloadContentCallback callback)
+    public void downloadContent(@Nullable String path, @NonNull String  name, boolean isSmallSize, @NonNull final IDownloadContentCallback callback)
     {
-        Log.v(TAG, "downloadContent() : " + path);
+        Log.v(TAG, "downloadContent() : " + name);
         String suffix = "?size=full";
         if (isSmallSize)
         {
             suffix = "?size=view";
         }
-        String url = getPhotoUrl + path + suffix;
+        String url = getPhotoUrl + name + suffix;
         Log.v(TAG, "downloadContent() GET URL : " + url);
         try
         {
@@ -254,5 +255,17 @@ public class RicohGr2PlaybackControl implements IPlaybackControl
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void showPictureStarted()
+    {
+
+    }
+
+    @Override
+    public void showPictureFinished()
+    {
+
     }
 }

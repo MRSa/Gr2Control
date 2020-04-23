@@ -7,7 +7,7 @@ import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.CameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.IContentInfoCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentCallback;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
+import net.osdn.gokigen.gr2control.camera.playback.ICameraContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent;
@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import jp.co.olympus.camerakit.OLYCamera;
 import jp.co.olympus.camerakit.OLYCameraFileInfo;
 
@@ -38,7 +40,7 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentList(@NonNull final IDownloadContentListCallback callback)
+    public void downloadContentList(@NonNull final ICameraContentListCallback callback)
     {
         try
         {
@@ -71,12 +73,12 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void getContentInfo(@NonNull String path, @NonNull IContentInfoCallback callback)
+    public void getContentInfo(@Nullable String path, @NonNull String name, @NonNull IContentInfoCallback callback)
     {
         try
         {
             // ここは使っていないから何もしない
-            Log.v(TAG, "getContentInfo() : " + path);
+            Log.v(TAG, "getContentInfo() : " + name);
         }
         catch (Exception e)
         {
@@ -99,11 +101,11 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentScreennail(@NonNull String path, @NonNull final IDownloadThumbnailImageCallback callback)
+    public void downloadContentScreennail(@Nullable String path, @NonNull String name, @NonNull final IDownloadThumbnailImageCallback callback)
     {
         try
         {
-            camera.downloadContentScreennail(path, new OLYCamera.DownloadImageCallback() {
+            camera.downloadContentScreennail(name, new OLYCamera.DownloadImageCallback() {
                 @Override
                 public void onProgress(OLYCamera.ProgressEvent progressEvent)
                 {
@@ -139,11 +141,11 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContentThumbnail(@NonNull String path, @NonNull final IDownloadThumbnailImageCallback callback)
+    public void downloadContentThumbnail(@Nullable String path, @NonNull String name, @NonNull final IDownloadThumbnailImageCallback callback)
     {
         try
         {
-            camera.downloadContentThumbnail(path, new OLYCamera.DownloadImageCallback() {
+            camera.downloadContentThumbnail(name, new OLYCamera.DownloadImageCallback() {
                 @Override
                 public void onProgress(OLYCamera.ProgressEvent progressEvent)
                 {
@@ -179,11 +181,11 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     }
 
     @Override
-    public void downloadContent(@NonNull String path, boolean isSmallSize, @NonNull final IDownloadContentCallback callback)
+    public void downloadContent(@Nullable String path,  @NonNull String name, boolean isSmallSize, @NonNull final IDownloadContentCallback callback)
     {
         try
         {
-            camera.downloadLargeContent(path, new OLYCamera.DownloadLargeContentCallback() {
+            camera.downloadLargeContent(name, new OLYCamera.DownloadLargeContentCallback() {
                 @Override
                 public void onProgress(byte[] bytes, OLYCamera.ProgressEvent progressEvent)
                 {
@@ -229,5 +231,17 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
             e.printStackTrace();
             callback.onErrorOccurred(e);
         }
+    }
+
+    @Override
+    public void showPictureStarted()
+    {
+
+    }
+
+    @Override
+    public void showPictureFinished()
+    {
+
     }
 }

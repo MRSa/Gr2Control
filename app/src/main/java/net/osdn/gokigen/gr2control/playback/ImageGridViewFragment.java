@@ -2,7 +2,6 @@ package net.osdn.gokigen.gr2control.playback;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ import android.widget.ProgressBar;
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
-import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentListCallback;
+import net.osdn.gokigen.gr2control.camera.playback.ICameraContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
@@ -291,7 +290,7 @@ public class ImageGridViewFragment extends Fragment
 		contentList = null;
 		Log.v(TAG, "refreshImpl() start");
 
-		playbackControl.downloadContentList(new IDownloadContentListCallback() {
+		playbackControl.downloadContentList(new ICameraContentListCallback() {
 			@Override
 			public void onCompleted(List<ICameraFileInfo> list) {
 				// Sort contents in chronological order (or alphabetical order).
@@ -755,7 +754,7 @@ public class ImageGridViewFragment extends Fragment
 			}
 			final Box box = new Box();
 
-			playbackControl.downloadContentThumbnail(path, new IDownloadThumbnailImageCallback()
+			playbackControl.downloadContentThumbnail(null, path, new IDownloadThumbnailImageCallback()
             {
 				@Override
 				public void onCompleted(final Bitmap thumbnail, Map<String, Object> metadata)

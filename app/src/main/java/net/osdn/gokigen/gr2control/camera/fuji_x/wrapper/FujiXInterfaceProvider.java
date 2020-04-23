@@ -33,6 +33,7 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCa
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommunication;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXConnection;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.playback.FujiXPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
@@ -95,7 +96,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
         zoomControl = new FujiXZoomControl();
         buttonControl = new FujiXButtonControl();
         statusChecker = new FujiXStatusChecker(context, commandPublisher);
-        playbackControl = new FujiXPlaybackControl(communicationTimeoutMs);
+        playbackControl = new FujiXPlaybackControl(context, this);
         hardwareStatus = new FujiXHardwareStatus();
         runMode = new FujiXRunMode();
     }

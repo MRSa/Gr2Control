@@ -422,7 +422,7 @@ public class ImagePagerViewFragment extends Fragment
             }
 
             // Download the image.
-            playbackControl.downloadContentScreennail(path, new IDownloadThumbnailImageCallback() {
+            playbackControl.downloadContentScreennail(null, path, new IDownloadThumbnailImageCallback() {
                 @Override
 				//public void onCompleted(final byte[] data, final Map<String, Object> metadata) {
                 public void onCompleted(final Bitmap bitmap, final Map<String, Object> metadata) {

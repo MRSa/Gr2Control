@@ -154,7 +154,7 @@ public class MyContentDownloader implements IDownloadContentCallback
                 });
             }
             Log.v(TAG, "downloadContent : " + path + " (small: " + isSmallSize + ")");
-            playbackControl.downloadContent(path, isSmallSize, this);
+            playbackControl.downloadContent(null, path, isSmallSize, this);
         }
         catch (Exception ex)
         {
