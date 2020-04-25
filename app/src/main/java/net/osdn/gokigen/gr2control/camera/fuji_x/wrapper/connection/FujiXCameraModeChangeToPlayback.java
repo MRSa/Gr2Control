@@ -31,7 +31,7 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
 
     public void startModeChange(IFujiXRunModeHolder runModeHolder)
     {
-        Log.v(TAG, "onClick");
+        Log.v(TAG, "startModeChange()");
         try
         {
             if (runModeHolder != null)
@@ -46,7 +46,6 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void onClick(View v)
@@ -82,6 +81,7 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_2ND:
                     publisher.enqueueCommand(new ChangeToPlayback3rd(this));
+                    //publisher.enqueueCommand(new StatusRequestMessage(this));
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_3RD:
@@ -101,11 +101,11 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
                     {
                         runModeHolder.transitToPlaybackMode(true);
                     }
-                    Log.v(TAG, "CHANGED PLAYBACK MODE : DONE.");
+                    Log.v(TAG, " CHANGED PLAYBACK MODE : DONE.");
                     break;
 
                 default:
-                    Log.v(TAG, "RECEIVED UNKNOWN ID : " + id);
+                    Log.v(TAG, " RECEIVED UNKNOWN ID : " + id);
                     break;
             }
         }

@@ -11,6 +11,7 @@ import android.util.Log;
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraHardwareStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.olympus.operation.CameraPowerOff;
 import net.osdn.gokigen.gr2control.camera.olympus.wrapper.property.IOlyCameraProperty;
@@ -38,7 +39,7 @@ import jp.co.olympus.camerakit.OLYCamera;
  *   SettingFragment
  *
  */
-public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceSynchronizer.IPropertySynchronizeCallback, Preference.OnPreferenceClickListener
+public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceSynchronizer.IPropertySynchronizeCallback, Preference.OnPreferenceClickListener, ICameraRunModeCallback
 {
     private final String TAG = toString();
     private AppCompatActivity context = null;
@@ -328,7 +329,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
             if ((changeRunModeExecutor != null) && (!changeRunModeExecutor.isRecordingMode()))
             {
                 // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。
-                changeRunModeExecutor.changeRunMode(true);
+                changeRunModeExecutor.changeRunMode(true, this);
+                return;
             }
             synchronizeCameraProperties(true);
         }
@@ -337,6 +339,19 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
             e.printStackTrace();
         }
         Log.v(TAG, "onResume() End");
+    }
+
+    @Override
+    public void onCompleted(boolean isRecording)
+    {
+        synchronizeCameraProperties(true);
+    }
+
+    @Override
+    public void onErrorOccurred(boolean isRecording)
+    {
+        Log.v(TAG, " onErrorOccurred()");
+        synchronizeCameraProperties(true);
     }
 
     /**

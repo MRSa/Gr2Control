@@ -98,7 +98,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
         statusChecker = new FujiXStatusChecker(context, commandPublisher);
         playbackControl = new FujiXPlaybackControl(context, this);
         hardwareStatus = new FujiXHardwareStatus();
-        runMode = new FujiXRunMode();
+        runMode = new FujiXRunMode(commandPublisher);
     }
 
     public void prepare()

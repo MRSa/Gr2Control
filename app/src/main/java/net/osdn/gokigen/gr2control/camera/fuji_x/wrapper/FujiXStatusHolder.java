@@ -179,7 +179,8 @@ class FujiXStatusHolder
                 {
                     int id = Integer.parseInt(key, 16);
                     int value = statusHolder.get(id);
-                    return (String.format(Locale.US,"0x%08x (%d)", value, value));
+                    Log.v(TAG, "getItemStatus() value : " + value + " key : " + key + " [" + id + "]");
+                    return (value + "");
                 }
                 catch (Exception e)
                 {
@@ -194,7 +195,7 @@ class FujiXStatusHolder
                 if (key.contentEquals(strKey))
                 {
                     int value = statusHolder.get(id);
-                    return (String.format(Locale.US,"0x%08x (%d)", value, value));
+                    return (value + "");
                 }
             }
         }

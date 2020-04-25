@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 
@@ -33,7 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class ImagePagerViewFragment extends Fragment
+public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCallback
 {
     private final String TAG = this.toString();
     private static final String JPEG_SUFFIX = ".JPG";
@@ -92,7 +93,7 @@ public class ImagePagerViewFragment extends Fragment
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater)
 	{
 		try
 		{
@@ -146,7 +147,7 @@ public class ImagePagerViewFragment extends Fragment
         boolean getInformation = false;
 		boolean isSmallSize = false;
 		boolean isRaw = false;
-        String specialSuffix = null;
+        //String specialSuffix = null;
         if ((item.getItemId() == R.id.action_get_information)||(item.getItemId() == R.id.action_get_information_raw))
         {
             getInformation = true;
@@ -259,11 +260,11 @@ public class ImagePagerViewFragment extends Fragment
         if (runMode.isRecordingMode())
         {
             // Threadで呼んではダメみたいだ...
-            runMode.changeRunMode(false);
+            runMode.changeRunMode(false, this);
+            return;
         }
-
         viewPager.setCurrentItem(contentIndex);
-	}
+    }
 
 	@Override
 	public void onPause()
@@ -282,13 +283,28 @@ public class ImagePagerViewFragment extends Fragment
         if (!runMode.isRecordingMode())
         {
             // Threadで呼んではダメみたいだ...
-            runMode.changeRunMode(true);
+            runMode.changeRunMode(true, this);
         }
     }
 
+    @Override
+    public void onCompleted(boolean isRecording)
+    {
+        if (!isRecording)
+        {
+            viewPager.setCurrentItem(contentIndex);
+        }
+    }
+
+    @Override
+    public void onErrorOccurred(boolean isRecording)
+    {
+        Log.v(TAG, " onErrorOccurred() : " + isRecording);
+    }
+
+
 	private class ImagePagerAdapter extends PagerAdapter
     {
-
 		@Override
 		public int getCount()
         {
@@ -359,7 +375,7 @@ public class ImagePagerViewFragment extends Fragment
                     {
                         bar.setTitle(path);
                     }
-                    activity.getSupportActionBar().setTitle(path);
+                    //activity.getSupportActionBar().setTitle(path);
                     activity.getFragmentManager().invalidateOptionsMenu();
                 }
 			}

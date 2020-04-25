@@ -37,6 +37,7 @@ import android.widget.ProgressBar;
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
 import net.osdn.gokigen.gr2control.camera.playback.ICameraContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
@@ -51,7 +52,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-public class ImageGridViewFragment extends Fragment
+public class ImageGridViewFragment extends Fragment implements ICameraRunModeCallback
 {
 	private final String TAG = this.toString();
     private final String MOVIE_SUFFIX = ".mov";
@@ -211,15 +212,48 @@ public class ImageGridViewFragment extends Fragment
         if (!runMode.isRecordingMode())
         {
             // Threadで呼んではダメみたいだ...
-            runMode.changeRunMode(true);
+            runMode.changeRunMode(true, this);
+            super.onPause();
+            Log.v(TAG, "onPause() End");
+            return;
         }
-
-		if (!executor.isShutdown())
-		{
-			executor.shutdownNow();
-		}
+        postProcessChangeRunMode(true);
 		super.onPause();
         Log.v(TAG, "onPause() End");
+    }
+
+    private void postProcessChangeRunMode(boolean isRecording)
+    {
+        try
+        {
+            if (isRecording)
+            {
+                if (!executor.isShutdown())
+                {
+                    executor.shutdownNow();
+                }
+            }
+            else
+            {
+                refresh();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCompleted(boolean isRecording)
+    {
+        postProcessChangeRunMode(isRecording);
+    }
+
+    @Override
+    public void onErrorOccurred(boolean isRecording)
+    {
+        postProcessChangeRunMode(isRecording);
     }
 
 	@Override
@@ -235,7 +269,8 @@ public class ImageGridViewFragment extends Fragment
         {
             if (runMode.isRecordingMode())
             {
-                runMode.changeRunMode(false);
+                runMode.changeRunMode(false, this);
+                return;
             }
         }
         catch (Exception e)
@@ -246,12 +281,6 @@ public class ImageGridViewFragment extends Fragment
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-/*
-                if (runMode.isRecordingMode())
-                {
-                    runMode.changeRunMode(false);
-                }
-*/
                 refreshImpl();
             }
         });

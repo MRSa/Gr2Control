@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.util.Log;
 
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
 import net.osdn.gokigen.gr2control.camera.ILiveViewControl;
 import net.osdn.gokigen.gr2control.camera.olympus.wrapper.property.CameraPropertyUtilities;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.IImageDataReceiver;
@@ -55,17 +56,19 @@ class OlyCameraWrapper implements ICameraRunMode, ILiveViewControl, ILiveViewLis
      *
      */
     @Override
-    public void changeRunMode(boolean isRecording)
+    public void changeRunMode(boolean isRecording, @NonNull ICameraRunModeCallback callback)
     {
         OLYCamera.RunMode runMode = (isRecording) ? OLYCamera.RunMode.Recording : OLYCamera.RunMode.Playback;
         Log.v(TAG, "changeRunMode() : " + runMode);
         try
         {
             camera.changeRunMode(runMode);
+            callback.onCompleted(isRecording);
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            callback.onErrorOccurred(isRecording);
         }
     }
 

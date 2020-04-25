@@ -31,6 +31,7 @@ import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraInformation;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
+import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.ICameraStatusWatcher;
 import net.osdn.gokigen.gr2control.camera.IDisplayInjector;
@@ -50,7 +51,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
  *  撮影用ライブビュー画面
  *
  */
-public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFocusingModeNotify, IFavoriteSettingDialogKicker, ICameraStatusUpdateNotify, LiveViewKeyPanelClickListener.KeyPanelFeedback
+public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFocusingModeNotify, IFavoriteSettingDialogKicker, ICameraStatusUpdateNotify, LiveViewKeyPanelClickListener.KeyPanelFeedback, ICameraRunModeCallback
 {
     private final String TAG = this.toString();
 
@@ -494,10 +495,16 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         if ((changeRunModeExecutor != null)&&(!changeRunModeExecutor.isRecordingMode()))
         {
             // Runモードを切り替える。（でも切り替えると、設定がクリアされてしまう...。）
-            changeRunModeExecutor.changeRunMode(true);
+            changeRunModeExecutor.changeRunMode(true, this);
+            Log.v(TAG, "onResume() End");
+            return;
         }
+        prepareToStart();
+        Log.v(TAG, "onResume() End");
+    }
 
-        // propertyを取得
+    private void prepareToStart()
+    {
         try
         {
             Context context = getContext();
@@ -521,7 +528,18 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         {
             e.printStackTrace();
         }
-        Log.v(TAG, "onResume() End");
+    }
+
+    @Override
+    public void onCompleted(boolean isRecording)
+    {
+        prepareToStart();
+    }
+
+    @Override
+    public void onErrorOccurred(boolean isRecording)
+    {
+        prepareToStart();
     }
 
     /**
