@@ -51,7 +51,7 @@ class FujiXStatusHolder
         statusNameArray.append(IFujiXCameraProperties.DEVICE_ERROR, IFujiXCameraProperties.DEVICE_ERROR_STR);
         statusNameArray.append(IFujiXCameraProperties.IMAGE_FILE_COUNT, IFujiXCameraProperties.IMAGE_FILE_COUNT_STR);
         statusNameArray.append(IFujiXCameraProperties.SDCARD_REMAIN_SIZE, IFujiXCameraProperties.SDCARD_REMAIN_SIZE_STR);
-        statusNameArray.append(FOCUS_LOCK, IFujiXCameraProperties.FOCUS_LOCK_STR);
+        statusNameArray.append(IFujiXCameraProperties.FOCUS_LOCK, IFujiXCameraProperties.FOCUS_LOCK_STR);
         statusNameArray.append(IFujiXCameraProperties.MOVIE_REMAINING_TIME, IFujiXCameraProperties.MOVIE_REMAINING_TIME_STR);
         statusNameArray.append(IFujiXCameraProperties.SHUTTER_SPEED, IFujiXCameraProperties.SHUTTER_SPEED_STR);
         statusNameArray.append(IFujiXCameraProperties.IMAGE_ASPECT,IFujiXCameraProperties.IMAGE_ASPECT_STR);

@@ -267,10 +267,11 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
         }
     }
 
-    /**
+    /*
      *    カメラからにコマンドの結果を受信する（メイン部分）
      *
      */
+/*
     private void receive_from_camera(boolean isDumpReceiveLog, int id, IFujiXCommandCallback callback, boolean receiveAgain, int delayMs)
     {
         try
@@ -325,6 +326,109 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
             e.printStackTrace();
         }
     }
+*/
+    /**
+     *    カメラからにコマンドの結果を受信する（メイン部分）
+     *
+     */
+    private void receive_from_camera(boolean isDumpReceiveLog, int id, IFujiXCommandCallback callback, boolean receiveAgain, int delayMs)
+    {
+        try
+        {
+            sleep(delayMs);
+            boolean isFirstTime = true;
+            int totalReadBytes;
+            int receive_message_buffer_size = BUFFER_SIZE;
+            byte[] byte_array = new byte[receive_message_buffer_size];
+            InputStream is = socket.getInputStream();
+            if (is != null)
+            {
+                int read_bytes = is.read(byte_array, 0, receive_message_buffer_size);
+                byte[] receive_body;
+                if (read_bytes > 4)
+                {
+                    if (receiveAgain)
+                    {
+                        int length = ((((int) byte_array[3]) & 0xff) << 24) + ((((int) byte_array[2]) & 0xff) << 16) + ((((int) byte_array[1]) & 0xff) << 8) + (((int) byte_array[0]) & 0xff);
+                        if (length > receive_message_buffer_size)
+                        {
+                            Log.v(TAG, "+++++ TOTAL RECEIVE MESSAGE SIZE IS " + length + " +++++");
+                        }
+                        totalReadBytes = read_bytes;
+                        while ((length > totalReadBytes)||((length == read_bytes)&&((int) byte_array[4] == 0x02)))
+                        {
+                            // データについて、もう一回受信が必要な場合...
+                            if (isDumpReceiveLog)
+                            {
+                                Log.v(TAG, "--- RECEIVE AGAIN --- [" + length + "(" + read_bytes + ") " + byte_array[4]+ "] ");
+                            }
+                            sleep(delayMs);
+                            int read_bytes2 = is.read(byte_array, read_bytes, receive_message_buffer_size - read_bytes);
+                            if (read_bytes2 > 0)
+                            {
+                                read_bytes = read_bytes + read_bytes2;
+                                totalReadBytes = totalReadBytes + read_bytes2;
+                            }
+                            else
+                            {
+                                // よみだし終了。
+                                Log.v(TAG, "FINISHED RECEIVE... ");
+                                break;
+                            }
+                            if (callback != null)
+                            {
+                                if (callback.isReceiveMulti())
+                                {
+                                    int offset = 0;
+                                    if (isFirstTime)
+                                    {
+                                        // 先頭のヘッダ部分をカットして送る
+                                        offset = 12;
+                                        isFirstTime = false;
+                                        //Log.v(TAG, " FIRST TIME : " + read_bytes + " " + offset);
+                                    }
+                                    callback.onReceiveProgress(read_bytes - offset, length, Arrays.copyOfRange(byte_array, offset, read_bytes));
+                                    read_bytes = 0;
+                                }
+                                else
+                                {
+                                    callback.onReceiveProgress(read_bytes, length, null);
+                                }
+                            }
+                        }
+                    }
+                    receive_body = Arrays.copyOfRange(byte_array, 0, read_bytes);
+                }
+                else
+                {
+                    receive_body = new byte[1];
+                }
+                if (isDumpReceiveLog)
+                {
+                    // ログに受信メッセージを出力する
+                    Log.v(TAG, "receive_from_camera() : " + read_bytes + " bytes. [" + receive_message_buffer_size + "]");
+                    dump_bytes("RECV[" + receive_body.length + "] ", receive_body);
+                }
+                if (callback != null)
+                {
+                    if (callback.isReceiveMulti())
+                    {
+                        callback.receivedMessage(id, null);
+                    }
+                    else
+                    {
+                        callback.receivedMessage(id, receive_body);
+                        //callback.receivedMessage(id, Arrays.copyOfRange(receive_body, 0, receive_body.length));
+                    }
+                }
+            }
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      *   デバッグ用：ログにバイト列を出力する

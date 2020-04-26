@@ -131,7 +131,7 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
                 start = 1;
             }
             int index = getIndexNumber(start, name);
-            Log.v(TAG, "FujiX::downloadContent() : " + path + " " + name + " " + index);
+            Log.v(TAG, "  FujiX::downloadContent() : " + path + " " + name + " " + index);
             if ((index > 0)&&(index <= imageContentInfo.size()))
             {
                 IFujiXCommandPublisher publisher = provider.getCommandPublisher();
