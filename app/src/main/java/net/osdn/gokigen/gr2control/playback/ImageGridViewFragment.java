@@ -212,7 +212,7 @@ public class ImageGridViewFragment extends Fragment implements ICameraRunModeCal
         if (!runMode.isRecordingMode())
         {
             // Threadで呼んではダメみたいだ...
-            runMode.changeRunMode(true, this);
+            //runMode.changeRunMode(true, this);
             super.onPause();
             Log.v(TAG, "onPause() End");
             return;

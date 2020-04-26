@@ -81,6 +81,7 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
     public void updateCameraFileInfo(ICameraFileInfo info)
     {
         //  なにもしない
+        Log.v(TAG, " updateCameraFileInfo() : " + info.getDatetime());
     }
 
     @Override
@@ -129,10 +130,8 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
             {
                 start = 1;
             }
-            String indexStr = name.substring(start, name.indexOf("."));
-            Log.v(TAG, "FujiX::downloadContent() : " + path + " " + name + " " + indexStr);
-            int index = Integer.parseInt(indexStr);
-            //FujiXImageContentInfo contentInfo = imageContentInfo.get(index);   // 特にデータを更新しないから大丈夫か？
+            int index = getIndexNumber(start, name);
+            Log.v(TAG, "FujiX::downloadContent() : " + path + " " + name + " " + index);
             if ((index > 0)&&(index <= imageContentInfo.size()))
             {
                 IFujiXCommandPublisher publisher = provider.getCommandPublisher();

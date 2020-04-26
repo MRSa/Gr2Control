@@ -30,6 +30,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
     private static final int BUFFER_SIZE = 2048 * 1280;
     private static final int ERROR_LIMIT = 30;
     private boolean isStart = false;
+    private Socket lvSocket = null;
 
     FujiXLiveViewControl(@NonNull Activity activity, String ip, int portNumber)
     {
@@ -62,8 +63,10 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
         if (isStart)
         {
             // すでに受信スレッド動作中なので抜ける
+            Log.v(TAG, " LIVE VIEW IS ALREADY STARTED.");
             return;
         }
+        Log.v(TAG, " START LIVEVIEW... ");
         isStart = true;
         Thread thread = new Thread(new Runnable()
         {
@@ -72,14 +75,19 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
             {
                 try
                 {
-                    Socket socket = new Socket(ipAddress, portNumber);
-                    startReceive(socket);
+                    if (lvSocket == null)
+                    {
+                        lvSocket = new Socket(ipAddress, portNumber);
+                    }
+                    startReceive(lvSocket);
                 }
                 catch (Exception e)
                 {
                     Log.v(TAG, " IP : " + ipAddress + " port : " + portNumber);
                     e.printStackTrace();
                 }
+                //lvSocket = null;
+                Log.v(TAG, " STOP LIVEVIEW... ");
             }
         });
         try
@@ -97,6 +105,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
     {
         isStart = false;
     }
+
 /*
     private void startReceivePrevious(Socket socket)
     {
@@ -257,6 +266,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
             Log.v(TAG, "===== startReceive() aborted.");
             return;
         }
+        Log.v(TAG, " Receive (wait) image...");
 
         boolean findJpeg = false;
         boolean finishJpeg = false;
@@ -351,6 +361,7 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
                 isStart = false;
             }
         }
+/*
         try
         {
             isr.close();
@@ -360,5 +371,6 @@ public class FujiXLiveViewControl implements ILiveViewControl, IFujiXCommunicati
         {
             e.printStackTrace();
         }
+*/
     }
 }

@@ -118,7 +118,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
      *
      */
     @Override
-    public void onAttach(Context context)
+    public void onAttach(@NonNull Context context)
     {
         super.onAttach(context);
         Log.v(TAG, "onAttach()");
@@ -599,6 +599,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     @Override
     public void startLiveView()
     {
+        Log.v(TAG, " LiveViewFragment::startLiveView() ");
         ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
         if (liveViewControl == null)
         {
