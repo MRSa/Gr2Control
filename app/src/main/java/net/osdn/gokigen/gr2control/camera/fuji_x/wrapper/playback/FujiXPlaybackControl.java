@@ -96,13 +96,12 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
         try
         {
             int start = 0;
-            if (path.indexOf("/") == 0)
+            if (name.indexOf("/") == 0)
             {
                 start = 1;
             }
-            String indexStr = path.substring(start, path.indexOf("."));
-            Log.v(TAG, "downloadContentThumbnail() : " + path + " " + indexStr);
-            int index = Integer.parseInt(indexStr);
+            Log.v(TAG, "downloadContentThumbnail() : " + path + " " + name);
+            int index = getIndexNumber(start, name);
             if ((index > 0)&&(index <= imageContentInfo.size()))
             {
                 IFujiXCommandPublisher publisher = provider.getCommandPublisher();
@@ -126,12 +125,12 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
         try
         {
             int start = 0;
-            if (path.indexOf("/") == 0)
+            if (name.indexOf("/") == 0)
             {
                 start = 1;
             }
-            String indexStr = path.substring(start, path.indexOf("."));
-            Log.v(TAG, "FujiX::downloadContent() : " + path + " " + indexStr);
+            String indexStr = name.substring(start, name.indexOf("."));
+            Log.v(TAG, "FujiX::downloadContent() : " + path + " " + name + " " + indexStr);
             int index = Integer.parseInt(indexStr);
             //FujiXImageContentInfo contentInfo = imageContentInfo.get(index);   // 特にデータを更新しないから大丈夫か？
             if ((index > 0)&&(index <= imageContentInfo.size()))
@@ -144,6 +143,38 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
         {
             e.printStackTrace();
         }
+    }
+
+    private int getIndexNumber(int start, @NonNull String name)
+    {
+        String indexStr = name.substring(start, name.indexOf("."));
+        int indexNo = -1;
+        try
+        {
+            indexNo = Integer.parseInt(indexStr);
+        }
+        catch (Exception e)
+        {
+            //e.printStackTrace();
+        }
+        if (indexNo >= 0)
+        {
+            return (indexNo);
+        }
+        indexStr = name.substring(start);
+        int size = imageContentInfo.size();
+        for (int index = 0; index < size; index++)
+        {
+            FujiXImageContentInfo info = imageContentInfo.valueAt(index);
+            String contentName = info.getOriginalName();
+            if (indexStr.matches(contentName))
+            {
+                return (info.getId());
+            }
+            Log.v(TAG, " contentName : " + contentName);
+        }
+        Log.v(TAG, "index is not found : " + name + " " + indexStr);
+        return (-1);
     }
 
     @Override

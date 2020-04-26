@@ -38,8 +38,7 @@ public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiX
 
         if (interfaceProvider.getCameraConnection().getConnectionStatus() != ICameraConnection.CameraConnectionStatus.CONNECTED)
         {
-            //
-            Log.v(TAG, " ===== DOES NOT CONNECT TO CAMERA, SO PENDING...");
+            Log.v(TAG, " ===== DOES NOT CONNECT TO CAMERA, SO CHANGE MODE IS PENDING...");
             return;
         }
 

@@ -105,11 +105,11 @@ public class FujiXCameraModeChangeToLiveView implements View.OnClickListener, IF
                     {
                         runModeHolder.transitToRecordingMode(true);
                     }
-                    Log.v(TAG, "CHANGED LIVEVIEW MODE : DONE.");
+                    Log.v(TAG, "  CHANGED LIVEVIEW MODE : DONE.");
                     break;
 
                 default:
-                    Log.v(TAG, "RECEIVED UNKNOWN ID : " + id);
+                    Log.v(TAG, "  RECEIVED UNKNOWN ID : " + id);
                     break;
             }
         }

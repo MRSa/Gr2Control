@@ -48,6 +48,6 @@ public class StatusRequestMessage extends FujiXCommandBase
     @Override
     public boolean dumpLog()
     {
-        return (true);
+        return (false);
     }
 }
