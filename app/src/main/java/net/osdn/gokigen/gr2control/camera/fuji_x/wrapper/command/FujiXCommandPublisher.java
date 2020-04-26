@@ -162,7 +162,7 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
     {
         try
         {
-            //Log.v(TAG, "Enqueue : "  + command.getId());
+            //Log.v(TAG, " --- Enqueue : "  + command.getId());
             return (commandQueue.offer(command));
         }
         catch (Exception e)
@@ -311,10 +311,10 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
                 if (isDumpReceiveLog)
                 {
                     // ログに受信メッセージを出力する
-                    Log.v(TAG, "receive_from_camera() : " + read_bytes + " bytes.");
+                    Log.v(TAG, " receive_from_camera() : " + read_bytes + " bytes.");
                     dump_bytes("RECV[" + receive_body.length + "] ", receive_body);
                 }
-               if (callback != null)
+                if (callback != null)
                 {
                     callback.receivedMessage(id, receive_body);
                 }

@@ -4,9 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import net.osdn.gokigen.gr2control.camera.ICameraConnection;
 import net.osdn.gokigen.gr2control.camera.ICameraRunMode;
 import net.osdn.gokigen.gr2control.camera.ICameraRunModeCallback;
-import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.FujiXCommandPublisher;
+import net.osdn.gokigen.gr2control.camera.fuji_x.IFujiXInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXCameraModeChangeToLiveView;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXCameraModeChangeToPlayback;
@@ -14,17 +15,19 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXCameraM
 public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiXCommandCallback
 {
     private final String TAG = toString();
+    private final IFujiXInterfaceProvider interfaceProvider;
     private final FujiXCameraModeChangeToLiveView toLiveViewCommand;
     private final FujiXCameraModeChangeToPlayback toPlaybackCommand;
     private boolean isChanging = false;
     private boolean isRecordingMode = false;
+    private boolean modeChangeIsPending = false;
     private ICameraRunModeCallback runModeCallback = null;
 
-    FujiXRunMode(@NonNull FujiXCommandPublisher commandPublisher)
+    FujiXRunMode(@NonNull IFujiXInterfaceProvider interfaceProvider)
     {
-        //
-        toLiveViewCommand = new FujiXCameraModeChangeToLiveView(commandPublisher, this);
-        toPlaybackCommand = new FujiXCameraModeChangeToPlayback(commandPublisher, this);
+        this.interfaceProvider = interfaceProvider;
+        toLiveViewCommand = new FujiXCameraModeChangeToLiveView(interfaceProvider.getCommandPublisher(), this);
+        toPlaybackCommand = new FujiXCameraModeChangeToPlayback(interfaceProvider.getCommandPublisher(), this);
     }
 
     @Override
@@ -32,6 +35,14 @@ public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiX
     {
         // モードを切り替える
         Log.v(TAG, "changeRunMode() : " + isRecording);
+
+        if (interfaceProvider.getCameraConnection().getConnectionStatus() != ICameraConnection.CameraConnectionStatus.CONNECTED)
+        {
+            //
+            Log.v(TAG, " ===== DOES NOT CONNECT TO CAMERA, SO PENDING...");
+            return;
+        }
+
         this.runModeCallback = callback;
         if (isRecording)
         {

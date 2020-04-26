@@ -180,6 +180,7 @@ class FujiXStatusHolder
                     int id = Integer.parseInt(key, 16);
                     int value = statusHolder.get(id);
                     Log.v(TAG, "getItemStatus() value : " + value + " key : " + key + " [" + id + "]");
+                    dumpStatus();
                     return (value + "");
                 }
                 catch (Exception e)
@@ -205,5 +206,26 @@ class FujiXStatusHolder
         }
         return ("? [" + key + "]");
     }
+
+    private void dumpStatus()
+    {
+        try
+        {
+            Log.v(TAG, " - - - status - - - ");
+            for (int index = 0; index < statusHolder.size(); index++)
+            {
+                int key = statusHolder.keyAt(index);
+                int value = statusHolder.get(key);
+                Log.v(TAG, String.format("id : 0x%x value : %d (0x%x) ", key, value, value));
+            }
+            Log.v(TAG, " - - - status - - - ");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

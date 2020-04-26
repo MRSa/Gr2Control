@@ -33,7 +33,7 @@ public class FujiXCameraModeChangeToLiveView implements View.OnClickListener, IF
 
     public void startModeChange(IFujiXRunModeHolder runModeHolder)
     {
-        Log.v(TAG, "onClick");
+        Log.v(TAG, " startModeChange()");
         try
         {
             if (runModeHolder != null)

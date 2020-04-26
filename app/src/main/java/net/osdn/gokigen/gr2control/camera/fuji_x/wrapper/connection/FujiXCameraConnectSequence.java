@@ -68,6 +68,7 @@ public class FujiXCameraConnectSequence implements Runnable, IFujiXCommandCallba
             IFujiXCommandPublisher issuer = interfaceProvider.getCommandPublisher();
             if (!issuer.isConnected())
             {
+                Log.v(TAG, " --- CONNECT SOCKET --- ");
                 if (!interfaceProvider.getCommandCommunication().connect())
                 {
                     // 接続失敗...
@@ -109,7 +110,7 @@ public class FujiXCameraConnectSequence implements Runnable, IFujiXCommandCallba
     @Override
     public void receivedMessage(int id, byte[] rx_body)
     {
-        //Log.v(TAG, "receivedMessage : " + id + "[" + rx_body.length + " bytes]");
+        Log.v(TAG, "receivedMessage : " + id + "[" + rx_body.length + " bytes]");
         //int bodyLength = 0;
         switch (id)
         {
