@@ -4,4 +4,6 @@ public interface IFujiXRunModeHolder
 {
     void transitToRecordingMode(boolean isFinished);
     void transitToPlaybackMode(boolean isFinished);
+
+    int getStartLiveViewSequenceNumber();
 }

@@ -263,6 +263,17 @@ public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCa
             runMode.changeRunMode(false, this);
             return;
         }
+
+        try
+        {
+            // 画像表示が開始することを通知する
+            playbackControl.showPictureStarted();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         viewPager.setCurrentItem(contentIndex);
     }
 
@@ -278,6 +289,16 @@ public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCa
             {
                 bar.hide();
             }
+        }
+
+        try
+        {
+            // 画像表示が終わったことを通知する
+            playbackControl.showPictureFinished();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         if (!runMode.isRecordingMode())

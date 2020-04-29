@@ -6,12 +6,12 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCa
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXMessages;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.FujiXCommandBase;
 
-public class ChangeToPlayback2nd  extends FujiXCommandBase
+public class ChangeToPlayback6th extends FujiXCommandBase
 {
     private final int holdId;
     private final IFujiXCommandCallback callback;
 
-    public ChangeToPlayback2nd(int holdId, @NonNull IFujiXCommandCallback callback)
+    public ChangeToPlayback6th(int holdId, @NonNull IFujiXCommandCallback callback)
     {
         this.holdId = holdId;
         this.callback = callback;
@@ -26,7 +26,7 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
     @Override
     public int getId()
     {
-        return (IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_2ND);
+        return (IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_6TH);
     }
 
     @Override
@@ -36,36 +36,18 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
                 // message_header.index : uint16 (0: terminate, 2: two_part_message, 1: other)
                 (byte)0x01, (byte)0x00,
 
-                // message_header.type : two_part (0x1016) : SetDevicePropValue
-                (byte)0x16, (byte)0x10,
+                // message_header.type : 0x902b
+                (byte)0x2b, (byte)0x90,
 
                 // sequence number
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
 
                 // data ...
-                (byte)0x01, (byte)0xdf, (byte)0x00, (byte)0x00,
+                //(byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
+                //(byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
         });
     }
 
-    @Override
-    public byte[] commandBody2()
-    {
-        return (new byte[] {
-                // message_header.index : uint16 (0: terminate, 2: two_part_message, 1: other)
-                (byte)0x02, (byte)0x00,
-
-                // message_header.type : two_part (0x1016) : SetDevicePropValue
-                (byte)0x16, (byte)0x10,
-
-                // sequence number
-                (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
-
-                // data ...
-                (byte)0x0b, (byte)0x00,
-                //(byte)0x05, (byte)0x00,
-
-        });
-    }
 
     @Override
     public int getHoldId()
@@ -76,12 +58,12 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
     @Override
     public boolean isHold()
     {
-        return (true);
+        return (false);
     }
 
     @Override
     public boolean isRelease()
     {
-        return (false);
+        return (true);
     }
 }

@@ -26,6 +26,16 @@ public interface IFujiXCommand
     // コマンド送信結果（応答）の通知先
     IFujiXCommandCallback responseCallback();
 
+    //  特定シーケンスを特定するID
+    int getHoldId();
+
+    // 特定シーケンスに入るか？
+    boolean isHold();
+
+    // 特定シーケンスから出るか？
+    boolean isRelease();
+
     // デバッグ用： ログ(logcat)に通信結果を残すかどうか
     boolean dumpLog();
+
 }

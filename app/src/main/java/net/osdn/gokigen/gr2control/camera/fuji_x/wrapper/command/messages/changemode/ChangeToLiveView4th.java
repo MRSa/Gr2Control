@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode;
 
-
 import androidx.annotation.NonNull;
 
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
@@ -9,10 +8,12 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.FujiXC
 
 public class ChangeToLiveView4th   extends FujiXCommandBase
 {
+    private final int holdId;
     private final IFujiXCommandCallback callback;
 
-    public ChangeToLiveView4th(@NonNull IFujiXCommandCallback callback)
+    public ChangeToLiveView4th(int holdId, @NonNull IFujiXCommandCallback callback)
     {
+        this.holdId = holdId;
         this.callback = callback;
     }
 
@@ -60,7 +61,26 @@ public class ChangeToLiveView4th   extends FujiXCommandBase
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
 
                 // data ...
-                (byte)0x07, (byte)0x00, (byte)0x02, (byte)0x00,
+                //(byte)0x07, (byte)0x00, (byte)0x02, (byte)0x00,
+                (byte)0x0a, (byte)0x00, (byte)0x02, (byte)0x00,
         });
+    }
+
+    @Override
+    public int getHoldId()
+    {
+        return (holdId);
+    }
+
+    @Override
+    public boolean isHold()
+    {
+        return (true);
+    }
+
+    @Override
+    public boolean isRelease()
+    {
+        return (false);
     }
 }

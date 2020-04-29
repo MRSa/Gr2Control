@@ -18,14 +18,16 @@ public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiX
     private final IFujiXInterfaceProvider interfaceProvider;
     private final FujiXCameraModeChangeToLiveView toLiveViewCommand;
     private final FujiXCameraModeChangeToPlayback toPlaybackCommand;
+    private final FujiXStatusChecker statusChecker;
     private boolean isChanging = false;
-    private boolean isRecordingMode = false;
+    private boolean isRecordingMode = true;
     private boolean modeChangeIsPending = false;
     private ICameraRunModeCallback runModeCallback = null;
 
-    FujiXRunMode(@NonNull IFujiXInterfaceProvider interfaceProvider)
+    FujiXRunMode(@NonNull IFujiXInterfaceProvider interfaceProvider, @NonNull FujiXStatusChecker statusChecker)
     {
         this.interfaceProvider = interfaceProvider;
+        this.statusChecker = statusChecker;
         toLiveViewCommand = new FujiXCameraModeChangeToLiveView(interfaceProvider.getCommandPublisher(), this);
         toPlaybackCommand = new FujiXCameraModeChangeToPlayback(interfaceProvider.getCommandPublisher(), this);
     }
@@ -89,9 +91,16 @@ public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiX
     }
 
     @Override
+    public int getStartLiveViewSequenceNumber()
+    {
+        return (toLiveViewCommand.getChangedSequenceNumber());
+    }
+
+    @Override
     public void receivedMessage(int id, byte[] rx_body)
     {
-        Log.v(TAG, " receivedMessage() " + id);
+        Log.v(TAG, " FujiXRunMode::receivedMessage() " + id);
+        statusChecker.receivedMessage(id, rx_body);
     }
 
     @Override

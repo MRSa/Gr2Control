@@ -31,6 +31,7 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
 
     private PreferenceFragmentCompat preferenceFragment = null;
     private LogCatFragment logCatFragment = null;
+    private ImageGridViewFragment imageGridViewFragment = null;
 
     public static CameraSceneUpdater newInstance(@NonNull AppCompatActivity activity)
     {
@@ -311,9 +312,12 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
         Log.v(TAG, "changeScenceToImageList()");
         try
         {
-            ImageGridViewFragment fragment = ImageGridViewFragment.newInstance(interfaceProvider.getPlaybackControl(), interfaceProvider.getCameraRunMode());
+            if (imageGridViewFragment == null)
+            {
+                imageGridViewFragment = ImageGridViewFragment.newInstance(interfaceProvider.getPlaybackControl(), interfaceProvider.getCameraRunMode());
+            }
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment1, fragment);
+            transaction.replace(R.id.fragment1, imageGridViewFragment);
             // backstackに追加
             transaction.addToBackStack(null);
             transaction.commit();

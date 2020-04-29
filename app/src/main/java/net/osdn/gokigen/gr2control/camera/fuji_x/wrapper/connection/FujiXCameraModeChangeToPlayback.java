@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.IFujiXRunModeHolder;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommand;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXMessages;
@@ -14,11 +15,16 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.Status
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback1st;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback2nd;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback3rd;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback6th;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback7th;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlaybackZero;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback4th;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToPlayback5th;
 
 public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IFujiXCommandCallback
 {
     private final String TAG = toString();
+    private static final int COMMANDID_CHANGE_TO_PLAYBACK = 200;
     private final IFujiXCommandPublisher publisher;
     private final IFujiXCommandCallback callback;
     private IFujiXRunModeHolder runModeHolder = null;
@@ -29,17 +35,19 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
         this.callback = callback;
     }
 
-    public void startModeChange(IFujiXRunModeHolder runModeHolder)
+    public void startModeChange(@Nullable IFujiXRunModeHolder runModeHolder)
     {
-        Log.v(TAG, "startModeChange()");
+        Log.v(TAG, " startModeChange() : FujiXCameraModeChangeToPlayback");
         try
         {
+            int seqNumber = 8;
             if (runModeHolder != null)
             {
                 this.runModeHolder = runModeHolder;
                 this.runModeHolder.transitToPlaybackMode(false);
+                seqNumber = runModeHolder.getStartLiveViewSequenceNumber();
             }
-            publisher.enqueueCommand(new ChangeToPlayback1st(this));
+            publisher.enqueueCommand(new ChangeToPlaybackZero(COMMANDID_CHANGE_TO_PLAYBACK, seqNumber, this));
         }
         catch (Exception e)
         {
@@ -69,27 +77,40 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
     @Override
     public void receivedMessage(int id, byte[] rx_body)
     {
-        //Log.v(TAG, "receivedMessage : " + id + "[" + rx_body.length + " bytes]");
-        //int bodyLength = 0;
         try
         {
             switch (id)
             {
+                case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_ZERO:
+                    enqueueCommand(id, rx_body, new ChangeToPlayback1st(COMMANDID_CHANGE_TO_PLAYBACK,this));
+                    break;
+
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_1ST:
-                    publisher.enqueueCommand(new ChangeToPlayback2nd(this));
+                    enqueueCommand(id, rx_body, new ChangeToPlayback3rd(COMMANDID_CHANGE_TO_PLAYBACK,this));
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_2ND:
-                    publisher.enqueueCommand(new ChangeToPlayback3rd(this));
-                    //publisher.enqueueCommand(new StatusRequestMessage(this));
+                    enqueueCommand(id, rx_body, new ChangeToPlayback7th(COMMANDID_CHANGE_TO_PLAYBACK,this));
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_3RD:
-                    publisher.enqueueCommand(new ChangeToPlayback4th(this));
+                    enqueueCommand(id, rx_body, new ChangeToPlayback4th(COMMANDID_CHANGE_TO_PLAYBACK,this));
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_4TH:
-                    publisher.enqueueCommand(new StatusRequestMessage(this));
+                    enqueueCommand(id, rx_body, new ChangeToPlayback2nd(COMMANDID_CHANGE_TO_PLAYBACK,this));
+                    break;
+
+                case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_5TH:
+                    enqueueCommand(id, rx_body, new ChangeToPlayback6th(COMMANDID_CHANGE_TO_PLAYBACK,this));
+                    break;
+
+                case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_6TH:
+                    enqueueCommand(id, rx_body, new StatusRequestMessage(this));
+                    break;
+
+                case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_7TH:
+                    enqueueCommand(id, rx_body, new ChangeToPlayback5th(COMMANDID_CHANGE_TO_PLAYBACK,this));
                     break;
 
                 case IFujiXMessages.SEQ_STATUS_REQUEST:
@@ -101,7 +122,7 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
                     {
                         runModeHolder.transitToPlaybackMode(true);
                     }
-                    Log.v(TAG, " CHANGED PLAYBACK MODE : DONE.");
+                    Log.v(TAG, " - - - - - CHANGED PLAYBACK MODE : DONE.");
                     break;
 
                 default:
@@ -114,4 +135,11 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
             e.printStackTrace();
         }
     }
+
+    private void enqueueCommand(int id, byte[] rx_body, IFujiXCommand command)
+    {
+        //Log.v(TAG, "  --- receivedMessage : " + id + "[" + rx_body.length + " bytes]");
+        publisher.enqueueCommand(command);
+    }
+
 }

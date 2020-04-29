@@ -74,7 +74,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     public FujiXInterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int communicationTimeoutMs = 5000;  // デフォルトは 5000ms とする
+        int communicationTimeoutMs;
         try
         {
             communicationTimeoutMs = Integer.parseInt(preferences.getString(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT, IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE)) * 1000;
@@ -98,7 +98,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
         statusChecker = new FujiXStatusChecker(context, commandPublisher);
         playbackControl = new FujiXPlaybackControl(context, this);
         hardwareStatus = new FujiXHardwareStatus();
-        runMode = new FujiXRunMode(this);
+        runMode = new FujiXRunMode(this, statusChecker);
     }
 
     public void prepare()

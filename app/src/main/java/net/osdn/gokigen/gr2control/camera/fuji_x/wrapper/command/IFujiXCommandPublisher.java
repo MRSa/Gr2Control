@@ -7,6 +7,8 @@ public interface IFujiXCommandPublisher
     boolean isConnected();
     boolean enqueueCommand(@NonNull IFujiXCommand command);
 
+    boolean flushHoldQueue();
+
     void start();
     void stop();
 }

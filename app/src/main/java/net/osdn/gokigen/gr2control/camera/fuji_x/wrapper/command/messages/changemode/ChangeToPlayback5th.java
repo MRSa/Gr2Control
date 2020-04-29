@@ -6,12 +6,12 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCa
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXMessages;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.FujiXCommandBase;
 
-public class ChangeToPlayback2nd  extends FujiXCommandBase
+public class ChangeToPlayback5th extends FujiXCommandBase
 {
     private final int holdId;
     private final IFujiXCommandCallback callback;
 
-    public ChangeToPlayback2nd(int holdId, @NonNull IFujiXCommandCallback callback)
+    public ChangeToPlayback5th(int holdId, @NonNull IFujiXCommandCallback callback)
     {
         this.holdId = holdId;
         this.callback = callback;
@@ -26,7 +26,7 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
     @Override
     public int getId()
     {
-        return (IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_2ND);
+        return (IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_5TH);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
 
                 // data ...
-                (byte)0x01, (byte)0xdf, (byte)0x00, (byte)0x00,
+                (byte)0x25, (byte)0xdf, (byte)0x00, (byte)0x00,
         });
     }
 
@@ -61,8 +61,8 @@ public class ChangeToPlayback2nd  extends FujiXCommandBase
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
 
                 // data ...
-                (byte)0x0b, (byte)0x00,
-                //(byte)0x05, (byte)0x00,
+                //(byte)0x02, (byte)0x00,
+                (byte)0x04, (byte)0x00,
 
         });
     }

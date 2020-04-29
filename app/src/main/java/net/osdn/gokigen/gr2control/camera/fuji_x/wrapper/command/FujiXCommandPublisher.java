@@ -26,11 +26,14 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
     private final int portNumber;
 
     private boolean isStart = false;
+    private boolean isHold = false;
+    private int holdId = 0;
     private Socket socket = null;
     private DataOutputStream dos = null;
     private BufferedReader bufferedReader = null;
     private int sequenceNumber = SEQUENCE_START_NUMBER;
     private Queue<IFujiXCommand> commandQueue;
+    private Queue<IFujiXCommand> holdCommandQueue;
 
 
     public FujiXCommandPublisher(@NonNull String ip, int portNumber)
@@ -38,7 +41,9 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
         this.ipAddress = ip;
         this.portNumber = portNumber;
         this.commandQueue = new ArrayDeque<>();
+        this.holdCommandQueue = new ArrayDeque<>();
         commandQueue.clear();
+        holdCommandQueue.clear();
     }
 
     @Override
@@ -157,6 +162,7 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
         commandQueue.clear();
     }
 
+/*
     @Override
     public boolean enqueueCommand(@NonNull IFujiXCommand command)
     {
@@ -170,6 +176,62 @@ public class FujiXCommandPublisher implements IFujiXCommandPublisher, IFujiXComm
             e.printStackTrace();
         }
         return (false);
+    }
+*/
+    @Override
+    public boolean enqueueCommand(@NonNull IFujiXCommand command)
+    {
+        try
+        {
+            if (isHold) {
+                if (holdId == command.getHoldId()) {
+                    if (command.isRelease()) {
+                        // コマンドをキューに積んだ後、リリースする
+                        boolean ret = commandQueue.offer(command);
+                        isHold = false;
+
+                        //  溜まっているキューを積みなおす
+                        while (holdCommandQueue.size() != 0) {
+                            IFujiXCommand queuedCommand = holdCommandQueue.poll();
+                            commandQueue.offer(queuedCommand);
+                            if ((queuedCommand != null)&&(queuedCommand.isHold()))
+                            {
+                                // 特定シーケンスに入った場合は、そこで積みなおすのをやめる
+                                isHold = true;
+                                holdId = queuedCommand.getHoldId();
+                                break;
+                            }
+                        }
+                        return (ret);
+                    }
+                    return (commandQueue.offer(command));
+                } else {
+                    // 特定シーケンスではなかったので HOLD
+                    return (holdCommandQueue.offer(command));
+                }
+            }
+            if (command.isHold())
+            {
+                isHold = true;
+                holdId = command.getHoldId();
+            }
+            //Log.v(TAG, "Enqueue : "  + command.getId());
+            return (commandQueue.offer(command));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (false);
+    }
+
+    @Override
+    public boolean flushHoldQueue()
+    {
+        Log.v(TAG, "  flushHoldQueue()");
+        holdCommandQueue.clear();
+        System.gc();
+        return (true);
     }
 
     private void issueCommand(@NonNull IFujiXCommand command)

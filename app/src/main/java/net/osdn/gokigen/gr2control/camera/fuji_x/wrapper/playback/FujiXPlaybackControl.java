@@ -179,13 +179,35 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
     @Override
     public void showPictureStarted()
     {
+        try
+        {
+            Log.v(TAG, "   showPictureStarted() ");
 
+            IFujiXCommandPublisher publisher = provider.getCommandPublisher();
+            publisher.flushHoldQueue();
+            System.gc();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showPictureFinished()
     {
+        try
+        {
+            Log.v(TAG, "   showPictureFinished() ");
 
+            IFujiXCommandPublisher publisher = provider.getCommandPublisher();
+            publisher.flushHoldQueue();
+            System.gc();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void getCameraContents(ICameraContentListCallback callback)
