@@ -17,6 +17,7 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.change
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToLiveView4th;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToLiveView5th;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToLiveView6th;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToLiveView7th;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.changemode.ChangeToLiveViewZero;
 
 
@@ -101,16 +102,20 @@ public class FujiXCameraModeChangeToLiveView implements View.OnClickListener, IF
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_LIVEVIEW_5TH:
-                    //publisher.enqueueCommand(new ChangeToLiveView6th(COMMANDID_CHANGE_TO_LIVEVIEW,this));
-
                     //  Liveview切り替え時のシーケンス番号を記憶する
                     changedLiveviewSeqNumber = getSequenceNumber(rx_body);
-                    publisher.enqueueCommand(new StatusRequestMessage(this));
+                    publisher.enqueueCommand(new ChangeToLiveView7th(COMMANDID_CHANGE_TO_LIVEVIEW,this));
+                    //publisher.enqueueCommand(new StatusRequestMessage(this));
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_LIVEVIEW_6TH:
                     publisher.enqueueCommand(new ChangeToLiveView5th(COMMANDID_CHANGE_TO_LIVEVIEW,this));
                     //publisher.enqueueCommand(new StatusRequestMessage(this));
+                    break;
+
+                case IFujiXMessages.SEQ_CHANGE_TO_LIVEVIEW_7TH:
+                    //publisher.enqueueCommand(new ChangeToLiveView6th(COMMANDID_CHANGE_TO_LIVEVIEW,this));
+                    publisher.enqueueCommand(new StatusRequestMessage(this));
                     break;
 
                 case IFujiXMessages.SEQ_STATUS_REQUEST:
