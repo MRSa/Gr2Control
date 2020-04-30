@@ -46,4 +46,10 @@ public class CameraRemoteMessage extends FujiXCommandBase
 
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

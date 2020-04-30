@@ -45,4 +45,10 @@ public class StartMessage4th extends FujiXCommandBase
 
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

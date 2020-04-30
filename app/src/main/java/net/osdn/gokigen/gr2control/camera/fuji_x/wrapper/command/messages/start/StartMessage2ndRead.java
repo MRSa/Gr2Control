@@ -46,4 +46,10 @@ public class StartMessage2ndRead extends FujiXCommandBase
                 (byte)0x12, (byte)0xd2, (byte)0x00, (byte)0x00,
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

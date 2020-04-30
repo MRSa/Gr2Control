@@ -65,4 +65,10 @@ public class ChangeToLiveViewZero   extends FujiXCommandBase
     {
         return (false);
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

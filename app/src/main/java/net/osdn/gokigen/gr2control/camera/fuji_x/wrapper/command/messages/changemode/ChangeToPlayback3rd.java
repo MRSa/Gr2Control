@@ -66,4 +66,10 @@ public class ChangeToPlayback3rd extends FujiXCommandBase
     {
         return (false);
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

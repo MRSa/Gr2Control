@@ -63,4 +63,10 @@ public class StartMessage3rd extends FujiXCommandBase
 
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

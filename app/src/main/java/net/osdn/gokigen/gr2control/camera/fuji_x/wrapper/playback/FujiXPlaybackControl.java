@@ -101,7 +101,7 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
             {
                 start = 1;
             }
-            Log.v(TAG, "downloadContentThumbnail() : " + path + " " + name);
+            Log.v(TAG, "  downloadContentThumbnail() : " + path + " " + name);
             int index = getIndexNumber(start, name);
             if ((index > 0)&&(index <= imageContentInfo.size()))
             {
@@ -350,6 +350,7 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
 
     private List<ICameraFileInfo> getCameraFileInfoList()
     {
+        Log.v(TAG, " FujiXPlaybackControl::getCameraFileInfoList() ");
         List<ICameraFileInfo> fileInfoList = new ArrayList<>();
         try
         {

@@ -63,4 +63,10 @@ public class StartMessage5th extends FujiXCommandBase
                 (byte)0x07, (byte)0x00, (byte)0x02, (byte)0x00,
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

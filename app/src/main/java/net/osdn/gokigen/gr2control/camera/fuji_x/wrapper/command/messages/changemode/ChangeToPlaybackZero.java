@@ -75,4 +75,10 @@ public class ChangeToPlaybackZero extends FujiXCommandBase
     {
         return (false);
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

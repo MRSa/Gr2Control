@@ -65,4 +65,10 @@ public class ChangeToLiveView7th extends FujiXCommandBase
     {
         return (true);
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }

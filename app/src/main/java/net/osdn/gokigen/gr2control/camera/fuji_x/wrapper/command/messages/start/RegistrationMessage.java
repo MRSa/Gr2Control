@@ -65,4 +65,10 @@ public class RegistrationMessage extends FujiXCommandBase
 /**/
         });
     }
+
+    @Override
+    public boolean dumpLog()
+    {
+        return (false);
+    }
 }
