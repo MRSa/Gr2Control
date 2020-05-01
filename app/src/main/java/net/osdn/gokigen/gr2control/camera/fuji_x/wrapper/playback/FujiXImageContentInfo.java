@@ -2,6 +2,7 @@ package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.playback;
 
 import android.util.Log;
 
+import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
 import net.osdn.gokigen.gr2control.camera.playback.CameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.playback.ICameraContent;
@@ -10,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class FujiXImageContentInfo implements ICameraContent, IFujiXCommandCallback
+public class FujiXImageContentInfo implements ICameraContent, IFujiXCommandCallback, ICameraFileInfo
 {
     private final String TAG = toString();
     private final int indexNumber;
@@ -18,7 +19,17 @@ public class FujiXImageContentInfo implements ICameraContent, IFujiXCommandCallb
     private boolean isDateValid = false;
     private Date date = null;
     private String realFileName = null;
-    private CameraFileInfo fileInfo = null;
+    private boolean captured;
+    private String av;
+    private String sv;
+    private String tv;
+    private String xv;
+    private int orientation;
+    private String aspectRatio;
+    private String cameraModel;
+    private String latlng;
+    private long fileSize;
+
     private byte[] rx_body;
     FujiXImageContentInfo(int indexNumber, byte[] rx_body)
     {
@@ -177,14 +188,6 @@ public class FujiXImageContentInfo implements ICameraContent, IFujiXCommandCallb
         return (isReceived);
     }
 
-    CameraFileInfo getCameraFileInfo()
-    {
-        if (fileInfo != null)
-        {
-            return (fileInfo);
-        }
-        return (new CameraFileInfo(getContentPath(), getOriginalName()));
-    }
 
     private void updateInformation(byte[] rx_body)
     {
@@ -221,5 +224,106 @@ public class FujiXImageContentInfo implements ICameraContent, IFujiXCommandCallb
             result[index] = data[start + index * 2];
         }
         return (result);
+    }
+
+    @Override
+    public Date getDatetime()
+    {
+        return (date);
+    }
+
+    @Override
+    public String getDirectoryPath()
+    {
+        return ("");
+    }
+
+    @Override
+    public String getOriginalFilename()
+    {
+        return (getOriginalName());
+    }
+
+    @Override
+    public String getFilename()
+    {
+        return (getContentName());
+    }
+
+    @Override
+    public String getAperature()
+    {
+        return (av);
+    }
+
+    @Override
+    public String getShutterSpeed()
+    {
+        return (tv);
+    }
+
+    @Override
+    public String getIsoSensitivity()
+    {
+        return (sv);
+    }
+
+    @Override
+    public String getExpRev()
+    {
+        return (xv);
+    }
+
+    @Override
+    public int getOrientation()
+    {
+        return (orientation);
+    }
+
+    @Override
+    public String getAspectRatio()
+    {
+        return (aspectRatio);
+    }
+
+    @Override
+    public String getModel()
+    {
+        return (cameraModel);
+    }
+
+    @Override
+    public String getLatLng()
+    {
+        return (latlng);
+    }
+
+    @Override
+    public boolean getCaptured()
+    {
+        return (captured);
+    }
+
+    @Override
+    public void updateValues(String dateTime, String av, String tv, String sv, String xv, int orientation, String aspectRatio, String model, String latLng, boolean captured)
+    {
+        this.av = av;
+        this.tv = tv;
+        this.sv = sv;
+        this.xv = xv;
+        this.orientation = orientation;
+        this.aspectRatio = aspectRatio;
+        this.cameraModel = model;
+        this.latlng = latLng;
+        this.captured = captured;
+        try
+        {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+            this.date = df.parse(dateTime);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

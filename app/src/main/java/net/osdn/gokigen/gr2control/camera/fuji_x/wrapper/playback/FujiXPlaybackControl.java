@@ -358,7 +358,7 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
             for(int index = 0; index < listSize; index++)
             {
                 FujiXImageContentInfo info = imageContentInfo.valueAt(index);
-                fileInfoList.add(info.getCameraFileInfo());
+                fileInfoList.add(info);
             }
         }
         catch (Exception e)

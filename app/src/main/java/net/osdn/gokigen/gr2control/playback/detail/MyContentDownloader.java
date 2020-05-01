@@ -79,7 +79,7 @@ public class MyContentDownloader implements IDownloadContentCallback
         {
             Calendar calendar = Calendar.getInstance();
             String extendName = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(calendar.getTime());
-            targetFileName = fileInfo.getFilename().toUpperCase();
+            targetFileName = fileInfo.getOriginalFilename().toUpperCase();
             if (replaceJpegSuffix != null)
             {
                 targetFileName = targetFileName.replace(JPEG_SUFFIX, replaceJpegSuffix);
@@ -121,7 +121,7 @@ public class MyContentDownloader implements IDownloadContentCallback
                     downloadDialog.show();
                 }
             });
-            String path = fileInfo.getDirectoryPath() + "/" + targetFileName;
+            String fileName = fileInfo.getDirectoryPath() + "/" + fileInfo.getFilename();
 
             final String directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath() + "/" + activity.getString(R.string.app_name2) + "/";
             String suffix = targetFileName.substring(targetFileName.indexOf("."));
@@ -153,8 +153,8 @@ public class MyContentDownloader implements IDownloadContentCallback
                     }
                 });
             }
-            Log.v(TAG, "downloadContent : " + path + " (small: " + isSmallSize + ")");
-            playbackControl.downloadContent(null, path, isSmallSize, this);
+            Log.v(TAG, "downloadContent : " + fileName + " (small: " + isSmallSize + ")");
+            playbackControl.downloadContent(null, fileName, isSmallSize, this);
         }
         catch (Exception ex)
         {

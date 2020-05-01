@@ -32,15 +32,19 @@ public class CameraFileInfo implements ICameraFileInfo, ICameraFileInfoSetter
     }
 
     @Override
-    public Date getDatetime()
-    {
+    public Date getDatetime() {
         return (dateTime);
     }
 
     @Override
-    public String getDirectoryPath()
-    {
+    public String getDirectoryPath() {
         return (path);
+    }
+
+    @Override
+    public String getOriginalFilename()
+    {
+        return (name);
     }
 
     @Override

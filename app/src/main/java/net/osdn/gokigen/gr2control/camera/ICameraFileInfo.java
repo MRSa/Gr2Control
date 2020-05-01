@@ -7,6 +7,7 @@ public interface ICameraFileInfo
     Date getDatetime();
     String getDirectoryPath();
     String getFilename();
+    String getOriginalFilename();
 
     String getAperature();
     String getShutterSpeed();

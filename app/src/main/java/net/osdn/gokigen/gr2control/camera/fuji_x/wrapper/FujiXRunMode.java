@@ -36,7 +36,7 @@ public class FujiXRunMode implements ICameraRunMode, IFujiXRunModeHolder, IFujiX
     public void changeRunMode(boolean isRecording, @NonNull ICameraRunModeCallback callback)
     {
         // モードを切り替える
-        Log.v(TAG, "changeRunMode() : " + isRecording);
+        Log.v(TAG, " changeRunMode() : " + isRecording);
 
         if (interfaceProvider.getCameraConnection().getConnectionStatus() != ICameraConnection.CameraConnectionStatus.CONNECTED)
         {

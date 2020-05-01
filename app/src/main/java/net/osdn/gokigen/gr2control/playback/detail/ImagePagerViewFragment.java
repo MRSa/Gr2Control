@@ -99,7 +99,7 @@ public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCa
 		{
 			ImageContentInfoEx info  = contentList.get(contentIndex);
             ICameraFileInfo file = info.getFileInfo();
-			String path = file.getDirectoryPath() + "/" + file.getFilename();
+			String path = file.getDirectoryPath() + "/" + file.getOriginalFilename();
 
 			AppCompatActivity activity = (AppCompatActivity) getActivity();
 			if (activity != null)
@@ -300,12 +300,13 @@ public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCa
         {
             e.printStackTrace();
         }
-
+/*
         if (!runMode.isRecordingMode())
         {
             // Threadで呼んではダメみたいだ...
             runMode.changeRunMode(true, this);
         }
+*/
     }
 
     @Override
@@ -386,7 +387,7 @@ public class ImagePagerViewFragment extends Fragment implements ICameraRunModeCa
 			try
 			{
                 ICameraFileInfo file = (contentList.get(contentIndex)).getFileInfo();
-                String path = file.getDirectoryPath() + "/" + file.getFilename();
+                String path = file.getDirectoryPath() + "/" + file.getOriginalFilename();
 
                 AppCompatActivity activity = (AppCompatActivity) getActivity();
                 if (activity != null)
