@@ -220,7 +220,7 @@ public class FujiXCameraConnectSequence implements Runnable, IFujiXCommandCallba
             Thread.sleep(1000);
             cameraStatusReceiver.onStatusNotify(context.getString(R.string.connect_connected));
             interfaceProvider.getAsyncEventCommunication().connect();
-            interfaceProvider.getCameraStatusWatcher().startStatusWatch(interfaceProvider.getStatusListener());
+            //interfaceProvider.getCameraStatusWatcher().startStatusWatch(interfaceProvider.getStatusListener());
             onConnectNotify();
         }
         catch (Exception e)

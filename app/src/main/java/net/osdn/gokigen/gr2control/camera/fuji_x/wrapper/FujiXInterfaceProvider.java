@@ -1,11 +1,9 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
@@ -39,7 +37,6 @@ import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
-import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplayInjector
 {
@@ -51,7 +48,6 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     private static final String CAMERA_IP = "192.168.0.1";
 
     private final Activity activity;
-    //private final ICameraStatusReceiver provider;
     private final FujiXCommandPublisher commandPublisher;
     private final FujiXLiveViewControl liveViewControl;
     private final FujiXAsyncResponseReceiver asyncReceiver;
@@ -73,22 +69,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
      */
     public FujiXInterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
     {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int communicationTimeoutMs;
-        try
-        {
-            communicationTimeoutMs = Integer.parseInt(preferences.getString(IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT, IPreferencePropertyAccessor.RICOH_GET_PICS_LIST_TIMEOUT_DEFAULT_VALUE)) * 1000;
-            if (communicationTimeoutMs < 5000)
-            {
-                communicationTimeoutMs = 5000;  // 最小値は 5000msとする。
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
         this.activity = context;
-        //this.provider = provider;
         this.commandPublisher = new FujiXCommandPublisher(CAMERA_IP, CONTROL_PORT);
         fujiXConnection = new FujiXConnection(context, provider, this);
         liveViewControl = new FujiXLiveViewControl(context, CAMERA_IP, STREAM_PORT);
@@ -109,7 +90,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     @Override
     public void injectDisplay(IAutoFocusFrameDisplay frameDisplayer, IIndicatorControl indicator, IFocusingModeNotify focusingModeNotify)
     {
-        Log.v(TAG, "injectDisplay()");
+        Log.v(TAG, " injectDisplay()");
         focusControl = new FujiXFocusingControl(activity, commandPublisher, frameDisplayer, indicator);
         captureControl = new FujiXCaptureControl(commandPublisher, frameDisplayer);
     }
@@ -216,12 +197,6 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     public IFujiXCommunication getCommandCommunication()
     {
         return (commandPublisher);
-    }
-
-    @Override
-    public ICameraStatusUpdateNotify getStatusListener()
-    {
-        return statusChecker.getStatusListener();
     }
 
     @Override

@@ -27,7 +27,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     private ICameraStatusUpdateNotify notifier = null;
     private FujiXStatusHolder statusHolder;
     private boolean whileFetching = false;
-    private boolean logcat = false;
+    private boolean logcat = true;
 
 
     FujiXStatusChecker(@NonNull Activity activity, @NonNull IFujiXCommandPublisher issuer)
@@ -65,13 +65,18 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     {
         try
         {
-            logcat("receivedMessage : " + id + ", length: " + data.length);
+            if (logcat)
+            {
+                Log.v(TAG, " receivedMessage : " + id + ", length: " + data.length);
+            }
             if (data.length < STATUS_MESSAGE_HEADER_SIZE)
             {
-                Log.v(TAG, "received status length is short. (" + data.length + " bytes.)");
+                if (logcat)
+                {
+                    Log.v(TAG, "received status length is short. (" + data.length + " bytes.)");
+                }
                 return;
             }
-
             int nofStatus = (data[13] * 256) + data[12];
             int statusCount = 0;
             int index = STATUS_MESSAGE_HEADER_SIZE;
@@ -148,7 +153,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     {
         if (whileFetching)
         {
-            Log.v(TAG, "startStatusWatch() already starting.");
+            Log.v(TAG, " startStatusWatch() already starting.");
             return;
         }
         try
@@ -161,7 +166,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
                 @Override
                 public void run()
                 {
-                    logcat("Start status watch. : " + sleepMs + "ms");
+                    Log.v(TAG, " Start status watch. : " + sleepMs + "ms");
                     while (whileFetching)
                     {
                         try
@@ -174,7 +179,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
                             e.printStackTrace();
                         }
                     }
-                    logcat("STATUS WATCH STOPPED.");
+                    Log.v(TAG, "STATUS WATCH STOPPED.");
                 }
             });
             thread.start();
@@ -198,11 +203,4 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
         return (this.notifier);
     }
 
-    private void logcat(String message)
-    {
-        if (logcat)
-        {
-            Log.v(TAG, message);
-        }
-    }
 }

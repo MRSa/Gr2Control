@@ -46,7 +46,6 @@ public interface IFujiXInterfaceProvider
     IFujiXCommunication getLiveviewCommunication();
     IFujiXCommunication getAsyncEventCommunication();
     IFujiXCommunication getCommandCommunication();
-    ICameraStatusUpdateNotify getStatusListener();
     IFujiXCommandPublisher getCommandPublisher();
     void setAsyncEventReceiver(@NonNull IFujiXCommandCallback receiver);
 }
