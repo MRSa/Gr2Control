@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.liveview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 import android.util.Log;
@@ -156,7 +156,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             {
                 Log.v(TAG, "interfaceInjector is NULL...");
             }
-            Activity activity = this.getActivity();
+            FragmentActivity activity = this.getActivity();
             Vibrator vibrator = (activity != null) ? (Vibrator) activity.getSystemService(VIBRATOR_SERVICE) : null;
             if ((onClickTouchListener == null)&&(activity != null))
             {
@@ -362,7 +362,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            Activity activity = getActivity();
+            FragmentActivity activity = getActivity();
             if (activity != null)
             {
                 if (showGrid == null) {
@@ -684,7 +684,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             @Override
             public void run() {
                 // isVisibleがtrueなら、ズームレンズボタンを有効にする
-                Activity activity = getActivity();
+                FragmentActivity activity = getActivity();
                 if (activity != null)
                 {
                     try
@@ -742,7 +742,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
      */
     private void runOnUiThread(Runnable action)
     {
-        Activity activity = getActivity();
+        FragmentActivity activity = getActivity();
         if (activity == null)
         {
             return;
@@ -755,7 +755,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if (activity == null)
             {
                 return;
@@ -786,7 +786,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         try
         {
             final String shutterSpeed = tv.replace(".", "/");
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if (activity == null)
             {
                 return;
@@ -817,7 +817,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         try
         {
             final String apertureValue = (av.length() > 1) ? ("F" + av) : "";
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if (activity == null)
             {
                 return;
@@ -847,7 +847,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if (activity == null)
             {
                 return;
@@ -878,7 +878,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
         try
         {
             Log.v(TAG, "updatedMeteringMode() : " + meteringMode);
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if ((activity == null)||(meteringMode == null))
             {
                 return;
@@ -937,7 +937,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            final Activity activity = getActivity();
+            final FragmentActivity activity = getActivity();
             if (activity == null)
             {
                 return;
@@ -994,7 +994,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     @Override
     public void updateFocusedStatus(final boolean focused, final boolean focusLocked)
     {
-        final Activity activity = getActivity();
+        final FragmentActivity activity = getActivity();
         try
         {
             if (activity != null)
@@ -1061,7 +1061,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            Activity activity = getActivity();
+            FragmentActivity activity = getActivity();
             if (activity != null)
             {
                 ImageView imageView = activity.findViewById(R.id.button_toggle_aeaf);
@@ -1093,7 +1093,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     {
         try
         {
-            Activity activity = getActivity();
+            FragmentActivity activity = getActivity();
             if (activity != null)
             {
                 TextView textView = activity.findViewById(R.id.lever_ael_caf);

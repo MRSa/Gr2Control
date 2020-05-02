@@ -19,5 +19,6 @@ public interface IFujiXFilmSimulation
     int FILM_SIMULATION_ACROS_R  =14;
     int FILM_SIMULATION_ACROS_G  =15;
     int FILM_SIMULATION_ETERNA  =16;
-    int FILM_SIMULATION_MAX = 17;
+    int FILM_SIMULATION_CLASSIC_NEGATIVE = 17;
+    int FILM_SIMULATION_MAX = 18;
 }

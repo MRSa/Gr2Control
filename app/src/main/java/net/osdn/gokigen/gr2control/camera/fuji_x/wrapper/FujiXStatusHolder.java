@@ -317,6 +317,9 @@ class FujiXStatusHolder
             case IFujiXFilmSimulation.FILM_SIMULATION_ETERNA:
                 value = "ETERNA";
                 break;
+            case IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_NEGATIVE:
+                value = "CLASSIC NEGATIVE";
+                break;
             default:
                 value = "??? " + current;
                 break;
@@ -700,7 +703,7 @@ class FujiXStatusHolder
 
     List<String> getAvailableItemList(String listKey)
     {
-        if (listKey == null)
+        if ((listKey == null)||(listKey.isEmpty()))
         {
             // アイテム名の一覧を応答する
             return (getAvailableStatusNameList());

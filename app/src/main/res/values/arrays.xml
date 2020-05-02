@@ -84,4 +84,70 @@
         <item >QUAD_VGA</item>
     </string-array>
 
+    <string-array name="fuji_x_film_simulation">
+        <item>PROVIA</item>
+        <item>Velvia</item>
+        <item>ASTIA</item>
+        <item>MONOCHROME</item>
+        <item>SEPIA</item>
+        <item>PRO Neg. Hi</item>
+        <item>PRO Neg. Std</item>
+        <item>MONOCHROME+Ye</item>
+        <item>MONOCHROME+R</item>
+        <item>MONOCHROME+G</item>
+        <item>CLASSIC CHROME</item>
+        <item>ACROS</item>
+        <item>ACROS+Ye</item>
+        <item>ACROS+R</item>
+        <item>ACROS+G</item>
+        <item>ETERNA</item>
+        <item>CLASSIC Neg.</item>
+    </string-array>
+
+    <string-array name="fuji_x_film_simulation_value">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+    </string-array>
+
+    <string-array name="fuji_x_white_balance">
+        <item>AUTO</item>
+        <item>FINE</item>
+        <item>INCANDESCENT</item>
+        <item>FLUORESCENT 1</item>
+        <item>FLUORESCENT 2</item>
+        <item>FLUORESCENT 3</item>
+        <item>SHADE</item>
+        <item>UNDERWATER</item>
+        <item>TEMPERATURE</item>
+        <item>CUSTOM</item>
+    </string-array>
+
+    <string-array name="fuji_x_white_balance_value">
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>32769</item>
+        <item>32770</item>
+        <item>32771</item>
+        <item>32774</item>
+        <item>32778</item>
+        <item>32779</item>
+        <item>32780</item>
+    </string-array>
+
 </resources>

@@ -213,4 +213,20 @@
     <string name="connect_connect_finished">Connect Finished.</string>
     <string name="connect_receive_unknown_message">RECEIVED UNKNOWN ID MESSAGE</string>
 
+    <string name="dialog_fujix_command_title_command">Send Message(FUJI)</string>
+    <string name="camera_status_title">Camera Status</string>
+    <string name="update_status">Update</string>
+
+    <string name="dialog_title_command">Command</string>
+    <string name="dialog_command_id_hint">0x####</string>
+    <string name="dialog_message_type_name">Message Type</string>
+    <string name="dialog_title_body_length">Body Length</string>
+    <string name="dialog_message_body1_hint">0x########</string>
+    <string name="dialog_message_body2_hint">0x########</string>
+    <string name="dialog_message_body3_hint">0x########</string>
+    <string name="dialog_message_body4_hint">0x########</string>
+    <string name="dialog_title_message_body">Message Body</string>
+    <string name="dialog_command_hint">(command)</string>
+    <string name="dialog_service_hint">(service)</string>
+
 </resources>

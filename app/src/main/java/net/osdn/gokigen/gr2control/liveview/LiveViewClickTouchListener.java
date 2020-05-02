@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.liveview;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
@@ -15,11 +14,13 @@ import net.osdn.gokigen.gr2control.camera.ICaptureControl;
 import net.osdn.gokigen.gr2control.camera.IFocusingControl;
 import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.IZoomLensControl;
+import net.osdn.gokigen.gr2control.camera.fuji_x.cameraproperty.FujiXCameraCommandSendDialog;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 import net.osdn.gokigen.gr2control.scene.ConfirmationDialog;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -31,7 +32,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
 class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener
 {
     private final String TAG = toString();
-    private final Activity context;
+    private final FragmentActivity context;
     private final ILiveImageStatusNotify statusNotify;
     private final IStatusViewDrawer statusViewDrawer;
     private final IChangeScene changeScene;
@@ -44,7 +45,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     private final IFavoriteSettingDialogKicker dialogKicker;
     private final IZoomLensControl zoomLensControl;
 
-    LiveViewClickTouchListener(@NonNull Activity context, @NonNull ILiveImageStatusNotify imageStatusNotify, @NonNull IStatusViewDrawer statusView, @NonNull IChangeScene changeScene, @NonNull IInterfaceProvider interfaceProvider, @NonNull IFavoriteSettingDialogKicker dialogKicker)
+    LiveViewClickTouchListener(@NonNull FragmentActivity context, @NonNull ILiveImageStatusNotify imageStatusNotify, @NonNull IStatusViewDrawer statusView, @NonNull IChangeScene changeScene, @NonNull IInterfaceProvider interfaceProvider, @NonNull IFavoriteSettingDialogKicker dialogKicker)
     {
         this.context = context;
         this.statusNotify = imageStatusNotify;
@@ -68,7 +69,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
     public void onClick(View view)
     {
         int id = view.getId();
-        boolean isVibrate = true;
+        boolean isVibrate;
         //Log.v(TAG, "onClick() : " + id);
         try
         {
@@ -102,7 +103,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.connect_disconnect_button:
                     // カメラと接続・切断のボタンが押された
                     changeScene.changeCameraConnection();
-                    //isVibrate = true;
+                    isVibrate = true;
                     break;
 
                 case R.id.shutter_button:
@@ -120,19 +121,19 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.show_images_button:
                     // 画像一覧表示ボタンが押された...画像一覧画面を開く
                     changeScene.changeScenceToImageList();
-                    //isVibrate = true;
+                    isVibrate = true;
                     break;
 
                 case R.id.camera_power_off_button:
                     // 電源ボタンが押された...終了してよいか確認して、終了する
                     confirmExitApplication();
-                    //isVibrate = true;
+                    isVibrate = true;
                     break;
 
                 case R.id.show_preference_button:
                     // カメラの設定
                     changeScene.changeSceneToConfiguration();
-                    //isVibrate = true;
+                    isVibrate = true;
                     break;
 
                 case R.id.show_hide_grid_button:
@@ -410,7 +411,19 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 dialogKicker.showFavoriteSettingDialog();
                 return;
             }
-
+            else if (interfaceProvider.getCammeraConnectionMethod() == ICameraConnection.CameraConnectionMethod.FUJI_X)
+            {
+                try
+                {
+                    // FUJI X Seriesの場合は、コマンド送信ダイアログを表示する
+                    FujiXCameraCommandSendDialog.newInstance(interfaceProvider.getFujiXInterfaceProvider()).show(context.getSupportFragmentManager(), "sendCommandDialog");
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                return;
+            }
 
             ICameraButtonControl btnCtl = interfaceProvider.getButtonControl();
             if (btnCtl != null)

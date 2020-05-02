@@ -34,7 +34,6 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.connection.FujiXConnect
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.playback.FujiXPlaybackControl;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
-import net.osdn.gokigen.gr2control.liveview.ICameraStatusUpdateNotify;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
 import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 

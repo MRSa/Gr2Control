@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/info_edit_data"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            >
+            <LinearLayout
+                android:id="@+id/mode_change_button_area"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="button"
+                    android:id="@+id/change_to_liveview"
+                    android:text="@string/dialog_button_liveview"
+                    android:layout_gravity="center"
+                    android:textSize="6pt" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="button"
+                    android:id="@+id/change_to_playback"
+                    android:text="@string/dialog_button_playback"
+                    android:layout_gravity="center"
+                    android:textSize="6pt" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:id="@+id/command_select_area"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/command_name"
+                    android:text="@string/dialog_title_command"
+                    android:layout_gravity="start">
+                </TextView>
+
+                <Spinner
+                    android:id="@+id/spinner_selection_command_id"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <EditText android:id="@+id/edit_command_id"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/dialog_command_id_hint"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="8dp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:id="@+id/message_type_area"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/message_type_name"
+                    android:text="@string/dialog_message_type_name"
+                    android:layout_gravity="start">
+                </TextView>
+
+                <Spinner
+                    android:id="@+id/spinner_selection_message_type"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:id="@+id/body_length_area"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/body_length_name"
+                    android:text="@string/dialog_title_body_length"
+                    android:layout_gravity="start">
+                </TextView>
+
+                <Spinner
+                    android:id="@+id/spinner_selection_message_body_length"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="6dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/message_body_name"
+                android:text="@string/dialog_title_message_body"
+                />
+
+            <EditText android:id="@+id/edit_message_body1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/dialog_message_body1_hint"
+                />
+
+            <EditText android:id="@+id/edit_message_body2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/dialog_message_body2_hint"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="button"
+                android:id="@+id/send_message_button"
+                android:text="@string/dialog_send_message"
+                android:layout_gravity="center"
+                android:textSize="6pt" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/command_response_value"
+                android:text="@string/blank"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/darker_gray"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

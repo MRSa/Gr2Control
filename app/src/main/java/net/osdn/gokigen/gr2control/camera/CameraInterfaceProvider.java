@@ -3,6 +3,7 @@ package net.osdn.gokigen.gr2control.camera;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import net.osdn.gokigen.gr2control.camera.fuji_x.IFujiXInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.FujiXInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.olympus.IOlympusInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.olympus.wrapper.OlympusInterfaceProvider;
@@ -50,6 +51,12 @@ public class CameraInterfaceProvider implements IInterfaceProvider
     public IOlympusInterfaceProvider getOlympusInterfaceProvider()
     {
         return (olympus);
+    }
+
+    @Override
+    public IFujiXInterfaceProvider getFujiXInterfaceProvider()
+    {
+        return (fujiX);
     }
 
     /*

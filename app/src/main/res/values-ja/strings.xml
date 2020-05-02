@@ -133,8 +133,8 @@
     <string name="pref_exit_only">アプリ終了</string>
     <string name="pref_fujix_display_camera_view">LVをカメラでも表示</string>
     <string name="pref_fujix_display_camera_view_summary">お試し：ライブビューをカメラ画面で同時表示します</string>
-    <string name="pref_fujix_focus_xy">フォーカス点数 (default: 7,7)</string>
-    <string name="pref_summary_fujix_focus_xy">フォーカス点数を指定します</string>
+    <string name="pref_fujix_focus_xy">フォーカス点数[X,Y] (default: 7,7)</string>
+    <string name="pref_summary_fujix_focus_xy">接続するカメラに合わせてフォーカス点数を指定します</string>
     <string name="pref_fujix_liveview_wait">LV画像受信待ち間隔(default: 80)</string>
     <string name="pref_summary_fujix_liveview_wait">ライブビュー画像受信間隔を指定します</string>
     <string name="pref_fujix_command_polling_wait">コマンド間隔(default: 500)</string>
@@ -172,4 +172,19 @@
     <string name="connect_connecting12">接続中&#8230;(12/12)</string>
     <string name="connect_connect_finished">カメラと接続</string>
     <string name="connect_receive_unknown_message">不明な応答を受信しました。</string>
+
+    <string name="dialog_fujix_command_title_command">メッセージ送信(FUJI)</string>
+    <string name="camera_status_title">カメラ状態</string>
+    <string name="update_status">更新</string>
+    <string name="dialog_title_command">コマンド</string>
+    <string name="dialog_command_id_hint">0x####</string>
+    <string name="dialog_message_type_name">メッセージ種別</string>
+    <string name="dialog_title_body_length">ボディ長</string>
+    <string name="dialog_message_body1_hint">0x########</string>
+    <string name="dialog_message_body2_hint">0x########</string>
+    <string name="dialog_message_body3_hint">0x########</string>
+    <string name="dialog_message_body4_hint">0x########</string>
+    <string name="dialog_title_message_body">メッセージボディ</string>
+    <string name="dialog_command_hint">(command)</string>
+    <string name="dialog_service_hint">(service)</string>
 </resources>
