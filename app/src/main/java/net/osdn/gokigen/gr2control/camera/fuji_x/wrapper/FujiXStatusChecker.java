@@ -27,7 +27,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     private ICameraStatusUpdateNotify notifier = null;
     private FujiXStatusHolder statusHolder;
     private boolean whileFetching = false;
-    private boolean logcat = true;
+    private boolean logcat = false;
 
 
     FujiXStatusChecker(@NonNull Activity activity, @NonNull IFujiXCommandPublisher issuer)

@@ -182,6 +182,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setOnClickListener(view, R.id.zoom_in_button);
             setOnClickListener(view, R.id.zoom_out_button);
             setOnClickListener(view, R.id.specialButtonImageView);
+            setOnClickListener(view, R.id.fuji_x_hideKeyPanelTextView);
 
             if (onPanelClickListener == null)
             {

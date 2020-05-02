@@ -89,13 +89,14 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                 case R.id.showKeyPanelImageView:
                     // キーパネルを表示する
                     showHideKeyPanel(true);
-                    isVibrate = false;
+                    isVibrate = true;
                     break;
 
                 case R.id.hideKeyPanelTextView:
+                case R.id.fuji_x_hideKeyPanelTextView:
                     // キーパネルを隠す
                     showHideKeyPanel(false);
-                    isVibrate = false;
+                    isVibrate = true;
                     break;
 
                 case R.id.connect_disconnect_button:
@@ -145,11 +146,13 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
                     actionZoomin();
                     isVibrate = false;
                     break;
+
                 case R.id.zoom_out_button:
                     // ズームアウトのボタンが押された
                     actionZoomout();
                     isVibrate = false;
                     break;
+
                 case R.id.specialButtonImageView:
                     // スペシャルボタンが押された
                     pushedSpecialButton();
@@ -229,19 +232,47 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
      */
     private void showHideKeyPanel(boolean isShow)
     {
+        View target = null;
+        View target2 = null;
+        View target3 = null;
         try
         {
-            View target = context.findViewById(R.id.keyPanelLayout);
-            View target2 = context.findViewById(R.id.showKeyPanelImageView);
+            ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
+            if (connectionMethod == ICameraConnection.CameraConnectionMethod.FUJI_X)
+            {
+                // FUJI X モード
+                target3 = context.findViewById(R.id.keyPanelLayout);
+                target2 = context.findViewById(R.id.showKeyPanelImageView);
+                target = context.findViewById(R.id.fuji_x_keyPanelLayout);
+            }
+            else
+            {
+                // FUJI Xモード以外 (GR2 / Olympus)
+                target = context.findViewById(R.id.keyPanelLayout);
+                target2 = context.findViewById(R.id.showKeyPanelImageView);
+                target3 = context.findViewById(R.id.fuji_x_keyPanelLayout);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
             if (target != null)
             {
                 target.setVisibility((isShow) ? View.VISIBLE : View.INVISIBLE);
                 target.invalidate();
-                if (target2 != null)
-                {
-                    target2.setVisibility((isShow) ? View.INVISIBLE : View.VISIBLE);
-                    target2.invalidate();
-                }
+            }
+            if (target2 != null)
+            {
+                target2.setVisibility((isShow) ? View.INVISIBLE : View.VISIBLE);
+                target2.invalidate();
+            }
+            if (target3 != null)
+            {
+                target3.setVisibility(View.GONE);
+                target3.invalidate();
             }
         }
         catch (Exception e)

@@ -24,13 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-class FujiXStatusHolder {
+class FujiXStatusHolder
+{
     private final String TAG = toString();
     private static final boolean logcat = true;
     private SparseIntArray statusHolder;
     private SparseArrayCompat<String> statusNameArray;
 
-    FujiXStatusHolder() {
+    FujiXStatusHolder()
+    {
         statusHolder = new SparseIntArray();
         statusHolder.clear();
 
@@ -75,7 +77,8 @@ class FujiXStatusHolder {
         statusNameArray.append(IFujiXCameraProperties.UNKNOWN_DF27, IFujiXCameraProperties.UNKNOWN_DF27_STR);
     }
 
-    void updateValue(@Nullable ICameraStatusUpdateNotify notifier, int id, byte data0, byte data1, byte data2, byte data3) {
+    void updateValue(@Nullable ICameraStatusUpdateNotify notifier, int id, byte data0, byte data1, byte data2, byte data3)
+    {
         try
         {
             int value = ((((int) data3) & 0xff) << 24) + ((((int) data2) & 0xff) << 16) + ((((int) data1) & 0xff) << 8) + (((int) data0) & 0xff);
