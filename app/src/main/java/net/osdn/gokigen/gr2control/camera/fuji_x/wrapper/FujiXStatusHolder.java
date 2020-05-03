@@ -7,6 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.SparseArrayCompat;
 
+import net.osdn.gokigen.gr2control.camera.ICameraStatus;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.FujiXReplyMessageReceiver;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.SetPropertyValue;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.values.IFujiXBatteryMode;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.values.IFujiXCameraProperties;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.values.IFujiXFSSControl;
@@ -27,15 +31,17 @@ import java.util.Locale;
 class FujiXStatusHolder
 {
     private final String TAG = toString();
+    private final IFujiXCommandPublisher publisher;
     private static final boolean logcat = true;
     private SparseIntArray statusHolder;
     private SparseArrayCompat<String> statusNameArray;
 
-    FujiXStatusHolder()
+    FujiXStatusHolder(@NonNull IFujiXCommandPublisher publisher)
     {
         statusHolder = new SparseIntArray();
         statusHolder.clear();
 
+        this.publisher = publisher;
         statusNameArray = new SparseArrayCompat<>();
         prepareStatusNameArray();
     }
@@ -167,6 +173,7 @@ class FujiXStatusHolder
                 case IFujiXCameraProperties.UNKNOWN_DF41:
                 case IFujiXCameraProperties.UNKNOWN_DF26:
                 case IFujiXCameraProperties.UNKNOWN_DF27:
+                default:
                     updateUnknownValue(id, previous, current);
                     break;
             }
@@ -709,6 +716,11 @@ class FujiXStatusHolder
             return (getAvailableStatusNameList());
         }
 
+        if (listKey.matches(ICameraStatus.EFFECT))
+        {
+            return (getAvailableEffectItemList());
+        }
+
         /////  選択可能なステータスの一覧を取得する : でも以下はアイテム名の一覧... /////
         ArrayList<String> selection = new ArrayList<>();
         try
@@ -726,8 +738,79 @@ class FujiXStatusHolder
         return (selection);
     }
 
+    private List<String> getAvailableEffectItemList()
+    {
+        // EFFECTの選択肢をリストにして返す  : Film Simulation にした。
+        ArrayList<String> selection = new ArrayList<>();
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_PROVIA_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_VELVIA_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ASTIA_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_SEPIA_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_HI_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_STD_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_Y_FILTER_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_R_FILTER_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_G_FILTER_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_CHROME_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ACROS_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ACROS_Y_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ACROS_R_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ACROS_G_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_NEGATIVE_STR);
+        return(selection);
+    }
+
+    private String getCurrentEffectStatus()
+    {
+        // EFFECTの現在状態を応答する : FILM Simulationにした
+        try
+        {
+            int value = statusHolder.get(IFujiXCameraProperties.FILM_SIMULATION);
+            List<String> itemList = getAvailableEffectItemList();
+            if ((value >= IFujiXFilmSimulation.FILM_SIMULATION_MIN)&&(value < itemList.size()))
+            {
+                return (itemList.get(value - 1));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ("");
+    }
+
+    private void setEffectItem(String value)
+    {
+        try
+        {
+            int index = 1;
+            List<String> itemList = getAvailableEffectItemList();
+            for (String item : itemList)
+            {
+                if (item.matches(value))
+                {
+                    //  見つかった！ この値に設定する
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set Film Simulation", true), IFujiXCameraProperties.FILM_SIMULATION, 4, index));
+                    return;
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
     String getItemStatus(String key)
     {
+        if (key.matches(ICameraStatus.EFFECT))
+        {
+            return (getCurrentEffectStatus());
+        }
         try
         {
             int strIndex = key.indexOf("x");
@@ -766,6 +849,30 @@ class FujiXStatusHolder
         }
         return ("? [" + key + "]");
     }
+
+    void setItemStatus(@NonNull String key, @NonNull String value)
+    {
+        try
+        {
+            if (logcat)
+            {
+                Log.v(TAG, "setStatus(" + key + ", " + value + ")");
+            }
+
+            if (key.matches(ICameraStatus.EFFECT))
+            {
+                setEffectItem(value);
+                return;
+            }
+
+            // ここで設定を行う。
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     private void dumpStatus()
     {

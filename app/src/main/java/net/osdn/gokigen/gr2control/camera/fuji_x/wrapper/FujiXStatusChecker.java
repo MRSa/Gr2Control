@@ -33,7 +33,7 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     FujiXStatusChecker(@NonNull Activity activity, @NonNull IFujiXCommandPublisher issuer)
     {
         this.issuer = issuer;
-        this.statusHolder = new FujiXStatusHolder();
+        this.statusHolder = new FujiXStatusHolder(issuer);
         try
         {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -131,16 +131,20 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     }
 
     @Override
-    public void setStatus(@NonNull String key, @NonNull String value)
+    public void setStatus(@NonNull final String key, @NonNull final String value)
     {
         try
         {
-            if (logcat)
-            {
-                Log.v(TAG, "setStatus(" + key + ", " + value + ")");
-            }
-
-            // ここで設定を行う。
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (statusHolder != null)
+                    {
+                        statusHolder.setItemStatus(key, value);
+                    }
+                }
+            });
+            thread.start();
         }
         catch (Exception e)
         {

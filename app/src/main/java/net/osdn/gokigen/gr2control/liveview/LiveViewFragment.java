@@ -66,6 +66,7 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
     private LiveViewClickTouchListener onClickTouchListener = null;
     private LiveViewControlPanelClickListener onPanelClickListener = null;
     private LiveViewKeyPanelClickListener onKeyPanelClickListener = null;
+    private LiveViewFujiXKeyPanelClickListener fujiXOnKeyPanelClickListener = null;
 
     private TextView statusArea = null;
     private TextView focalLengthArea = null;
@@ -223,6 +224,13 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             setKeyPanelClickListener(view, R.id.button_lcd_onoff);
             setKeyPanelClickListener(view, R.id.button_highlight);
 
+            if (fujiXOnKeyPanelClickListener == null)
+            {
+                fujiXOnKeyPanelClickListener = new LiveViewFujiXKeyPanelClickListener(interfaceProvider, vibrator);
+            }
+            //setFujiXKeyPanelClickListener(view, xxx);
+
+
             connectStatus = view.findViewById(R.id.connect_disconnect_button);
             if (connectStatus != null)
             {
@@ -286,6 +294,23 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             {
                 button.setOnClickListener(onKeyPanelClickListener);
                 button.setOnLongClickListener(onKeyPanelClickListener);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void setFujiXKeyPanelClickListener(View view, int id)
+    {
+        try
+        {
+            View button = view.findViewById(id);
+            if (button != null)
+            {
+                button.setOnClickListener(fujiXOnKeyPanelClickListener);
+                button.setOnLongClickListener(fujiXOnKeyPanelClickListener);
             }
         }
         catch (Exception e)

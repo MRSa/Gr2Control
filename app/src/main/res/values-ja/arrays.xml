@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="connection_method">
-        <item>Ricoh GR II / PENTAX DSLR</item>
+        <item>Ricoh GR Series / PENTAX DSLR</item>
         <item>OPC(Olympus Air)</item>
         <item>Fujifilm X</item>
     </string-array>
