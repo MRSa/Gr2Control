@@ -6,7 +6,9 @@ import android.util.SparseIntArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.SparseArrayCompat;
+import androidx.fragment.app.FragmentActivity;
 
+import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.FujiXReplyMessageReceiver;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
@@ -31,16 +33,18 @@ import java.util.Locale;
 class FujiXStatusHolder
 {
     private final String TAG = toString();
+    private final FragmentActivity activity;
     private final IFujiXCommandPublisher publisher;
     private static final boolean logcat = true;
     private SparseIntArray statusHolder;
     private SparseArrayCompat<String> statusNameArray;
 
-    FujiXStatusHolder(@NonNull IFujiXCommandPublisher publisher)
+    FujiXStatusHolder(@NonNull FragmentActivity activity, @NonNull IFujiXCommandPublisher publisher)
     {
         statusHolder = new SparseIntArray();
         statusHolder.clear();
 
+        this.activity = activity;
         this.publisher = publisher;
         statusNameArray = new SparseArrayCompat<>();
         prepareStatusNameArray();
@@ -715,13 +719,26 @@ class FujiXStatusHolder
             // アイテム名の一覧を応答する
             return (getAvailableStatusNameList());
         }
-
         if (listKey.matches(ICameraStatus.EFFECT))
         {
             return (getAvailableEffectItemList());
         }
+        if (listKey.matches(ICameraStatus.AE))
+        {
+            return (new ArrayList<>());
+        }
+        if (listKey.matches(ICameraStatus.WHITE_BALANCE))
+        {
+            return (getAvailableWhiteBalanceItemList());
+        }
+        if (listKey.matches(ICameraStatus.ISO_SENSITIVITY))
+        {
+            return (getAvailableIsoSensitivityItemList());
+        }
+
 
         /////  選択可能なステータスの一覧を取得する : でも以下はアイテム名の一覧... /////
+        /*
         ArrayList<String> selection = new ArrayList<>();
         try
         {
@@ -735,7 +752,8 @@ class FujiXStatusHolder
         {
             e.printStackTrace();
         }
-        return (selection);
+        */
+        return (new ArrayList<>());
     }
 
     private List<String> getAvailableEffectItemList()
@@ -762,6 +780,27 @@ class FujiXStatusHolder
         return(selection);
     }
 
+    private List<String> getAvailableWhiteBalanceItemList()
+    {
+        // WHITE BALANCEの選択肢をリストにして返す
+        ArrayList<String> selection = new ArrayList<>();
+
+        String[] items = activity.getResources().getStringArray(R.array.fuji_x_white_balance);
+        for (String item : items)
+        {
+            selection.add(item);
+        }
+        return (selection);
+    }
+
+    private List<String> getAvailableIsoSensitivityItemList()
+    {
+        // ISO感度設定の選択肢をリストにして返す
+        ArrayList<String> selection = new ArrayList<>();
+        return (selection);
+    }
+
+
     private String getCurrentEffectStatus()
     {
         // EFFECTの現在状態を応答する : FILM Simulationにした
@@ -779,6 +818,57 @@ class FujiXStatusHolder
             e.printStackTrace();
         }
         return ("");
+    }
+
+    private String getCurrentWhiteBalanceStatus()
+    {
+        // White Balanceの現在状態を取得する
+        try
+        {
+            int value = statusHolder.get(IFujiXCameraProperties.WHITE_BALANCE);
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_white_balance);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_white_balance_value);
+            int index = 0;
+            for (String itemValue : itemValues)
+            {
+                int itemValueInt = Integer.parseInt(itemValue);
+                if (itemValueInt == value)
+                {
+                    return (items[index]);
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ("");
+    }
+
+    private String getCurrentIsoSensitivityStatus()
+    {
+        // ISO感度設定の現在状態を取得する
+        String isoValue = "";
+        try
+        {
+            int value = statusHolder.get(IFujiXCameraProperties.ISO);
+            int iso = ((0x0000ffff & value));
+            int auto = ((0xffff0000 & value));
+            if (auto != 0)
+            {
+                isoValue = "A (" + iso + ")";
+            }
+            else
+            {
+                isoValue = "" + iso;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (isoValue);
     }
 
     private void setEffectItem(String value)
@@ -804,12 +894,56 @@ class FujiXStatusHolder
         }
     }
 
+    private void setCurrentWhiteBalanceStatus(String value)
+    {
+        try
+        {
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_white_balance);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_white_balance_value);
+            int index = 0;
+            for (String item : items)
+            {
+                if (item.matches(value))
+                {
+                    // 見つかった！ この値を設定する
+                    String itemValue = itemValues[index];
+                    int itemValueInt = Integer.parseInt(itemValue);
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set White Balance", true), IFujiXCameraProperties.WHITE_BALANCE, 4, itemValueInt));
+                    return;
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void setCurrentIsoSensitivityStatus(String value)
+    {
+        // ISO感度を設定する
+
+
+    }
 
     String getItemStatus(String key)
     {
         if (key.matches(ICameraStatus.EFFECT))
         {
             return (getCurrentEffectStatus());
+        }
+        if (key.matches(ICameraStatus.WHITE_BALANCE))
+        {
+            return (getCurrentWhiteBalanceStatus());
+        }
+        if (key.matches(ICameraStatus.ISO_SENSITIVITY))
+        {
+            return (getCurrentIsoSensitivityStatus());
+        }
+        if (key.matches(ICameraStatus.TAKE_MODE))
+        {
+            return ("");
         }
         try
         {
@@ -858,11 +992,20 @@ class FujiXStatusHolder
             {
                 Log.v(TAG, "setStatus(" + key + ", " + value + ")");
             }
-
             if (key.matches(ICameraStatus.EFFECT))
             {
                 setEffectItem(value);
                 return;
+            }
+            if (key.matches(ICameraStatus.WHITE_BALANCE))
+            {
+                setCurrentWhiteBalanceStatus(value);
+                return;
+            }
+            if (key.matches(ICameraStatus.ISO_SENSITIVITY))
+            {
+                setCurrentIsoSensitivityStatus(value);
+                // return;
             }
 
             // ここで設定を行う。

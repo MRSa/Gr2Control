@@ -1,9 +1,9 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper;
 
-import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import net.osdn.gokigen.gr2control.camera.ICameraButtonControl;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
@@ -46,7 +46,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
     private static final int CONTROL_PORT = 55740;
     private static final String CAMERA_IP = "192.168.0.1";
 
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final FujiXCommandPublisher commandPublisher;
     private final FujiXLiveViewControl liveViewControl;
     private final FujiXAsyncResponseReceiver asyncReceiver;
@@ -66,7 +66,7 @@ public class FujiXInterfaceProvider implements IFujiXInterfaceProvider, IDisplay
      *
      *
      */
-    public FujiXInterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
+    public FujiXInterfaceProvider(@NonNull FragmentActivity context, @NonNull ICameraStatusReceiver provider)
     {
         this.activity = context;
         this.commandPublisher = new FujiXCommandPublisher(CAMERA_IP, CONTROL_PORT);

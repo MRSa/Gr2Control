@@ -1,10 +1,10 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
@@ -30,10 +30,10 @@ public class FujiXStatusChecker implements ICameraStatusWatcher, ICameraStatus, 
     private boolean logcat = false;
 
 
-    FujiXStatusChecker(@NonNull Activity activity, @NonNull IFujiXCommandPublisher issuer)
+    FujiXStatusChecker(@NonNull FragmentActivity activity, @NonNull IFujiXCommandPublisher issuer)
     {
         this.issuer = issuer;
-        this.statusHolder = new FujiXStatusHolder(issuer);
+        this.statusHolder = new FujiXStatusHolder(activity, issuer);
         try
         {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);

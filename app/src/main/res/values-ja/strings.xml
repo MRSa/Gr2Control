@@ -187,4 +187,8 @@
     <string name="dialog_title_message_body">メッセージボディ</string>
     <string name="dialog_command_hint">(command)</string>
     <string name="dialog_service_hint">(service)</string>
+
+    <string name="shutter_speed">Shutter</string>
+    <string name="aperture">Aperture</string>
+
 </resources>

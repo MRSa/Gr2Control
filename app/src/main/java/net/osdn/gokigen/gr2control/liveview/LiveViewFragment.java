@@ -228,8 +228,12 @@ public class LiveViewFragment extends Fragment implements IStatusViewDrawer, IFo
             {
                 fujiXOnKeyPanelClickListener = new LiveViewFujiXKeyPanelClickListener(interfaceProvider, vibrator);
             }
-            //setFujiXKeyPanelClickListener(view, xxx);
-
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_sv_minus);
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_sv_plus);
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_tv_minus);
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_tv_plus);
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_xv_minus);
+            setFujiXKeyPanelClickListener(view, R.id.button_fuji_x_xv_plus);
 
             connectStatus = view.findViewById(R.id.connect_disconnect_button);
             if (connectStatus != null)

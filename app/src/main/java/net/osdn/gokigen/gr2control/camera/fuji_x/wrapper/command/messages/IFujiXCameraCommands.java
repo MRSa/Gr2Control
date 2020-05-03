@@ -13,10 +13,10 @@ public interface IFujiXCameraCommands
     int FOCUS_POINT = 0x9026;
     int FOCUS_UNLOCK = 0x9027;
     int CAMERA_CAPABILITIES = 0x902b;
+*/
     int SHUTTER_SPEED = 0x902c;
     int APERTURE = 0x902d;
     int EXPREV = 0x902e;
-*/
 
     String STOP_STR = "STOP";
     String IMAGE_INFO_STR = "IMAGE_INFO";

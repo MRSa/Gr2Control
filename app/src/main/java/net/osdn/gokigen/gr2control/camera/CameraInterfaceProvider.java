@@ -1,6 +1,6 @@
 package net.osdn.gokigen.gr2control.camera;
 
-import android.app.Activity;
+
 import android.content.SharedPreferences;
 
 import net.osdn.gokigen.gr2control.camera.fuji_x.IFujiXInterfaceProvider;
@@ -13,6 +13,7 @@ import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 /**
@@ -26,10 +27,10 @@ public class CameraInterfaceProvider implements IInterfaceProvider
     private final OlympusInterfaceProvider olympus;
     private final RicohGr2InterfaceProvider ricohGr2;
     private final FujiXInterfaceProvider fujiX;
-    private final Activity context;
+    private final FragmentActivity context;
     private ICameraConnection.CameraConnectionMethod connectionMethod = ICameraConnection.CameraConnectionMethod.UNKNOWN;
 
-    public static IInterfaceProvider newInstance(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
+    public static IInterfaceProvider newInstance(@NonNull FragmentActivity context, @NonNull ICameraStatusReceiver provider)
     {
         return (new CameraInterfaceProvider(context, provider));
     }
@@ -38,7 +39,7 @@ public class CameraInterfaceProvider implements IInterfaceProvider
      *
      *
      */
-    private CameraInterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
+    private CameraInterfaceProvider(@NonNull FragmentActivity context, @NonNull ICameraStatusReceiver provider)
     {
         this.context = context;
         olympus = new OlympusInterfaceProvider(context, provider);
