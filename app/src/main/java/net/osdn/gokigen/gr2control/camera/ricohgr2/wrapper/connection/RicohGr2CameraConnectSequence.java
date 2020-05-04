@@ -19,13 +19,15 @@ class RicohGr2CameraConnectSequence implements Runnable
     private final Activity context;
     private final ICameraConnection cameraConnection;
     private final ICameraStatusReceiver cameraStatusReceiver;
+    private final IUseGR2CommandNotify gr2CommandNotify;
 
-    RicohGr2CameraConnectSequence(@NonNull Activity context, @NonNull ICameraStatusReceiver statusReceiver, @NonNull final ICameraConnection cameraConnection)
+    RicohGr2CameraConnectSequence(@NonNull Activity context, @NonNull ICameraStatusReceiver statusReceiver, @NonNull final ICameraConnection cameraConnection, @NonNull IUseGR2CommandNotify gr2CommandNotify)
     {
         Log.v(TAG, "RicohGr2CameraConnectSequence");
         this.context = context;
         this.cameraConnection = cameraConnection;
         this.cameraStatusReceiver = statusReceiver;
+        this.gr2CommandNotify = gr2CommandNotify;
     }
 
     @Override
@@ -42,19 +44,33 @@ class RicohGr2CameraConnectSequence implements Runnable
             {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-                // 接続時、レンズロックOFF
+                // 接続時、レンズロックOFF + GR2 コマンド有効/無効の確認
                 {
                     final String postData = "cmd=acclock off";
                     String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
                     Log.v(TAG, grCommandUrl + " " + response0);
-                }
 
-                // 接続時、カメラの画面を消す
-                if (preferences.getBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false))
-                {
-                    final String postData = "cmd=lcd sleep on";
-                    String response0 = SimpleHttpClient.httpPost(grCommandUrl, postData, TIMEOUT_MS);
-                    Log.v(TAG, grCommandUrl + " " + response0);
+                    // GR2 専用コマンドを受け付けられるかどうかで、Preference を書き換える
+                    boolean enableGr2Command = (response0.length() > 0);
+                    try
+                    {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, enableGr2Command);
+                        editor.apply();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    gr2CommandNotify.setUseGR2Command(enableGr2Command);
+
+                    // 接続時、カメラの画面を消す
+                    if ((enableGr2Command)&&(preferences.getBoolean(IPreferencePropertyAccessor.GR2_LCD_SLEEP, false)))
+                    {
+                        final String postData0 = "cmd=lcd sleep on";
+                        String response1 = SimpleHttpClient.httpPost(grCommandUrl, postData0, TIMEOUT_MS);
+                        Log.v(TAG, grCommandUrl + " " + response1);
+                    }
                 }
                 onConnectNotify();
             }

@@ -140,7 +140,7 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
                 editor.putBoolean(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, false);
             }
             if (!items.containsKey(IPreferencePropertyAccessor.USE_PLAYBACK_MENU)) {
-                editor.putBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, false);
+                editor.putBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, true);
             }
             if (!items.containsKey(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW)) {
                 editor.putBoolean(IPreferencePropertyAccessor.GR2_DISPLAY_CAMERA_VIEW, true);

@@ -24,20 +24,23 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
     private final String grCommandUrl = "http://192.168.0.1/_gr";
     private final int sleepMs;
 
-    private final boolean useGrCommand;
-
     private int timeoutMs = 5000;
     private boolean whileFetching = false;
     private RicohGr2StatusHolder statusHolder;
+    private boolean useGR2command = false;
 
     /**
      *
      *
      */
-    RicohGr2StatusChecker(int sleepMs, boolean useGrCommand)
+    RicohGr2StatusChecker(int sleepMs)
     {
-        this.useGrCommand = useGrCommand;
         this.sleepMs = sleepMs;
+    }
+
+    public void setUseGR2Command(boolean useGR2command)
+    {
+        this.useGR2command = useGR2command;
     }
 
     /**
@@ -176,7 +179,7 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
                 {
                     String response;
                     String postData = key + "=" + value;
-                    if ((useGrCommand)&&(key.equals("exposureMode")))
+                    if ((useGR2command)&&(key.equals("exposureMode")))
                     {
                         //  撮影モードを変更するときは、GR専用コマンドを送ることにする。
                         postData = "cmd=" + decideButtonCode(value);
@@ -187,7 +190,7 @@ public class RicohGr2StatusChecker implements ICameraStatusWatcher, ICameraStatu
                         response = SimpleHttpClient.httpPut(statusSetUrl, postData, timeoutMs);
                         Log.v(TAG, "SET PROPERTY : " + postData + " resp. (" + response.length() + "bytes.)");
                     }
-                    if (useGrCommand)
+                    if (useGR2command)
                     {
                         //  GR専用コマンドで、画面表示をリフレッシュ
                         response = SimpleHttpClient.httpPost(grCommandUrl, "cmd=mode refresh", timeoutMs);

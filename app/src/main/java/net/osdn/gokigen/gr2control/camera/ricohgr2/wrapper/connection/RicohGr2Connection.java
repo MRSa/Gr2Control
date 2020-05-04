@@ -33,6 +33,7 @@ public class RicohGr2Connection implements ICameraConnection
     private final Activity context;
     private final ICameraStatusReceiver statusReceiver;
     private final BroadcastReceiver connectionReceiver;
+    private final IUseGR2CommandNotify gr2CommandNotify;
     //private final ConnectivityManager connectivityManager;
     private final Executor cameraExecutor = Executors.newFixedThreadPool(1);
     //private final Handler networkConnectionTimeoutHandler;
@@ -44,11 +45,12 @@ public class RicohGr2Connection implements ICameraConnection
      *
      *
      */
-    public RicohGr2Connection(@NonNull final Activity context, @NonNull final ICameraStatusReceiver statusReceiver)
+    public RicohGr2Connection(@NonNull final Activity context, @NonNull final ICameraStatusReceiver statusReceiver, @NonNull IUseGR2CommandNotify gr2CommandNotify)
     {
         Log.v(TAG, "RicohGr2Connection()");
         this.context = context;
         this.statusReceiver = statusReceiver;
+        this.gr2CommandNotify = gr2CommandNotify;
         connectionReceiver = new BroadcastReceiver()
         {
             @Override
@@ -87,17 +89,25 @@ public class RicohGr2Connection implements ICameraConnection
                     WifiInfo info = wifiManager.getConnectionInfo();
                     if (wifiManager.isWifiEnabled() && info != null)
                     {
-                        if (info.getNetworkId() != -1)
+                        if (info.getNetworkId() == -1)
                         {
                             Log.v(TAG, "Network ID is -1, there is no currently connected network.");
                         }
+                        else
+                        {
+                            Log.v(TAG, "Network ID is " + info.getNetworkId());
+                        }
                         // 自動接続が指示されていた場合は、カメラとの接続処理を行う
                         connectToCamera();
-                    } else {
+                    }
+                    else
+                    {
                         if (info == null)
                         {
                             Log.v(TAG, "NETWORK INFO IS NULL.");
-                        } else {
+                        }
+                        else
+                        {
                             Log.v(TAG, "isWifiEnabled : " + wifiManager.isWifiEnabled() + " NetworkId : " + info.getNetworkId());
                         }
                     }
@@ -259,7 +269,7 @@ public class RicohGr2Connection implements ICameraConnection
         connectionStatus = CameraConnectionStatus.CONNECTING;
         try
         {
-            cameraExecutor.execute(new RicohGr2CameraConnectSequence(context, statusReceiver, this));
+            cameraExecutor.execute(new RicohGr2CameraConnectSequence(context, statusReceiver, this, gr2CommandNotify));
         }
         catch (Exception e)
         {

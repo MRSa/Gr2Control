@@ -25,10 +25,15 @@ public class RicohGr2CameraFocusControl implements IFocusingControl
      *
      *
      */
-    public RicohGr2CameraFocusControl(boolean useGrCommand, @NonNull final IAutoFocusFrameDisplay frameDisplayer, @NonNull final IIndicatorControl indicator)
+    public RicohGr2CameraFocusControl(@NonNull final IAutoFocusFrameDisplay frameDisplayer, @NonNull final IIndicatorControl indicator)
     {
         this.frameDisplay = frameDisplayer;
-        this.afControl = new RicohGr2AutoFocusControl(useGrCommand, frameDisplayer, indicator);
+        this.afControl = new RicohGr2AutoFocusControl(frameDisplayer, indicator);
+    }
+
+    public void setUseGR2Command(boolean useGR2command)
+    {
+        afControl.setUseGR2Command(useGR2command);
     }
 
     /**

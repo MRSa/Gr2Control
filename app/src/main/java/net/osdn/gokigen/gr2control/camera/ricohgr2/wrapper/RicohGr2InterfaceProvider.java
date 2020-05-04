@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -25,6 +24,7 @@ import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraCaptu
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraFocusControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraZoomLensControl;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2HardwareStatus;
+import net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.connection.IUseGR2CommandNotify;
 import net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.connection.RicohGr2Connection;
 import net.osdn.gokigen.gr2control.liveview.IAutoFocusFrameDisplay;
 import net.osdn.gokigen.gr2control.liveview.IIndicatorControl;
@@ -32,13 +32,14 @@ import net.osdn.gokigen.gr2control.liveview.liveviewlistener.ILiveViewListener;
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
 /**
  *
  *
  */
-public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, IDisplayInjector
+public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, IDisplayInjector, IUseGR2CommandNotify
 {
     private final String TAG = toString();
     //private final Activity activity;
@@ -49,7 +50,7 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     private final RicohGr2PlaybackControl playbackControl;
     private final RicohGr2HardwareStatus hardwareStatus;
     private final RicohGr2RunMode runMode;
-    private final boolean useGrCommand;
+    //private final boolean useGrCommand;
     private final boolean pentaxCaptureAfterAf;
 
     private RicohGr2LiveViewControl liveViewControl;
@@ -57,14 +58,16 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     private RicohGr2CameraZoomLensControl zoomControl;
     private RicohGr2CameraFocusControl focusControl;
 
+    private boolean useGR2Command = false;
+    private boolean useGR2CommandUpdated = false;
+
     /**
      *
      *
      */
-    public RicohGr2InterfaceProvider(@NonNull Activity context, @NonNull ICameraStatusReceiver provider)
+    public RicohGr2InterfaceProvider(@NonNull FragmentActivity context, @NonNull ICameraStatusReceiver provider)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        useGrCommand = preferences.getBoolean(IPreferencePropertyAccessor.USE_GR2_SPECIAL_COMMAND, true);
         pentaxCaptureAfterAf = preferences.getBoolean(IPreferencePropertyAccessor.PENTAX_CAPTURE_AFTER_AF, false);
         int communicationTimeoutMs = 5000;  // デフォルトは 5000ms とする
         try
@@ -81,11 +84,11 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
         }
         //this.activity = context;
         //this.provider = provider;
-        gr2Connection = new RicohGr2Connection(context, provider);
-        liveViewControl = new RicohGr2LiveViewControl(useGrCommand);
+        gr2Connection = new RicohGr2Connection(context, provider, this);
+        liveViewControl = new RicohGr2LiveViewControl();
         zoomControl = new RicohGr2CameraZoomLensControl();
         buttonControl = new RicohGr2CameraButtonControl();
-        statusChecker = new RicohGr2StatusChecker(500, useGrCommand);
+        statusChecker = new RicohGr2StatusChecker(500);
         playbackControl = new RicohGr2PlaybackControl(communicationTimeoutMs);
         hardwareStatus = new RicohGr2HardwareStatus();
         runMode = new RicohGr2RunMode();
@@ -100,8 +103,13 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     public void injectDisplay(IAutoFocusFrameDisplay frameDisplayer, IIndicatorControl indicator, IFocusingModeNotify focusingModeNotify)
     {
         Log.v(TAG, "injectDisplay()");
-        focusControl = new RicohGr2CameraFocusControl(useGrCommand, frameDisplayer, indicator);
-        captureControl = new RicohGr2CameraCaptureControl(useGrCommand, pentaxCaptureAfterAf, frameDisplayer, statusChecker);
+        focusControl = new RicohGr2CameraFocusControl(frameDisplayer, indicator);
+        captureControl = new RicohGr2CameraCaptureControl(pentaxCaptureAfterAf, frameDisplayer, statusChecker);
+        if (useGR2CommandUpdated)
+        {
+            captureControl.setUseGR2Command(useGR2Command);
+            focusControl.setUseGR2Command(useGR2Command);
+        }
     }
 
     @Override
@@ -151,7 +159,8 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     }
 
     @Override
-    public IDisplayInjector getDisplayInjector() {
+    public IDisplayInjector getDisplayInjector()
+    {
         return (this);
     }
 
@@ -168,7 +177,8 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     }
 
     @Override
-    public ICameraStatusWatcher getCameraStatusWatcher() {
+    public ICameraStatusWatcher getCameraStatusWatcher()
+    {
         return (statusChecker);
     }
 
@@ -188,5 +198,29 @@ public class RicohGr2InterfaceProvider implements IRicohGr2InterfaceProvider, ID
     public ICameraRunMode getCameraRunMode()
     {
         return (runMode);
+    }
+
+    @Override
+    public void setUseGR2Command(boolean useGR2Command)
+    {
+        try
+        {
+            this.useGR2Command = useGR2Command;
+            this.useGR2CommandUpdated = true;
+            statusChecker.setUseGR2Command(useGR2Command);
+            liveViewControl.setUseGR2Command(useGR2Command);
+            if (captureControl != null)
+            {
+                captureControl.setUseGR2Command(useGR2Command);
+            }
+            if (focusControl != null)
+            {
+                focusControl.setUseGR2Command(useGR2Command);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

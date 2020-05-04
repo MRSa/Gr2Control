@@ -44,6 +44,7 @@ import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
 import net.osdn.gokigen.gr2control.playback.detail.ImageContentInfoEx;
 import net.osdn.gokigen.gr2control.playback.detail.ImagePagerViewFragment;
 import net.osdn.gokigen.gr2control.playback.detail.MyContentDownloader;
+import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -181,7 +182,7 @@ public class ImageGridViewFragment extends Fragment implements ICameraRunModeCal
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 if (preferences != null)
                 {
-                    isShowActionBar = preferences.getBoolean("use_playback_menu", false);
+                    isShowActionBar = preferences.getBoolean(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, true);
                 }
                 if (isShowActionBar)
                 {

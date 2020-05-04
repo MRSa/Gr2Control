@@ -43,6 +43,7 @@ public class MyContentDownloader implements IDownloadContentCallback
     private static final String RAW_SUFFIX_1 = ".DNG";
     private static final String RAW_SUFFIX_2 = ".ORF";
     private static final String RAW_SUFFIX_3 = ".PEF";
+    private static final String RAW_SUFFIX_4 = ".RAF";
     private static final String MOVIE_SUFFIX = ".MOV";
     private static final String JPEG_SUFFIX = ".JPG";
     private ProgressDialog downloadDialog = null;
@@ -97,6 +98,11 @@ public class MyContentDownloader implements IDownloadContentCallback
             else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_3))
             {
                 mimeType = "image/x-pentax-pef";
+                isSmallSize = false;
+            }
+            else if (targetFileName.toUpperCase().contains(RAW_SUFFIX_4))
+            {
+                mimeType = "image/x-fuji-raf";
                 isSmallSize = false;
             }
             else if (targetFileName.toUpperCase().contains(MOVIE_SUFFIX))
@@ -196,7 +202,7 @@ public class MyContentDownloader implements IDownloadContentCallback
                 outputStream.close();
                 outputStream = null;
             }
-            if ((!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_1))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_2))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_3)))
+            //if ((!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_1))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_2))&&(!targetFileName.toUpperCase().endsWith(RAW_SUFFIX_3)))
             {
                 // ギャラリーに受信したファイルを登録する
                 long now = System.currentTimeMillis();
