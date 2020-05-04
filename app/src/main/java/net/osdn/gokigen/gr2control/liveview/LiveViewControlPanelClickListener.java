@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.liveview;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  *
@@ -21,10 +21,10 @@ import androidx.appcompat.app.AlertDialog;
 class LiveViewControlPanelClickListener  implements View.OnClickListener
 {
     private final String TAG = toString();
-    private final Activity activity;
+    private final FragmentActivity activity;
     private final IInterfaceProvider interfaceProvider;
 
-    LiveViewControlPanelClickListener(Activity context, IInterfaceProvider interfaceProvider)
+    LiveViewControlPanelClickListener(FragmentActivity context, IInterfaceProvider interfaceProvider)
     {
         this.activity = context;
         this.interfaceProvider = interfaceProvider;

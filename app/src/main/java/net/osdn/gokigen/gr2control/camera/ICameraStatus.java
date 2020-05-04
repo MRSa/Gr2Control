@@ -41,6 +41,7 @@ public interface ICameraStatus
     String ISO_SENSITIVITY = "sv";
     String EXPREV = "xv";
     String FLASH_XV = "flashxv";
+    String SELF_TIMER = "selftimer";
 
     String TAKE_MODE_MOVIE = "movie";
 }

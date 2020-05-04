@@ -756,7 +756,14 @@ class FujiXStatusHolder
         {
             return (getAvailableResourceArrayItemList(R.array.fuji_x_iso_sensitivity));
         }
-
+        if (listKey.matches(ICameraStatus.FLASH_XV))
+        {
+            return (getAvailableResourceArrayItemList(R.array.fuji_x_flash_control));
+        }
+        if (listKey.matches(ICameraStatus.SELF_TIMER))
+        {
+            return (getAvailableResourceArrayItemList(R.array.fuji_x_timer_control));
+        }
 
         /////  選択可能なステータスの一覧を取得する : でも以下はアイテム名の一覧... /////
         /*
@@ -810,6 +817,7 @@ class FujiXStatusHolder
         String[] items = activity.getResources().getStringArray(id);
         for (String item : items)
         {
+            Log.v(TAG, " SELECTION : " + item);
             selection.add(item);
         }
         return (selection);
@@ -893,6 +901,58 @@ class FujiXStatusHolder
         return (iso);
     }
 
+    private String getCurrentFlashStatus()
+    {
+        String flash = "";
+        try
+        {
+            int current = statusHolder.get(IFujiXCameraProperties.FLASH);
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_flash_control);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_flash_control_value);
+            int index = 0;
+            for (String itemValue : itemValues)
+            {
+                int itemValueInt = Integer.parseInt(itemValue, 16);
+                if (itemValueInt == current)
+                {
+                    return (items[index]);
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (flash);
+    }
+
+    private String getCurrentSelfTimerStatus()
+    {
+        String selfTimer = "";
+        try
+        {
+            int current = statusHolder.get(IFujiXCameraProperties.SELF_TIMER);
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_timer_control);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_timer_control_value);
+            int index = 0;
+            for (String itemValue : itemValues)
+            {
+                int itemValueInt = Integer.parseInt(itemValue, 16);
+                if (itemValueInt == current)
+                {
+                    return (items[index]);
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (selfTimer);
+    }
+
     private void setEffectItem(String value)
     {
         try
@@ -953,14 +1013,72 @@ class FujiXStatusHolder
             int index = 0;
             for (String item : items)
             {
-                Log.v(TAG, " ===== ISO : " + value + " " + item + " ===== ");
+                //Log.v(TAG, " ===== ISO : " + value + " " + item + " ===== ");
                 if (item.matches(value))
                 {
                     // 見つかった！ この値を設定する
                     String itemValue = itemValues[index];
                     int itemValueInt = (int) Long.parseLong(itemValue,16);
                     logcat(" SET ISO SENSITIVITY : " + value + " " + itemValueInt);
-                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set ISO", true), IFujiXCameraProperties.ISO, 8, itemValueInt));
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set ISO", true), IFujiXCameraProperties.ISO, 4, itemValueInt));
+                    return;
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void setCurrentFlashStatus(String value)
+    {
+        // ISO感度を設定する
+        try
+        {
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_flash_control);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_flash_control_value);
+            int index = 0;
+            for (String item : items)
+            {
+                Log.v(TAG, " ===== FLASH : " + value + " " + item + " ===== ");
+                if (item.matches(value))
+                {
+                    // 見つかった！ この値を設定する
+                    String itemValue = itemValues[index];
+                    int itemValueInt = (int) Long.parseLong(itemValue,16);
+                    logcat(" SET FLASH : " + value + " " + itemValueInt);
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set FLASH", true), IFujiXCameraProperties.FLASH, 4, itemValueInt));
+                    return;
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void setSelfTimerStatus(String value)
+    {
+        // セルフタイマーを設定する
+        try
+        {
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_timer_control);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_timer_control_value);
+            int index = 0;
+            for (String item : items)
+            {
+                Log.v(TAG, " ===== SELF-TIMER : " + value + " " + item + " ===== ");
+                if (item.matches(value))
+                {
+                    // 見つかった！ この値を設定する
+                    String itemValue = itemValues[index];
+                    int itemValueInt = (int) Long.parseLong(itemValue,16);
+                    logcat(" SET SELF-TIMER : " + value + " " + itemValueInt);
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set SELF-TIMER", true), IFujiXCameraProperties.SELF_TIMER, 4, itemValueInt));
                     return;
                 }
                 index++;
@@ -985,6 +1103,14 @@ class FujiXStatusHolder
         if (key.matches(ICameraStatus.ISO_SENSITIVITY))
         {
             return (getCurrentIsoSensitivityStatus());
+        }
+        if (key.matches(ICameraStatus.FLASH_XV))
+        {
+            return (getCurrentFlashStatus());
+        }
+        if (key.matches(ICameraStatus.SELF_TIMER))
+        {
+            return (getCurrentSelfTimerStatus());
         }
         if (key.matches(ICameraStatus.TAKE_MODE))
         {
@@ -1033,34 +1159,34 @@ class FujiXStatusHolder
     {
         try
         {
-            if (logcat)
-            {
-                Log.v(TAG, "setStatus(" + key + ", " + value + ")");
-            }
+            logcat(" setStatus(" + key + ", " + value + ")");
             if (key.matches(ICameraStatus.EFFECT))
             {
                 setEffectItem(value);
-                return;
             }
-            if (key.matches(ICameraStatus.WHITE_BALANCE))
+            else if (key.matches(ICameraStatus.WHITE_BALANCE))
             {
                 setCurrentWhiteBalanceStatus(value);
-                return;
             }
-            if (key.matches(ICameraStatus.ISO_SENSITIVITY))
+            else if (key.matches(ICameraStatus.ISO_SENSITIVITY))
             {
                 setCurrentIsoSensitivityStatus(value);
-                // return;
             }
-
-            // ここで設定を行う。
+            else if (key.matches(ICameraStatus.FLASH_XV))
+            {
+                setCurrentFlashStatus(value);
+            }
+            else if (key.matches(ICameraStatus.SELF_TIMER))
+            {
+                setSelfTimerStatus(value);
+            }
+            // その他の設定...
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-
 
     private void dumpStatus()
     {
