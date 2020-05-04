@@ -60,6 +60,9 @@ public class LiveViewFujiXKeyPanelClickListener implements View.OnClickListener,
                 case R.id.button_fuji_x_xv_minus:
                     updateValue(IFujiXCameraCommands.EXPREV, 0);
                     break;
+                case R.id.button_fuji_x_xv_plus:
+                    updateValue(IFujiXCameraCommands.EXPREV, 1);
+                    break;
                 case R.id.button_fuji_x_flash:
                     updateSelection(ICameraStatus.FLASH_XV);
                     isVibrate = false;
