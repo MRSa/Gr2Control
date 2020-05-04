@@ -281,55 +281,58 @@ class FujiXStatusHolder
         switch (current)
         {
             case IFujiXFilmSimulation.FILM_SIMULATION_PROVIA:
-                value = "PROVIA";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_PROVIA_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_VELVIA:
-                value = "VELVIA";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_VELVIA_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ASTIA:
-                value = "ASTIA";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ASTIA_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME:
-                value = "MONO";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_SEPIA:
-                value = "SEPIA";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_SEPIA_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_HI:
-                value = "NEG_HI";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_HI_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_STD:
-                value = "NEG_STD";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_PRO_NEG_STD_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_Y_FILTER:
-                value = "MONO_Y";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_Y_FILTER_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_R_FILTER:
-                value = "MONO_R";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_R_FILTER_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_G_FILTER:
-                value = "MONO_G";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_MONOCHROME_G_FILTER_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_CHROME:
-                value = "CLASSIC CHROME";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_CHROME_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ACROS:
-                value = "ACROS";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ACROS_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ACROS_Y:
-                value = "ACROS_Y";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ACROS_Y_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ACROS_R:
-                value = "ACROS_R";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ACROS_R_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ACROS_G:
-                value = "ACROS_G";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ACROS_G_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_ETERNA:
-                value = "ETERNA";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_STR;
                 break;
             case IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_NEGATIVE:
-                value = "CLASSIC NEGATIVE";
+                value = IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_NEGATIVE_STR;
+                break;
+            case IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_BLEACH_BYPASS:
+                value = IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_BLEACH_BYPASS_STR;
                 break;
             default:
                 value = "??? " + current;
@@ -374,7 +377,7 @@ class FujiXStatusHolder
                 value = "? " + current;
                 break;
         }
-        logcat("  Image Aspect : " + value);
+        logcat(" Image Aspect : " + value);
     }
 
 
@@ -480,12 +483,30 @@ class FujiXStatusHolder
         String iso = "";
         try
         {
-            iso = "" + (0x0000ffff & current);
+            int isoValue = (0x0000ffff & current);
+            if ((0xffff0000 & current) != 0)
+            {
+                iso = "AUTO_" + isoValue;
+            }
+            else if (isoValue > 12800)
+            {
+                iso = "H" + isoValue;
+
+            }
+            else if (isoValue < 200)
+            {
+                iso = "L" + isoValue;
+            }
+            else
+            {
+                iso = "" + isoValue;
+            }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+        logcat(" ISO SENSITIVITY : " + iso);
         notifier.updateIsoSensitivity(iso);
     }
 
@@ -611,7 +632,7 @@ class FujiXStatusHolder
         {
             mode = mode + current;
         }
-        logcat("  Focus Mode : " + mode);
+        logcat(" Focus Mode : " + mode);
     }
 
     private void updateFocusedStatus(@NonNull ICameraStatusUpdateNotify notifier, int previous, int current)
@@ -729,11 +750,11 @@ class FujiXStatusHolder
         }
         if (listKey.matches(ICameraStatus.WHITE_BALANCE))
         {
-            return (getAvailableWhiteBalanceItemList());
+            return (getAvailableResourceArrayItemList(R.array.fuji_x_white_balance));
         }
         if (listKey.matches(ICameraStatus.ISO_SENSITIVITY))
         {
-            return (getAvailableIsoSensitivityItemList());
+            return (getAvailableResourceArrayItemList(R.array.fuji_x_iso_sensitivity));
         }
 
 
@@ -777,29 +798,22 @@ class FujiXStatusHolder
         selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ACROS_G_STR);
         selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_STR);
         selection.add(IFujiXFilmSimulation.FILM_SIMULATION_CLASSIC_NEGATIVE_STR);
+        selection.add(IFujiXFilmSimulation.FILM_SIMULATION_ETERNA_BLEACH_BYPASS_STR);
         return(selection);
     }
 
-    private List<String> getAvailableWhiteBalanceItemList()
+    private List<String> getAvailableResourceArrayItemList(int id)
     {
-        // WHITE BALANCEの選択肢をリストにして返す
+        // リソースのの選択肢をリストにして返す
         ArrayList<String> selection = new ArrayList<>();
 
-        String[] items = activity.getResources().getStringArray(R.array.fuji_x_white_balance);
+        String[] items = activity.getResources().getStringArray(id);
         for (String item : items)
         {
             selection.add(item);
         }
         return (selection);
     }
-
-    private List<String> getAvailableIsoSensitivityItemList()
-    {
-        // ISO感度設定の選択肢をリストにして返す
-        ArrayList<String> selection = new ArrayList<>();
-        return (selection);
-    }
-
 
     private String getCurrentEffectStatus()
     {
@@ -848,27 +862,35 @@ class FujiXStatusHolder
 
     private String getCurrentIsoSensitivityStatus()
     {
-        // ISO感度設定の現在状態を取得する
-        String isoValue = "";
+        String iso = "";
         try
         {
-            int value = statusHolder.get(IFujiXCameraProperties.ISO);
-            int iso = ((0x0000ffff & value));
-            int auto = ((0xffff0000 & value));
-            if (auto != 0)
+            int current = statusHolder.get(IFujiXCameraProperties.ISO);
+            int isoValue = (0x0000ffff & current);
+            if ((0xffff0000 & current) != 0)
             {
-                isoValue = "A (" + iso + ")";
+                iso = "AUTO_" + isoValue;
+            }
+            else if (isoValue > 12800)
+            {
+                iso = "H" + isoValue;
+
+            }
+            else if (isoValue < 200)
+            {
+                iso = "L" + isoValue;
             }
             else
             {
-                isoValue = "" + iso;
+                iso = "" + isoValue;
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return (isoValue);
+        logcat(" ISO SENSITIVITY : " + iso);
+        return (iso);
     }
 
     private void setEffectItem(String value)
@@ -896,6 +918,7 @@ class FujiXStatusHolder
 
     private void setCurrentWhiteBalanceStatus(String value)
     {
+        // White Balanceを設定する
         try
         {
             String[] items = activity.getResources().getStringArray(R.array.fuji_x_white_balance);
@@ -923,8 +946,30 @@ class FujiXStatusHolder
     private void setCurrentIsoSensitivityStatus(String value)
     {
         // ISO感度を設定する
-
-
+        try
+        {
+            String[] items = activity.getResources().getStringArray(R.array.fuji_x_iso_sensitivity);
+            String[] itemValues = activity.getResources().getStringArray(R.array.fuji_x_iso_sensitivity_value);
+            int index = 0;
+            for (String item : items)
+            {
+                Log.v(TAG, " ===== ISO : " + value + " " + item + " ===== ");
+                if (item.matches(value))
+                {
+                    // 見つかった！ この値を設定する
+                    String itemValue = itemValues[index];
+                    int itemValueInt = (int) Long.parseLong(itemValue,16);
+                    logcat(" SET ISO SENSITIVITY : " + value + " " + itemValueInt);
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set ISO", true), IFujiXCameraProperties.ISO, 8, itemValueInt));
+                    return;
+                }
+                index++;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     String getItemStatus(String key)

@@ -102,6 +102,7 @@
         <item>ACROS+G</item>
         <item>ETERNA</item>
         <item>CLASSIC Neg.</item>
+        <item>ETERNA BLEACH BYPASS</item>
     </string-array>
 
     <string-array name="fuji_x_film_simulation_value">
@@ -122,6 +123,7 @@
         <item>15</item>
         <item>16</item>
         <item>17</item>
+        <item>18</item>
     </string-array>
 
     <string-array name="fuji_x_white_balance">
@@ -148,6 +150,66 @@
         <item>32778</item>
         <item>32779</item>
         <item>32780</item>
+    </string-array>
+
+    <string-array name="fuji_x_iso_sensitivity">
+        <item>AUTO_6400</item>
+        <item>AUTO_3200</item>
+        <item>AUTO_1600</item>
+        <item>AUTO_800</item>
+        <item>AUTO_400</item>
+        <item>200</item>
+        <item>250</item>
+        <item>320</item>
+        <item>400</item>
+        <item>500</item>
+        <item>640</item>
+        <item>800</item>
+        <item>1000</item>
+        <item>1250</item>
+        <item>1600</item>
+        <item>2000</item>
+        <item>2500</item>
+        <item>3200</item>
+        <item>4000</item>
+        <item>5000</item>
+        <item>6400</item>
+        <item>8000</item>
+        <item>10000</item>
+        <item>12800</item>
+        <item>H25600</item>
+        <item>H51200</item>
+        <item>L100</item>
+    </string-array>
+
+    <string-array name="fuji_x_iso_sensitivity_value">
+        <item>80001900</item>
+        <item>80000C80</item>
+        <item>80000640</item>
+        <item>80000320</item>
+        <item>80000190</item>
+        <item>C8</item>
+        <item>FA</item>
+        <item>140</item>
+        <item>190</item>
+        <item>1F4</item>
+        <item>280</item>
+        <item>320</item>
+        <item>3E8</item>
+        <item>4E2</item>
+        <item>640</item>
+        <item>7D0</item>
+        <item>9C4</item>
+        <item>C80</item>
+        <item>FA0</item>
+        <item>1388</item>
+        <item>1900</item>
+        <item>1F40</item>
+        <item>2710</item>
+        <item>3200</item>
+        <item>6400</item>
+        <item>C800</item>
+        <item>64</item>
     </string-array>
 
 </resources>

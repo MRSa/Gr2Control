@@ -362,7 +362,7 @@
     <RelativeLayout
         android:id="@+id/fuji_x_keyPanelLayout"
         android:orientation="horizontal"
-        android:layout_width="125pt"
+        android:layout_width="100pt"
         android:layout_height="120pt"
         android:layout_alignLeft="@id/controlPanelLayout"
         android:layout_alignStart="@id/controlPanelLayout"
