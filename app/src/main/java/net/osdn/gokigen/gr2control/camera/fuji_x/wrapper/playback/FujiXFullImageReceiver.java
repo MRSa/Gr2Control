@@ -43,8 +43,8 @@ public class FujiXFullImageReceiver implements IFujiXCommandCallback
         try
         {
             receivedLength = receivedLength + currentBytes;
-            //Log.v(TAG, " onReceiveProgress() " + receivedLength + "/" + totalBytes);
-            float percent = (totalBytes == 0) ? 0.0f : ((float) currentBytes / (float) totalBytes);
+            float percent = (totalBytes == 0) ? 0.0f : ((float) receivedLength / (float) totalBytes);
+            //Log.v(TAG, " onReceiveProgress() " + receivedLength + "/" + totalBytes + " " + percent);
             ProgressEvent event = new ProgressEvent(percent, null);
             callback.onProgress(body, currentBytes, event);
         }
