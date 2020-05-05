@@ -94,9 +94,9 @@ public class FujiXCameraModeChangeToPlayback implements View.OnClickListener, IF
                     break;
 
                 case IFujiXMessages.SEQ_CHANGE_TO_PLAYBACK_3RD:
-                    //if (callback != null)
+                    if (callback != null)
                     {
-                        //callback.receivedMessage(id, rx_body);
+                        callback.receivedMessage(id, rx_body);
                     }
                     enqueueCommand(id, rx_body, new ChangeToPlayback4th(COMMANDID_CHANGE_TO_PLAYBACK,this));
                     break;

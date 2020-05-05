@@ -94,11 +94,14 @@ class FujiXStatusHolder
             int value = ((((int) data3) & 0xff) << 24) + ((((int) data2) & 0xff) << 16) + ((((int) data1) & 0xff) << 8) + (((int) data0) & 0xff);
             int currentValue = statusHolder.get(id, -1);
             //logcat(String.format(Locale.US, " STATUS [id: 0x%04x] 0x%08x(%d) -> 0x%08x(%d)", id, currentValue, currentValue, value, value));
-            if ((notifier != null) && (currentValue != value))
+            if (currentValue != value)
             {
                 statusHolder.put(id, value);
-                //logcat(String.format(Locale.US," STATUS UPDATE [id: 0x%04x] 0x%08x(%d) -> 0x%08x(%d)", id, currentValue, currentValue, value, value));
-                updateDetected(notifier, id, currentValue, value);
+                if (notifier != null)
+                {
+                    //logcat(String.format(Locale.US," STATUS UPDATE [id: 0x%04x] 0x%08x(%d) -> 0x%08x(%d)", id, currentValue, currentValue, value, value));
+                    updateDetected(notifier, id, currentValue, value);
+                }
             }
         }
         catch (Exception e)
