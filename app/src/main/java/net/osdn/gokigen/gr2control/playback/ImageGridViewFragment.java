@@ -122,7 +122,7 @@ public class ImageGridViewFragment extends Fragment implements ICameraRunModeCal
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.image_grid_view, menu);
 		String title = getString(R.string.app_name);
@@ -538,6 +538,19 @@ public class ImageGridViewFragment extends Fragment implements ICameraRunModeCal
 
                                 // 画像の選択を落とす
                                 content.setSelected(false);
+
+                                // ここでダウンロードが終わるまで、すこし待つ
+                                do
+                                {
+                                    try
+                                    {
+                                        Thread.sleep(300);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                } while (contentDownloader.isDownloading());
                             }
                         }
 
