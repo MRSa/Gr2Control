@@ -9,6 +9,7 @@ import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.liveview.IStatusViewDrawer;
 import net.osdn.gokigen.gr2control.logcat.LogCatFragment;
 import net.osdn.gokigen.gr2control.playback.ImageGridViewFragment;
+import net.osdn.gokigen.gr2control.preference.Gr2ControlPreferenceFragment;
 import net.osdn.gokigen.gr2control.preference.fuji_x.FujiXPreferenceFragment;
 import net.osdn.gokigen.gr2control.preference.olympus.PreferenceFragment;
 import net.osdn.gokigen.gr2control.preference.ricohgr2.RicohGr2PreferenceFragment;
@@ -30,6 +31,10 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
     private IStatusViewDrawer statusViewDrawer;
 
     private PreferenceFragmentCompat preferenceFragment = null;
+    private PreferenceFragmentCompat preferenceFragmentOpc = null;
+    private PreferenceFragmentCompat preferenceFragmentRicoh = null;
+    private PreferenceFragmentCompat preferenceFragmentFujiX = null;
+
     private LogCatFragment logCatFragment = null;
     private ImageGridViewFragment imageGridViewFragment = null;
 
@@ -194,39 +199,103 @@ public class CameraSceneUpdater implements ICameraStatusReceiver, IChangeScene
 
     //  IChangeScene
     @Override
-    public void changeSceneToConfiguration()
+    public void changeSceneToConfiguration(ICameraConnection.CameraConnectionMethod connectionMethod)
+    {
+        try
+        {
+            if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2)
+            {
+                changeSceneToRicohConfiguration();
+            }
+            else if (connectionMethod == ICameraConnection.CameraConnectionMethod.FUJI_X)
+            {
+                changeSceneToFujiXConfiguration();
+            }
+            else if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
+            {
+                changeSceneToOpcConfiguration();
+            }
+            else // if (connectionMethod == ICameraConnection.CameraConnectionMethod.UNKNOWN)
+            {
+                changeSceneToSummaryConfiguration();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void changeSceneToSummaryConfiguration()
     {
         try
         {
             if (preferenceFragment == null)
             {
-                try
-                {
-                    //preferenceFragment = RicohGr2PreferenceFragment.newInstance(activity, this);
-                    ICameraConnection.CameraConnectionMethod connectionMethod = interfaceProvider.getCammeraConnectionMethod();
-                    if (connectionMethod == ICameraConnection.CameraConnectionMethod.RICOH_GR2) {
-                        preferenceFragment = RicohGr2PreferenceFragment.newInstance(activity, this);
-                    //} else if (connectionMethod == ICameraConnection.CameraConnectionMethod.SONY) {
-                    //    preferenceFragment = SonyPreferenceFragment.newInstance(this, this);
-                    }
-                    else if (connectionMethod == ICameraConnection.CameraConnectionMethod.FUJI_X)
-                    {
-                        preferenceFragment = FujiXPreferenceFragment.newInstance(activity, this);
-                    }
-                    else //  if (connectionMethod == ICameraConnection.CameraConnectionMethod.OPC)
-                    {
-                        preferenceFragment = PreferenceFragment.newInstance(activity, interfaceProvider, this);
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    //preferenceFragment = SonyPreferenceFragment.newInstance(this, this);
-                }
+                preferenceFragment = Gr2ControlPreferenceFragment.newInstance(activity, this);
             }
-
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment1, preferenceFragment);
+            // backstackに追加
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void changeSceneToOpcConfiguration()
+    {
+        try
+        {
+            if (preferenceFragmentOpc == null)
+            {
+                preferenceFragmentOpc = PreferenceFragment.newInstance(activity, interfaceProvider, this);
+            }
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment1, preferenceFragmentOpc);
+            // backstackに追加
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void changeSceneToRicohConfiguration()
+    {
+        try
+        {
+            if (preferenceFragmentRicoh == null)
+            {
+                preferenceFragmentRicoh = RicohGr2PreferenceFragment.newInstance(activity, this);
+            }
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment1, preferenceFragmentRicoh);
+            // backstackに追加
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void changeSceneToFujiXConfiguration()
+    {
+        try
+        {
+            if (preferenceFragmentFujiX == null)
+            {
+                preferenceFragmentFujiX = FujiXPreferenceFragment.newInstance(activity, this);
+            }
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment1, preferenceFragmentFujiX);
             // backstackに追加
             transaction.addToBackStack(null);
             transaction.commit();

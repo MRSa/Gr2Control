@@ -132,7 +132,7 @@ class LiveViewClickTouchListener implements View.OnClickListener, View.OnTouchLi
 
                 case R.id.show_preference_button:
                     // カメラの設定
-                    changeScene.changeSceneToConfiguration();
+                    changeScene.changeSceneToConfiguration(ICameraConnection.CameraConnectionMethod.UNKNOWN);
                     isVibrate = true;
                     break;
 

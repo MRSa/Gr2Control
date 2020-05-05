@@ -136,7 +136,7 @@
     <string name="pref_fujix_focus_xy">フォーカス点数[X,Y] (default: 7,7)</string>
     <string name="pref_summary_fujix_focus_xy">接続するカメラに合わせてフォーカス点数を指定します</string>
     <string name="pref_fujix_liveview_wait">LV画像受信待ち間隔(default: 80)</string>
-    <string name="pref_summary_fujix_liveview_wait">ライブビュー画像受信間隔を指定します</string>
+    <string name="pref_summary_fujix_liveview_wait">ライブビュー画像受信待ち間隔を指定します。(単位:ms)</string>
     <string name="pref_fujix_command_polling_wait">コマンド間隔(default: 500)</string>
     <string name="pref_summary_fujix_command_polling_wait">カメラ状態の確認間隔を調整します</string>
     <string name="pref_special_thanks">Special Thanks to</string>
@@ -191,4 +191,16 @@
     <string name="shutter_speed">Shutter</string>
     <string name="aperture">Aperture</string>
 
+    <string name="pref_ricoh_settings">RICOH GR/PENTAX用設定</string>
+    <string name="pref_summary_ricoh_settings"> </string>
+
+    <string name="pref_fuji_x_settings">Fujifilm X用設定</string>
+    <string name="pref_summary_fuji_x_settings"> </string>
+
+    <string name="pref_opc_settings">Olympus Air用設定</string>
+    <string name="pref_summary_opc_settings"> </string>
+
+    <string name="pref_fuji_x_exit_only">アプリ終了 (FUJI)</string>
+    <string name="pref_opc_exit_power_off">アプリ終了 (OPC)</string>
+    <string name="pref_ricoh_exit_power_off">アプリ終了 (RICOH)</string>
 </resources>

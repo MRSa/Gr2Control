@@ -6,8 +6,8 @@
         <PreferenceScreen
             android:key="exit_application"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
-            android:title="@string/pref_exit_only" />
-
+            android:title="@string/pref_fuji_x_exit_only" />
+<!--
         <ListPreference
             android:title="@string/pref_connection_method"
             android:entryValues="@array/connection_method_value"
@@ -19,16 +19,16 @@
             android:key="wifi_settings"
             android:title="@string/pref_wifi_settings"
             android:summary="@string/pref_summary_wifi_settings" />
-
+-->
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/pref_cat_camera">
-
+<!--
         <CheckBoxPreference
             android:key="capture_both_camera_and_live_view"
             android:title="@string/pref_capture_both_camera_and_live_view" />
-
+-->
         <CheckBoxPreference
             android:key="fujix_display_camera_view"
             android:title="@string/pref_fujix_display_camera_view"
@@ -53,7 +53,7 @@
             android:summary="@string/pref_summary_fujix_liveview_wait" />
 
     </PreferenceCategory>
-
+<!--
     <PreferenceCategory
         android:title="@string/pref_cat_initialize">
 
@@ -62,10 +62,11 @@
             android:title="@string/pref_auto_connect_camera"
             android:summary="@string/pref_summary_auto_connect_camera" />
     </PreferenceCategory>
+-->
 
     <PreferenceCategory
         android:title="@string/pref_cat_others">
-
+<!--
         <CheckBoxPreference
             android:key="share_after_save"
             android:title="@string/pref_call_share_after_save" />
@@ -74,6 +75,7 @@
             android:key="use_playback_menu"
             android:title="@string/pref_use_playback_menu"
             android:summary="@string/summary_use_playback_menu" />
+-->
 
         <Preference
             android:key="special_thanks"
@@ -83,9 +85,8 @@
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://github.com/hkr/fuji-cam-wifi-tool" />
         </Preference>
-
     </PreferenceCategory>
-
+<!--
     <PreferenceCategory
         android:title="@string/pref_cat_gokigen">
 
@@ -111,6 +112,6 @@
             android:key="debug_info"
             android:title="@string/pref_degug_info"
             android:summary="@string/pref_summary_debug_info" />
-
     </PreferenceCategory>
+-->
 </PreferenceScreen>

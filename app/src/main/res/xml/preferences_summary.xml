@@ -3,57 +3,53 @@
     <PreferenceCategory
         android:title="@string/pref_cat_application_control">
 
-        <PreferenceScreen
-            android:key="exit_application"
-            android:icon="@drawable/ic_power_settings_new_black_24dp"
-            android:title="@string/pref_opc_exit_power_off" />
-<!--
         <ListPreference
             android:title="@string/pref_connection_method"
             android:entryValues="@array/connection_method_value"
             android:entries="@array/connection_method"
             android:key="connection_method"
-            android:defaultValue="OPC"/>
+            android:defaultValue="RICOH_GR2"/>
 
         <PreferenceScreen
             android:key="wifi_settings"
             android:title="@string/pref_wifi_settings"
             android:summary="@string/pref_summary_wifi_settings" />
--->
+
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/pref_cat_camera">
 
-        <ListPreference
-            android:title="@string/pref_camera_sound_volume"
-            android:entryValues="@array/sound_volume_level_value"
-            android:entries="@array/sound_volume_level"
-            android:key="sound_volume_level"
-            android:defaultValue="OFF"/>
+        <PreferenceScreen
+            android:key="ricoh_settings"
+            android:title="@string/pref_ricoh_settings"
+            android:summary="@string/pref_summary_ricoh_settings" />
 
-        <CheckBoxPreference
-            android:key="raw"
-            android:title="@string/pref_take_raw" />
-<!--
+        <PreferenceScreen
+            android:key="fuji_x_settings"
+            android:title="@string/pref_fuji_x_settings"
+            android:summary="@string/pref_summary_fuji_x_settings" />
+
+        <PreferenceScreen
+            android:key="opc_settings"
+            android:title="@string/pref_opc_settings"
+            android:summary="@string/pref_summary_opc_settings" />
+
         <CheckBoxPreference
             android:key="capture_both_camera_and_live_view"
             android:title="@string/pref_capture_both_camera_and_live_view" />
--->
+
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_cat_live_view">
-        <ListPreference
-            android:title="@string/pref_live_view_quality"
-            android:entryValues="@array/live_view_quality_value"
-            android:entries="@array/live_view_quality"
-            android:key="live_view_quality"
-            android:defaultValue="VGA"/>
+        android:title="@string/pref_cat_initialize">
 
+        <CheckBoxPreference
+            android:key="auto_connect_to_camera"
+            android:title="@string/pref_auto_connect_camera"
+            android:summary="@string/pref_summary_auto_connect_camera" />
     </PreferenceCategory>
 
-    <!--
     <PreferenceCategory
         android:title="@string/pref_cat_others">
 
@@ -63,46 +59,9 @@
 
         <CheckBoxPreference
             android:key="use_playback_menu"
-            android:title="@string/pref_use_playback_menu" />
-    </PreferenceCategory>
--->
+            android:title="@string/pref_use_playback_menu"
+            android:summary="@string/summary_use_playback_menu" />
 
-    <PreferenceCategory
-        android:title="@string/pref_cat_info">
-        <PreferenceScreen
-            android:key="focal_length"
-            android:title="@string/pref_focal_length"
-            android:selectable="false" />
-
-        <PreferenceScreen
-            android:key="lens_status"
-            android:title="@string/pref_lens_status"
-            android:selectable="false" />
-
-        <PreferenceScreen
-            android:key="media_status"
-            android:title="@string/pref_media_status"
-            android:selectable="false" />
-
-        <PreferenceScreen
-            android:key="camera_version"
-            android:title="@string/pref_camera_version"
-            android:selectable="false" />
-
-        <PreferenceScreen
-        android:key="camerakit_version"
-        android:title="@string/pref_camerakit_version"
-        android:selectable="false" />
-    </PreferenceCategory>
-
-<!--
-    <PreferenceCategory
-        android:title="@string/pref_cat_initialize">
-
-        <CheckBoxPreference
-        android:key="auto_connect_to_camera"
-        android:title="@string/pref_auto_connect_camera"
-        android:summary="@string/pref_summary_auto_connect_camera" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -130,6 +89,6 @@
             android:key="debug_info"
             android:title="@string/pref_degug_info"
             android:summary="@string/pref_summary_debug_info" />
+
     </PreferenceCategory>
--->
 </PreferenceScreen>

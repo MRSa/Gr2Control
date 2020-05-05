@@ -231,4 +231,17 @@
 
     <string name="shutter_speed">Shutter</string>
     <string name="aperture">Aperture</string>
+
+    <string name="pref_ricoh_settings">RICOH GR/PENTAX Settings</string>
+    <string name="pref_summary_ricoh_settings"> </string>
+
+    <string name="pref_fuji_x_settings">Fujifilm X Settings</string>
+    <string name="pref_summary_fuji_x_settings"> </string>
+
+    <string name="pref_opc_settings">Olympus Air Settings</string>
+    <string name="pref_summary_opc_settings"> </string>
+
+    <string name="pref_fuji_x_exit_only">Exit Application (FUJI)</string>
+    <string name="pref_opc_exit_power_off">Exit Application (OPC)</string>
+    <string name="pref_ricoh_exit_power_off">Exit Application (RICOH)</string>
 </resources>
