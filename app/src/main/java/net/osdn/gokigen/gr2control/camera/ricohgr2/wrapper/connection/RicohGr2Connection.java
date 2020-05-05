@@ -1,6 +1,5 @@
 package net.osdn.gokigen.gr2control.camera.ricohgr2.wrapper.connection;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +20,7 @@ import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
 
 
 /**
@@ -30,7 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 public class RicohGr2Connection implements ICameraConnection
 {
     private final String TAG = toString();
-    private final Activity context;
+    private final FragmentActivity context;
     private final ICameraStatusReceiver statusReceiver;
     private final BroadcastReceiver connectionReceiver;
     private final IUseGR2CommandNotify gr2CommandNotify;
@@ -45,9 +45,9 @@ public class RicohGr2Connection implements ICameraConnection
      *
      *
      */
-    public RicohGr2Connection(@NonNull final Activity context, @NonNull final ICameraStatusReceiver statusReceiver, @NonNull IUseGR2CommandNotify gr2CommandNotify)
+    public RicohGr2Connection(@NonNull final FragmentActivity context, @NonNull final ICameraStatusReceiver statusReceiver, @NonNull IUseGR2CommandNotify gr2CommandNotify)
     {
-        Log.v(TAG, "RicohGr2Connection()");
+        Log.v(TAG, " RicohGr2Connection()");
         this.context = context;
         this.statusReceiver = statusReceiver;
         this.gr2CommandNotify = gr2CommandNotify;
@@ -183,47 +183,41 @@ public class RicohGr2Connection implements ICameraConnection
     public void alertConnectingFailed(String message)
     {
         Log.v(TAG, "alertConnectingFailed() : " + message);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.dialog_title_connect_failed))
-                .setMessage(message)
-                .setPositiveButton(context.getString(R.string.dialog_title_button_retry), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        connect();
-                    }
-                })
-                .setNeutralButton(R.string.dialog_title_button_network_settings, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        try
-                        {
-                            // Wifi 設定画面を表示する
-                            context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                        }
-                        catch (android.content.ActivityNotFoundException ex)
-                        {
-                            // Activity が存在しなかった...設定画面が起動できなかった
-                            Log.v(TAG, "android.content.ActivityNotFoundException...");
-
-                            // この場合は、再試行と等価な動きとする
+        if (context != null)
+        {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.dialog_title_connect_failed))
+                    .setMessage(message)
+                    .setPositiveButton(context.getString(R.string.dialog_title_button_retry), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             connect();
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
+                    })
+                    .setNeutralButton(R.string.dialog_title_button_network_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                // Wifi 設定画面を表示する
+                                context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            } catch (android.content.ActivityNotFoundException ex) {
+                                // Activity が存在しなかった...設定画面が起動できなかった
+                                Log.v(TAG, "android.content.ActivityNotFoundException...");
+
+                                // この場合は、再試行と等価な動きとする
+                                connect();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
-        context.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                builder.show();
-            }
-        });
+                    });
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    builder.show();
+                }
+            });
+        }
     }
 
     @Override
