@@ -9,6 +9,7 @@ import android.util.Log;
 
 import net.osdn.gokigen.gr2control.R;
 import net.osdn.gokigen.gr2control.camera.ICameraConnection;
+import net.osdn.gokigen.gr2control.camera.ricohgr2.operation.RicohGr2CameraPowerOff;
 import net.osdn.gokigen.gr2control.logcat.LogCatViewer;
 import net.osdn.gokigen.gr2control.scene.IChangeScene;
 
@@ -26,6 +27,7 @@ import androidx.preference.PreferenceManager;
 public class Gr2ControlPreferenceFragment  extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener
 {
     private final String TAG = toString();
+    //private RicohGr2CameraPowerOff powerOffController = null;
     private IChangeScene changeScene = null;
     private AppCompatActivity context = null;
     private SharedPreferences preferences = null;
@@ -57,6 +59,9 @@ public class Gr2ControlPreferenceFragment  extends PreferenceFragmentCompat impl
     {
         try
         {
+            //powerOffController = new RicohGr2CameraPowerOff(context, changeScene);
+            //powerOffController.prepare();
+
             logCatViewer = new LogCatViewer(changeScene);
             logCatViewer.prepare();
             this.changeScene = changeScene;
@@ -236,6 +241,14 @@ public class Gr2ControlPreferenceFragment  extends PreferenceFragmentCompat impl
                 });
                 connectionMethod.setSummary(connectionMethod.getValue() + " ");
             }
+
+            /*
+            Preference exitApplication = findPreference("exit_application");
+            if (exitApplication != null)
+            {
+                exitApplication.setOnPreferenceClickListener(powerOffController);
+            }
+            */
 
             Preference opcPreference = findPreference("opc_settings");
             if (opcPreference != null)
