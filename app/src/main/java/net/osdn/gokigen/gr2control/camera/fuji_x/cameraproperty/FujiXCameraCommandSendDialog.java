@@ -81,6 +81,8 @@ public class FujiXCameraCommandSendDialog  extends DialogFragment
             final EditText edit_command_id = alertView.findViewById(R.id.edit_command_id);
             final EditText edit_message_body1 = alertView.findViewById(R.id.edit_message_body1);
             final EditText edit_message_body2 = alertView.findViewById(R.id.edit_message_body2);
+            final EditText edit_message_body3 = alertView.findViewById(R.id.edit_message_body3);
+            final EditText edit_message_body4 = alertView.findViewById(R.id.edit_message_body4);
             final Spinner selection_command_id = alertView.findViewById(R.id.spinner_selection_command_id);
             final Spinner selection_message_type = alertView.findViewById(R.id.spinner_selection_message_type);
             final Spinner selection_message_body_length = alertView.findViewById(R.id.spinner_selection_message_body_length);
@@ -108,12 +110,22 @@ public class FujiXCameraCommandSendDialog  extends DialogFragment
                             int id = parseInt(edit_command_id);
                             int value1 = parseInt(edit_message_body1);
                             int value2 = parseInt(edit_message_body2);
+                            int value3 = parseInt(edit_message_body3);
+                            int value4 = parseInt(edit_message_body4);
                             if (selectedMessageTypePosition == 0)
                             {
-                                // single
+                                // single type
                                 if (selectedBodyLengthPosition == 0)
                                 {
                                     commandPublisher.enqueueCommand(new CommandGeneric(responseReceiver, id));
+                                }
+                                else if (selectedBodyLengthPosition == 5)
+                                {
+                                    commandPublisher.enqueueCommand(new CommandGeneric(responseReceiver, id, 16, value1, value2, value3, value4));
+                                }
+                                else if (selectedBodyLengthPosition == 4)
+                                {
+                                    commandPublisher.enqueueCommand(new CommandGeneric(responseReceiver, id, 12, value1, value2, value3));
                                 }
                                 else if (selectedBodyLengthPosition == 3)
                                 {
@@ -130,10 +142,18 @@ public class FujiXCameraCommandSendDialog  extends DialogFragment
                             }
                             else
                             {
-                                // multi
+                                // multi type
                                 if (selectedBodyLengthPosition == 0)
                                 {
                                     commandPublisher.enqueueCommand(new SetPropertyValue(responseReceiver, id));
+                                }
+                                else if (selectedBodyLengthPosition == 5)
+                                {
+                                    commandPublisher.enqueueCommand(new SetPropertyValue(responseReceiver, id, 16, value1, value2, value3, value4));
+                                }
+                                else if (selectedBodyLengthPosition == 4)
+                                {
+                                    commandPublisher.enqueueCommand(new SetPropertyValue(responseReceiver, id, 12, value1, value2, value3));
                                 }
                                 else if (selectedBodyLengthPosition == 3)
                                 {
@@ -430,6 +450,8 @@ public class FujiXCameraCommandSendDialog  extends DialogFragment
             adapter.add("2");
             adapter.add("4");
             adapter.add("8");
+            adapter.add("12");
+            adapter.add("16");
 
             spinner.setAdapter(adapter);
             spinner.setSelection(selectedBodyLengthPosition);

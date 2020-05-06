@@ -170,6 +170,24 @@
                 android:hint="@string/dialog_message_body2_hint"
                 />
 
+            <EditText android:id="@+id/edit_message_body3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/dialog_message_body3_hint"
+                />
+
+            <EditText android:id="@+id/edit_message_body4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:inputType="text"
+                android:hint="@string/dialog_message_body4_hint"
+                />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
