@@ -2,12 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
         android:title="@string/pref_cat_application_control">
-/*
+<!--
         <PreferenceScreen
             android:key="exit_application"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="@string/pref_exit_power_off" />
-*/
+-->
         <ListPreference
             android:title="@string/pref_connection_method"
             android:entryValues="@array/connection_method_value"
