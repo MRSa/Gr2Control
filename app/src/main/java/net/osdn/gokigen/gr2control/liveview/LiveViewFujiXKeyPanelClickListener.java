@@ -4,10 +4,12 @@ import android.content.DialogInterface;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import net.osdn.gokigen.gr2control.R;
@@ -16,7 +18,9 @@ import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCallback;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.CommandGeneric;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.FinishRecordingMovie;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.IFujiXCameraCommands;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.StartRecordingMovie;
 import net.osdn.gokigen.gr2control.camera.utils.SimpleLogDumper;
 
 import java.util.List;
@@ -28,6 +32,9 @@ public class LiveViewFujiXKeyPanelClickListener implements View.OnClickListener,
     private static final boolean isDumpLog = false;
     private final IInterfaceProvider interfaceProvider;
     private final Vibrator vibrator;
+    private boolean isRecordingVideoMovie = false;
+    private boolean commandIssued = false;
+    private int startMovieSequenceNumber = 0;
 
     LiveViewFujiXKeyPanelClickListener(@NonNull FragmentActivity activity, @NonNull IInterfaceProvider interfaceProvider, @Nullable Vibrator vibrator)
     {
@@ -71,7 +78,9 @@ public class LiveViewFujiXKeyPanelClickListener implements View.OnClickListener,
                     updateSelection(ICameraStatus.SELF_TIMER);
                     isVibrate = false;
                     break;
-
+                case R.id.button_fuji_x_video_on_off:
+                    startFinishMovie();
+                    break;
                 default:
                     isVibrate = false;
                     break;
@@ -194,6 +203,120 @@ public class LiveViewFujiXKeyPanelClickListener implements View.OnClickListener,
             e.printStackTrace();
         }
     }
+
+    /**
+     *   ビデオ撮影開始と終了
+     *
+     */
+    private void startFinishMovie()
+    {
+        try
+        {
+            if (commandIssued)
+            {
+                // すでにコマンド発行中。コマンドの発行は抑止する
+                Log.v(TAG, " COMMAND IS ALREADY ISSUED...");
+                return;
+            }
+            commandIssued = true;
+
+            IFujiXCommandPublisher publisher = interfaceProvider.getFujiXInterfaceProvider().getCommandPublisher();
+            if (isRecordingVideoMovie)
+            {
+                // 撮影中の場合には、撮影を止める
+                publisher.enqueueCommand(new FinishRecordingMovie(new IFujiXCommandCallback() {
+                    @Override
+                    public void receivedMessage(int id, byte[] rx_body)
+                    {
+                        commandIssued = false;
+                        isRecordingVideoMovie = false;
+                        updateMovieRecordingIcon();
+                        SimpleLogDumper.dump_bytes(" STOP MOVIE REPLY (" + startMovieSequenceNumber + ") ", rx_body);
+                        startMovieSequenceNumber = 0;
+                    }
+
+                    @Override
+                    public void onReceiveProgress(int currentBytes, int totalBytes, byte[] rx_body)
+                    {
+                        // 何もしない
+                    }
+
+                    @Override
+                    public boolean isReceiveMulti()
+                    {
+                        return (false);
+                    }
+                }, startMovieSequenceNumber));
+            }
+            else
+            {
+                // 撮影を開始する
+                publisher.enqueueCommand(new StartRecordingMovie(new IFujiXCommandCallback() {
+                    @Override
+                    public void receivedMessage(int id, byte[] rx_body)
+                    {
+                        commandIssued = false;
+                        if ((rx_body[7] == (byte) 0x20)&&(rx_body[6] == (byte) 0x01))
+                        {
+                            // 応答コード OKの場合... SequenceNumberを記憶する
+                            startMovieSequenceNumber = ((((int) rx_body[11]) & 0xff) << 24) + ((((int) rx_body[10]) & 0xff) << 16) + ((((int) rx_body[9]) & 0xff) << 8) + (((int) rx_body[8]) & 0xff);
+                            isRecordingVideoMovie = true;
+                        }
+                        updateMovieRecordingIcon();
+                        SimpleLogDumper.dump_bytes(" START MOVIE REPLY (" + startMovieSequenceNumber + ") ", rx_body);
+                    }
+
+                    @Override
+                    public void onReceiveProgress(int currentBytes, int totalBytes, byte[] rx_body)
+                    {
+                        // 何もしない
+                    }
+
+                    @Override
+                    public boolean isReceiveMulti()
+                    {
+                        return (false);
+                    }
+                }));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            commandIssued = false;
+        }
+    }
+
+    private void updateMovieRecordingIcon()
+    {
+        try
+        {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageView imageView = activity.findViewById(R.id.button_fuji_x_video_on_off);
+                    if (isRecordingVideoMovie)
+                    {
+                        //imageView.setImageDrawable(ContextCompat.getDrawable(activity,R.drawable.ic_videocam_off_black_24dp));
+                        imageView.setImageDrawable(ContextCompat.getDrawable(activity,R.drawable.ic_stop_black_24dp));
+                    }
+                    else
+                    {
+                        imageView.setImageDrawable(ContextCompat.getDrawable(activity,R.drawable.ic_videocam_black__24dp));
+                    }
+                    imageView.invalidate();
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
     /**
      *   ぶるぶるさせる

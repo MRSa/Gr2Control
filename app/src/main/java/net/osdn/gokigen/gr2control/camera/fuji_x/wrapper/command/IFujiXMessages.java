@@ -42,4 +42,7 @@ public interface IFujiXMessages
     int SEQ_IMAGE_INFO = 104;
     int SEQ_THUMBNAIL = 105;
     int SEQ_FULL_IMAGE = 106;
+
+    int SEQ_START_MOVIE = 107;
+    int SEQ_FINISH_MOVIE = 108;
 }
