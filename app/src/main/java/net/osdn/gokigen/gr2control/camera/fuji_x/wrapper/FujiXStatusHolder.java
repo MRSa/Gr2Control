@@ -964,10 +964,12 @@ class FujiXStatusHolder
             List<String> itemList = getAvailableEffectItemList();
             for (String item : itemList)
             {
-                if (item.matches(value))
+                //Log.v(TAG, " " + item + " vs " + value);
+                if (item.equals(value))
                 {
-                    //  見つかった！ この値に設定する
-                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set Film Simulation", true), IFujiXCameraProperties.FILM_SIMULATION, 4, index));
+                    //  見つかった！ この値に設定する (Film Simulation)
+                    //Log.v(TAG, " SET FILM SIMULATION : " + index);
+                    publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyMessageReceiver(" Set Film Simulation", false), IFujiXCameraProperties.FILM_SIMULATION, 2, index));
                     return;
                 }
                 index++;
