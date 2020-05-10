@@ -63,6 +63,7 @@ public interface IPreferencePropertyAccessor
     String FUJI_X_COMMAND_POLLING_WAIT = "fujix_command_polling_wait";
     String FUJI_X_COMMAND_POLLING_WAIT_DEFAULT_VALUE = "500";
 
+    String FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE = "fujix_get_screennail_as_small_picture";
 
 /*
     //String GR2_DISPLAY_MODE = "gr2_display_mode";

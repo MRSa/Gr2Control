@@ -244,4 +244,7 @@
     <string name="pref_fuji_x_exit_only">Exit Application (FUJI)</string>
     <string name="pref_opc_exit_power_off">Exit Application (OPC)</string>
     <string name="pref_ricoh_exit_power_off">Exit Application (RICOH)</string>
+
+    <string name="pref_fujix_get_screennail_as_small_picture">Use small image as detail screen</string>
+    <string name="pref_summary_fujix_get_screennail_as_small_picture">Use small size image for detail screen.</string>
 </resources>

@@ -203,4 +203,7 @@
     <string name="pref_fuji_x_exit_only">アプリ終了 (FUJI)</string>
     <string name="pref_opc_exit_power_off">アプリ終了 (OPC)</string>
     <string name="pref_ricoh_exit_power_off">アプリ終了 (RICOH)</string>
+
+    <string name="pref_fujix_get_screennail_as_small_picture">表示画像はスモール画像を使用</string>
+    <string name="pref_summary_fujix_get_screennail_as_small_picture">すこし時間がかかりますが、画像表示にスモール画像を使用します。</string>
 </resources>

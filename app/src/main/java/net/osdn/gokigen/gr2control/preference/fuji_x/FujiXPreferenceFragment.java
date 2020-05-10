@@ -165,6 +165,9 @@ public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implement
             if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT)) {
                 editor.putString(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT, IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT_DEFAULT_VALUE);
             }
+            if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE)) {
+                editor.putBoolean(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE, false);
+            }
             editor.apply();
         }
         catch (Exception e)
@@ -204,6 +207,11 @@ public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implement
                 case IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW:
                     value = preferences.getBoolean(key, false);
                     Log.v(TAG, " DISPLAY CAMERA VIEW : " + key + " , " + value);
+                    break;
+
+                case IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE:
+                    value = preferences.getBoolean(key, false);
+                    Log.v(TAG, " SMALL IMAGE AS SCREENNAIL : " + key + " , " + value);
                     break;
 
                 case IPreferencePropertyAccessor.SHARE_AFTER_SAVE:
@@ -378,6 +386,7 @@ public class FujiXPreferenceFragment  extends PreferenceFragmentCompat implement
                         setBooleanPreference(IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, IPreferencePropertyAccessor.CAPTURE_BOTH_CAMERA_AND_LIVE_VIEW, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.USE_PLAYBACK_MENU, IPreferencePropertyAccessor.USE_PLAYBACK_MENU, defaultValue);
                         setBooleanPreference(IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, IPreferencePropertyAccessor.FUJI_X_DISPLAY_CAMERA_VIEW, false);
+                        setBooleanPreference(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE, IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE, false);
                         setBooleanPreference(IPreferencePropertyAccessor.SHARE_AFTER_SAVE, IPreferencePropertyAccessor.SHARE_AFTER_SAVE, defaultValue);
                     }
                     catch (Exception e)

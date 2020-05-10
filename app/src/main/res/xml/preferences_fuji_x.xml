@@ -52,6 +52,10 @@
             android:defaultValue="80"
             android:summary="@string/pref_summary_fujix_liveview_wait" />
 
+        <CheckBoxPreference
+            android:key="fujix_get_screennail_as_small_picture"
+            android:title="@string/pref_fujix_get_screennail_as_small_picture"
+            android:summary="@string/pref_summary_fujix_get_screennail_as_small_picture" />
     </PreferenceCategory>
 <!--
     <PreferenceCategory

@@ -166,6 +166,9 @@ public class RicohGr2PreferenceFragment  extends PreferenceFragmentCompat implem
             if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT)) {
                 editor.putString(IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT, IPreferencePropertyAccessor.FUJI_X_COMMAND_POLLING_WAIT_DEFAULT_VALUE);
             }
+            if (!items.containsKey(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE)) {
+                editor.putBoolean(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE, false);
+            }
             editor.apply();
         }
         catch (Exception e)

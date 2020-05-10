@@ -1,11 +1,13 @@
 package net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.playback;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import net.osdn.gokigen.gr2control.camera.ICameraFileInfo;
 import net.osdn.gokigen.gr2control.camera.ICameraStatus;
@@ -14,13 +16,16 @@ import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandCa
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.IFujiXCommandPublisher;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.GetFullImage;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.GetImageInfo;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.GetScreenNail;
 import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.GetThumbNail;
+import net.osdn.gokigen.gr2control.camera.fuji_x.wrapper.command.messages.SetPropertyValue;
 import net.osdn.gokigen.gr2control.camera.playback.ICameraContent;
 import net.osdn.gokigen.gr2control.camera.playback.IContentInfoCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadContentCallback;
 import net.osdn.gokigen.gr2control.camera.playback.ICameraContentListCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IDownloadThumbnailImageCallback;
 import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl;
+import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,8 +92,65 @@ public class FujiXPlaybackControl implements IPlaybackControl, IFujiXCommandCall
     @Override
     public void downloadContentScreennail(@Nullable String path, @NonNull String name, @NonNull IDownloadThumbnailImageCallback callback)
     {
-        // Thumbnail と同じ画像を表示する
-        downloadContentThumbnail(path, name, callback);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        boolean useSmallImage = preferences.getBoolean(IPreferencePropertyAccessor.FUJI_X_GET_SCREENNAIL_AS_SMALL_PICTURE, false);
+        if (useSmallImage)
+        {
+            // small image を表示する
+            downloadContentScreennailImpl(path, name, callback);
+        }
+        else
+        {
+            // Thumbnail と同じ画像を表示する
+            downloadContentThumbnail(path, name, callback);
+        }
+    }
+
+    private void downloadContentScreennailImpl(@Nullable String path, @NonNull String name, @NonNull IDownloadThumbnailImageCallback callback)
+    {
+        try
+        {
+            Log.v(TAG, " ----- downloadContentScreennailImpl() ");
+            int start = 0;
+            if (name.indexOf("/") == 0)
+            {
+                start = 1;
+            }
+            Log.v(TAG, "  downloadContentThumbnail() : " + path + " " + name);
+            int index = getIndexNumber(start, name);
+            if ((index > 0)&&(index <= imageContentInfo.size()))
+            {
+                IFujiXCommandPublisher publisher = provider.getCommandPublisher();
+                FujiXImageContentInfo contentInfo = imageContentInfo.get(index);
+                if (contentInfo.isReceived())
+                {
+                    if (!contentInfo.isMovie())
+                    {
+                        // スモール画像を取得する (たぶんこのシーケンスでいけるはず...）
+                        publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyReceiver(), 0xd226, 2, 0x0001));
+                        publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyReceiver(), 0xd227, 2, 0x0001));
+                        publisher.enqueueCommand(new GetScreenNail(index, 0x00800000, new FujiXThumbnailImageReceiver(activity, callback)));
+                        publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyReceiver(), 0xd226, 2, 0x0000));
+                        publisher.enqueueCommand(new SetPropertyValue(new FujiXReplyReceiver(), 0xd227, 2, 0x0001));
+                    }
+                    else
+                    {
+                        // movieの時は、Small画像を使えないのでThumbnailで代用する。
+                        publisher.enqueueCommand(new GetThumbNail(index, new FujiXThumbnailImageReceiver(activity, callback)));
+                    }
+                }
+                else
+                {
+                    // まだ、ファイル情報を受信していない場合は、サムネイルの情報を流用する
+                    publisher.enqueueCommand(new GetImageInfo(index, index, contentInfo));
+                    publisher.enqueueCommand(new GetThumbNail(index, new FujiXThumbnailImageReceiver(activity, callback)));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
