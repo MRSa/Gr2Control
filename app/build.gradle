@@ -6,8 +6,8 @@ android {
         applicationId "net.osdn.gokigen.gr2control"
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 1003003
-        versionName "1.3.3"
+        versionCode 1003004
+        versionName "1.3.4"
     }
     buildTypes {
         release {
