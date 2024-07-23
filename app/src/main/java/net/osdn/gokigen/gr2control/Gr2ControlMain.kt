@@ -1,113 +1,195 @@
-package net.osdn.gokigen.gr2control;
+package net.osdn.gokigen.gr2control
 
-import android.Manifest;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.WindowManager;
-
-import net.osdn.gokigen.gr2control.camera.CameraInterfaceProvider;
-import net.osdn.gokigen.gr2control.camera.ICameraConnection;
-import net.osdn.gokigen.gr2control.camera.IInterfaceProvider;
-import net.osdn.gokigen.gr2control.liveview.LiveViewFragment;
-import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor;
-import net.osdn.gokigen.gr2control.scene.CameraSceneUpdater;
+import android.Manifest.permission
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import androidx.preference.PreferenceManager
+import net.osdn.gokigen.gr2control.camera.CameraInterfaceProvider
+import net.osdn.gokigen.gr2control.camera.IInterfaceProvider
+import net.osdn.gokigen.gr2control.liveview.LiveViewFragment
+import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor
+import net.osdn.gokigen.gr2control.scene.CameraSceneUpdater
 
 /**
  *
  *
  */
-public class Gr2ControlMain extends AppCompatActivity
+class Gr2ControlMain : AppCompatActivity()
 {
-    private final String TAG = toString();
-    private IInterfaceProvider interfaceProvider = null;
-    private CameraSceneUpdater scenceUpdater = null;
-    private  LiveViewFragment liveViewFragment = null;
+    private lateinit var interfaceProvider: IInterfaceProvider
+    private lateinit var scenceUpdater: CameraSceneUpdater
+    private lateinit var liveViewFragment: LiveViewFragment
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?)
     {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState)
 
         // 画面表示の準備
-        setContentView(R.layout.activity_gr2_control_main);
+        setContentView(R.layout.activity_gr2_control_main)
         try
         {
-            ActionBar bar = getSupportActionBar();
-            if (bar != null)
+            val bar = supportActionBar
+            bar?.hide()
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+
+        try
+        {
+            setupWindowInset(findViewById(R.id.base_layout))
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+
+        initializeClass()
+
+        try
+        {
+            ///////// SET PERMISSIONS /////////
+            Log.v(TAG, " ----- SET PERMISSIONS -----")
+            if (!allPermissionsGranted())
             {
-                // タイトルバーは表示しない
-                bar.hide();
+                val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+                {
+                    ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_NEED_PERMISSIONS)
+                    if(!allPermissionsGranted())
+                    {
+                        // Abort launch application because required permissions was rejected.
+                        Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
+                        Log.v(TAG, "----- APPLICATION LAUNCH ABORTED -----")
+                        finish()
+                    }
+                }
+                requestPermission.launch(REQUIRED_PERMISSIONS)
+            }
+            onReadyClass()
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setupWindowInset(view: View)
+    {
+        try
+        {
+            // Display cutout insets
+            //   https://developer.android.com/develop/ui/views/layout/edge-to-edge
+            ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+                val bars = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                            or WindowInsetsCompat.Type.displayCutout()
+                )
+                v.updatePadding(
+                    left = bars.left,
+                    top = bars.top,
+                    right = bars.right,
+                    bottom = bars.bottom,
+                )
+                WindowInsetsCompat.CONSUMED
             }
         }
-        catch (Exception e)
+        catch (e: Exception)
         {
-            e.printStackTrace();
+            e.printStackTrace()
         }
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
 
-        // 外部メモリアクセス権のオプトイン
-        final int REQUEST_NEED_PERMISSIONS = 1010;
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) ||
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) ||
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) ||
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.ACCESS_NETWORK_STATE,
-                            Manifest.permission.ACCESS_WIFI_STATE,
-                            Manifest.permission.VIBRATE,
-                            Manifest.permission.INTERNET,
-                    },
-                    REQUEST_NEED_PERMISSIONS);
+    private fun allPermissionsGranted() : Boolean
+    {
+        var result = true
+        for (param in REQUIRED_PERMISSIONS)
+        {
+            if (ContextCompat.checkSelfPermission(
+                    baseContext,
+                    param
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+            {
+                // ----- Permission Denied...
+                if ((param == permission.ACCESS_MEDIA_LOCATION)&&(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q))
+                {
+                    //　この場合は権限付与の判断を除外 (デバイスが (10) よりも古く、ACCESS_MEDIA_LOCATION がない場合）
+                }
+                else if ((param == permission.READ_EXTERNAL_STORAGE)&&(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
+                {
+                    // この場合は、権限付与の判断を除外 (SDK: 33以上はエラーになる...)
+                }
+                else if ((param == permission.WRITE_EXTERNAL_STORAGE)&&(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
+                {
+                    // この場合は、権限付与の判断を除外 (SDK: 33以上はエラーになる...)
+                }
+                else
+                {
+                    // ----- 権限が得られなかった場合...
+                    Log.v(TAG, " Permission: $param : ${Build.VERSION.SDK_INT}")
+                    result = false
+                }
+            }
         }
+        return (result)
+    }
 
-        initializeClass();
-        onReadyClass();
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.v(TAG, "------------------------- onRequestPermissionsResult() ")
+        if (requestCode == REQUEST_NEED_PERMISSIONS)
+        {
+            if (allPermissionsGranted())
+            {
+                // ----- 権限が有効だった、最初の画面を開く
+                Log.v(TAG, "onRequestPermissionsResult()")
+                onReadyClass()
+            }
+            else
+            {
+                Log.v(TAG, "----- onRequestPermissionsResult() : false")
+                Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
     }
 
     /**
      *
-     *
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[]  permissions, @NonNull int[] grantResults)
+    override fun onPause()
     {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        onReadyClass();
-    }
-
-    /**
-     *
-     */
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
+        super.onPause()
         try
         {
-            ICameraConnection connection = interfaceProvider.getCameraConnection();
-            if (connection != null)
+            if (::interfaceProvider.isInitialized)
             {
-                connection.stopWatchWifiStatus(this);
+                val connection = interfaceProvider.cameraConnection
+                connection?.stopWatchWifiStatus(this)
             }
         }
-        catch (Exception e)
+        catch (e: Exception)
         {
-            e.printStackTrace();
+            e.printStackTrace()
         }
     }
 
@@ -115,73 +197,96 @@ public class Gr2ControlMain extends AppCompatActivity
      * クラスの初期化 (instantiate)
      *
      */
-    private void initializeClass()
+    private fun initializeClass()
     {
         try
         {
-            scenceUpdater = CameraSceneUpdater.newInstance(this);
-            interfaceProvider = CameraInterfaceProvider.newInstance(this, scenceUpdater);
-
-            if (liveViewFragment == null)
+            if (!::scenceUpdater.isInitialized)
             {
-                liveViewFragment = LiveViewFragment.newInstance(scenceUpdater, interfaceProvider);
-                scenceUpdater.registerInterface(liveViewFragment, interfaceProvider);
+                scenceUpdater = CameraSceneUpdater.newInstance(this)
             }
-            liveViewFragment.setRetainInstance(true);
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment1, liveViewFragment);
-            transaction.commitAllowingStateLoss();
+            if (!::interfaceProvider.isInitialized)
+            {
+                interfaceProvider = CameraInterfaceProvider.newInstance(this, scenceUpdater)
+            }
+            if (!::liveViewFragment.isInitialized)
+            {
+                liveViewFragment = LiveViewFragment.newInstance(scenceUpdater, interfaceProvider)
+            }
+            scenceUpdater.registerInterface(liveViewFragment, interfaceProvider)
+            @Suppress("DEPRECATION")
+            liveViewFragment.retainInstance = true
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment1, liveViewFragment)
+            transaction.commitAllowingStateLoss()
         }
-        catch (Exception e)
+        catch (e: Exception)
         {
-            e.printStackTrace();
+            e.printStackTrace()
         }
     }
 
     /**
-     *    初期化終了時の処理 (カメラへの自動接続)
+     * 初期化終了時の処理 (カメラへの自動接続)
      */
-    private void onReadyClass()
+    private fun onReadyClass()
     {
         try
         {
             // カメラに自動接続するかどうか確認
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            boolean isAutoConnectCamera = preferences.getBoolean(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, true);
-            Log.v(TAG, "isAutoConnectCamera() : " + isAutoConnectCamera);
+            val preferences = PreferenceManager.getDefaultSharedPreferences(
+                this
+            )
+            val isAutoConnectCamera =
+                preferences.getBoolean(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, true)
+            Log.v(TAG, "isAutoConnectCamera() : $isAutoConnectCamera")
 
             // カメラに接続する
             if (isAutoConnectCamera)
             {
                 // 自動接続の指示があったとき
-                scenceUpdater.changeCameraConnection();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        Log.v(TAG, "onKeyDown()" + " " + keyCode);
-        try
-        {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN)&&
-                    ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)||(keyCode == KeyEvent.KEYCODE_CAMERA)))
-            {
-                if (liveViewFragment != null)
+                if (::scenceUpdater.isInitialized)
                 {
-                    return (liveViewFragment.handleKeyDown(keyCode, event));
+                    scenceUpdater.changeCameraConnection()
                 }
             }
         }
-        catch (Exception e)
+        catch (e: Exception)
         {
-            e.printStackTrace();
+            e.printStackTrace()
         }
-        return (super.onKeyDown(keyCode, event));
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean
+    {
+        Log.v(TAG, "onKeyDown() $keyCode")
+        try
+        {
+            if ((event.action == KeyEvent.ACTION_DOWN) && ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_CAMERA)))
+            {
+                if (::liveViewFragment.isInitialized)
+                {
+                    return (liveViewFragment.handleKeyDown(keyCode, event))
+                }
+            }
+        }
+        catch (e: Exception)
+        {
+            e.printStackTrace()
+        }
+        return (super.onKeyDown(keyCode, event))
+    }
+
+    companion object
+    {
+        private val TAG = Gr2ControlMain::class.java.simpleName
+        private const val REQUEST_NEED_PERMISSIONS = 1010
+        private val REQUIRED_PERMISSIONS = arrayOf(
+            permission.WRITE_EXTERNAL_STORAGE,
+            permission.ACCESS_NETWORK_STATE,
+            permission.ACCESS_WIFI_STATE,
+            permission.INTERNET,
+            permission.VIBRATE,
+        )
     }
 }

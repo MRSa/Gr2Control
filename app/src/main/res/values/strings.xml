@@ -247,4 +247,6 @@
 
     <string name="pref_fujix_get_screennail_as_small_picture">Use small image as detail screen</string>
     <string name="pref_summary_fujix_get_screennail_as_small_picture">Use small size image for detail screen.</string>
+
+    <string name="permission_not_granted">Permissions not granted by user.</string>
 </resources>
