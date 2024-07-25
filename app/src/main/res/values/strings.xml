@@ -134,6 +134,7 @@
     <string name="dialog_download_title">Get Image</string>
     <string name="dialog_download_message">File Name:</string>
     <string name="download_control_save_success">Saved</string>
+    <string name="resolver_insert_failure">insert fail.</string>
 
     <string name="label_aelock">AEL/AFL</string>
     <string name="label_c_af">C-AF</string>
