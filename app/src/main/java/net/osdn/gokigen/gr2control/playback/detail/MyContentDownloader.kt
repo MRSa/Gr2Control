@@ -21,7 +21,6 @@ import net.osdn.gokigen.gr2control.camera.playback.IPlaybackControl
 import net.osdn.gokigen.gr2control.camera.playback.ProgressEvent
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor
 import java.io.File
-import java.io.FileOutputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -125,7 +124,7 @@ class MyContentDownloader(private val activity: Activity, private val playbackCo
             val directoryPath = Environment.DIRECTORY_DCIM + File.separator + activity.getString(R.string.app_name2) + File.separator
             val calendar = Calendar.getInstance()
             val extendName = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(calendar.time)
-            val periodPosition = targetFileName.indexOf(".")
+            //val periodPosition = targetFileName.indexOf(".")
             //val extension = targetFileName.substring(periodPosition)
             //val baseFileName = targetFileName.substring(0, periodPosition)
             //val fileName = fileInfo.directoryPath + "/" + fileInfo.filename
