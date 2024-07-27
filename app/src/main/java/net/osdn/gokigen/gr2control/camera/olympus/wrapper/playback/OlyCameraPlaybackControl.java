@@ -185,6 +185,13 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
     {
         try
         {
+            if (isSmallSize)
+            {
+                //
+                downloadSmallImage(path, name, callback);
+                return;
+            }
+
             camera.downloadLargeContent(name, new OLYCamera.DownloadLargeContentCallback() {
                 @Override
                 public void onProgress(byte[] bytes, OLYCamera.ProgressEvent progressEvent)
@@ -231,6 +238,52 @@ public class OlyCameraPlaybackControl implements IPlaybackControl
             e.printStackTrace();
             callback.onErrorOccurred(e);
         }
+    }
+
+    private void downloadSmallImage(@Nullable String path, @NonNull String name, @NonNull final IDownloadContentCallback callback)
+    {
+        try
+        {
+            camera.downloadImage(name, OLYCamera.IMAGE_RESIZE_1920, new OLYCamera.DownloadImageCallback() {
+                @Override
+                public void onProgress(OLYCamera.ProgressEvent progressEvent)
+                {
+                    callback.onProgress(new byte[0], 0, new ProgressEvent(progressEvent.getProgress(), null));
+                }
+
+                @Override
+                public void onCompleted(byte[] bytes, Map<String, Object> map)
+                {
+                    try
+                    {
+                        callback.onProgress(bytes, bytes.length, new ProgressEvent(99.0f, null));
+                        callback.onCompleted();
+                    }
+                    catch (Throwable t)
+                    {
+                        t.printStackTrace();
+                        callback.onErrorOccurred(new NullPointerException());
+                    }
+                }
+
+                @Override
+                public void onErrorOccurred(Exception e)
+                {
+                    callback.onErrorOccurred(e);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            callback.onErrorOccurred(e);
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            callback.onErrorOccurred(new NullPointerException());
+        }
+
     }
 
     @Override
