@@ -11,7 +11,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,270 +22,178 @@ import net.osdn.gokigen.gr2control.liveview.LiveViewFragment
 import net.osdn.gokigen.gr2control.preference.IPreferencePropertyAccessor
 import net.osdn.gokigen.gr2control.scene.CameraSceneUpdater
 
-/**
- *
- *
- */
-class Gr2ControlMain : AppCompatActivity()
-{
+class Gr2ControlMain : AppCompatActivity() {
+
     private lateinit var interfaceProvider: IInterfaceProvider
-    private lateinit var scenceUpdater: CameraSceneUpdater
+    private lateinit var sceneUpdater: CameraSceneUpdater
     private lateinit var liveViewFragment: LiveViewFragment
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    // 実行中の OS バージョンに応じて要求する権限一覧を取得
+    private val requiredPermissions: Array<String>
+        get()
+        {
+            val permissions = mutableListOf<String>()
+
+            // 通常権限
+            permissions.add(permission.ACCESS_NETWORK_STATE)
+            permissions.add(permission.ACCESS_WIFI_STATE)
+            permissions.add(permission.INTERNET)
+            permissions.add(permission.VIBRATE)
+
+            // API 28 (Android 9.0) 以下のみストレージ書き込み権限を要求
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P)
+            {
+                permissions.add(permission.WRITE_EXTERNAL_STORAGE)
+            }
+
+            // API 33 (Android 13) 以上で Wi-Fi 機器検出権限を追加
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            {
+                permissions.add(permission.NEARBY_WIFI_DEVICES)
+            }
+
+            // API 37 (Android 17) 以上向けローカルネットワーク権限
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN)
+            {
+                permissions.add("android.permission.ACCESS_LOCAL_NETWORK")
+            }
+
+            return permissions.toTypedArray()
+        }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { _ ->
+        if (allPermissionsGranted()) {
+            Log.v(TAG, "Permissions granted via launcher")
+            setupAndConnect()
+        } else {
+            Log.v(TAG, "----- APPLICATION LAUNCH ABORTED (Permission Rejected) -----")
+            Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 画面表示の準備
         setContentView(R.layout.activity_gr2_control_main)
-        try
-        {
-            val bar = supportActionBar
-            bar?.hide()
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
+
+        supportActionBar?.hide()
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        val baseLayout = findViewById<View>(R.id.base_layout)
+        if (baseLayout != null) {
+            setupWindowInset(baseLayout)
         }
 
-        try
-        {
-            setupWindowInset(findViewById(R.id.base_layout))
+        // 権限の確認とリクエスト
+        Log.v(TAG, " ----- SET PERMISSIONS -----")
+        if (allPermissionsGranted()) {
+            setupAndConnect()
+        } else {
+            requestPermissionLauncher.launch(requiredPermissions)
         }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-        }
+    }
 
+    private fun setupAndConnect() {
         initializeClass()
-
-        try
-        {
-            ///////// SET PERMISSIONS /////////
-            Log.v(TAG, " ----- SET PERMISSIONS -----")
-            if (!allPermissionsGranted())
-            {
-                val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
-                {
-                    ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_NEED_PERMISSIONS)
-                    if(!allPermissionsGranted())
-                    {
-                        // Abort launch application because required permissions was rejected.
-                        Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
-                        Log.v(TAG, "----- APPLICATION LAUNCH ABORTED -----")
-                        finish()
-                    }
-                }
-                requestPermission.launch(REQUIRED_PERMISSIONS)
-            }
-            onReadyClass()
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-        }
+        onReadyClass()
     }
 
-    private fun setupWindowInset(view: View)
-    {
-        try
-        {
-            // Display cutout insets
-            //   https://developer.android.com/develop/ui/views/layout/edge-to-edge
-            ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-                val bars = insets.getInsets(
-                    WindowInsetsCompat.Type.systemBars()
-                            or WindowInsetsCompat.Type.displayCutout()
-                )
-                v.updatePadding(
-                    left = bars.left,
-                    top = bars.top,
-                    right = bars.right,
-                    bottom = bars.bottom,
-                )
-                WindowInsetsCompat.CONSUMED
-            }
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-        }
-    }
-
-    private fun allPermissionsGranted() : Boolean
-    {
-        var result = true
-        for (param in REQUIRED_PERMISSIONS)
-        {
-            if (ContextCompat.checkSelfPermission(
-                    baseContext,
-                    param
-                ) != PackageManager.PERMISSION_GRANTED
+    private fun setupWindowInset(view: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
             )
-            {
-                // ----- Permission Denied...
-                if ((param == permission.ACCESS_MEDIA_LOCATION)&&(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q))
-                {
-                    //　この場合は権限付与の判断を除外 (デバイスが (10) よりも古く、ACCESS_MEDIA_LOCATION がない場合）
-                }
-                else if ((param == permission.READ_EXTERNAL_STORAGE)&&(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
-                {
-                    // この場合は、権限付与の判断を除外 (SDK: 33以上はエラーになる...)
-                }
-                else if ((param == permission.WRITE_EXTERNAL_STORAGE)&&(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU))
-                {
-                    // この場合は、権限付与の判断を除外 (SDK: 33以上はエラーになる...)
-                }
-                else
-                {
-                    // ----- 権限が得られなかった場合...
-                    Log.v(TAG, " Permission: $param : ${Build.VERSION.SDK_INT}")
-                    result = false
-                }
-            }
-        }
-        return (result)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.v(TAG, "------------------------- onRequestPermissionsResult() ")
-        if (requestCode == REQUEST_NEED_PERMISSIONS)
-        {
-            if (allPermissionsGranted())
-            {
-                // ----- 権限が有効だった、最初の画面を開く
-                Log.v(TAG, "onRequestPermissionsResult()")
-                onReadyClass()
-            }
-            else
-            {
-                Log.v(TAG, "----- onRequestPermissionsResult() : false")
-                Toast.makeText(this, getString(R.string.permission_not_granted), Toast.LENGTH_SHORT).show()
-                finish()
-            }
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
         }
     }
 
-    /**
-     *
-     */
-    override fun onPause()
-    {
+    private fun allPermissionsGranted(): Boolean {
+        for (param in requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(this, param) != PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, " Permission denied: $param (SDK: ${Build.VERSION.SDK_INT})")
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun onPause() {
         super.onPause()
-        try
-        {
-            if (::interfaceProvider.isInitialized)
-            {
-                val connection = interfaceProvider.cameraConnection
-                connection?.stopWatchWifiStatus(this)
+        try {
+            if (::interfaceProvider.isInitialized) {
+                interfaceProvider.cameraConnection?.stopWatchWifiStatus(this)
             }
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in onPause", e)
         }
     }
 
-    /**
-     * クラスの初期化 (instantiate)
-     *
-     */
-    private fun initializeClass()
-    {
-        try
-        {
-            if (!::scenceUpdater.isInitialized)
-            {
-                scenceUpdater = CameraSceneUpdater.newInstance(this)
+    // クラスの初期化
+    private fun initializeClass() {
+        try {
+            if (!::sceneUpdater.isInitialized) {
+                sceneUpdater = CameraSceneUpdater.newInstance(this)
             }
-            if (!::interfaceProvider.isInitialized)
-            {
-                interfaceProvider = CameraInterfaceProvider.newInstance(this, scenceUpdater)
+            if (!::interfaceProvider.isInitialized) {
+                interfaceProvider = CameraInterfaceProvider.newInstance(this, sceneUpdater)
             }
-            if (!::liveViewFragment.isInitialized)
-            {
-                liveViewFragment = LiveViewFragment.newInstance(scenceUpdater, interfaceProvider)
+            if (!::liveViewFragment.isInitialized) {
+                liveViewFragment = LiveViewFragment.newInstance(sceneUpdater, interfaceProvider)
             }
-            scenceUpdater.registerInterface(liveViewFragment, interfaceProvider)
-            @Suppress("DEPRECATION")
-            liveViewFragment.retainInstance = true
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment1, liveViewFragment)
-            transaction.commitAllowingStateLoss()
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
+
+            sceneUpdater.registerInterface(liveViewFragment, interfaceProvider)
+
+            // Fragmentの重複生成帽子
+            if (supportFragmentManager.findFragmentById(R.id.fragment1) == null) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment1, liveViewFragment)
+                    .commitAllowingStateLoss()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in initializeClass", e)
         }
     }
 
-    /**
-     * 初期化終了時の処理 (カメラへの自動接続)
-     */
-    private fun onReadyClass()
-    {
-        try
-        {
-            // カメラに自動接続するかどうか確認
-            val preferences = PreferenceManager.getDefaultSharedPreferences(
-                this
+    // 初期化終了時の処理 (カメラへの自動接続)
+    private fun onReadyClass() {
+        try {
+            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+            val isAutoConnectCamera = preferences.getBoolean(
+                IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA,
+                true
             )
-            val isAutoConnectCamera =
-                preferences.getBoolean(IPreferencePropertyAccessor.AUTO_CONNECT_TO_CAMERA, true)
             Log.v(TAG, "isAutoConnectCamera() : $isAutoConnectCamera")
 
-            // カメラに接続する
-            if (isAutoConnectCamera)
-            {
-                // 自動接続の指示があったとき
-                if (::scenceUpdater.isInitialized)
-                {
-                    scenceUpdater.changeCameraConnection()
-                }
+            if (isAutoConnectCamera && ::sceneUpdater.isInitialized) {
+                sceneUpdater.changeCameraConnection()
             }
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in onReadyClass", e)
         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean
-    {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Log.v(TAG, "onKeyDown() $keyCode")
-        try
-        {
-            if ((event.action == KeyEvent.ACTION_DOWN) && ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) || (keyCode == KeyEvent.KEYCODE_CAMERA)))
-            {
-                if (::liveViewFragment.isInitialized)
-                {
-                    return (liveViewFragment.handleKeyDown(keyCode, event))
-                }
+        if (event.action == KeyEvent.ACTION_DOWN &&
+            (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_CAMERA)
+        ) {
+            if (::liveViewFragment.isInitialized) {
+                return liveViewFragment.handleKeyDown(keyCode, event)
             }
         }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-        }
-        return (super.onKeyDown(keyCode, event))
+        return super.onKeyDown(keyCode, event)
     }
 
-    companion object
-    {
+    companion object {
         private val TAG = Gr2ControlMain::class.java.simpleName
-        private const val REQUEST_NEED_PERMISSIONS = 1010
-        private val REQUIRED_PERMISSIONS = arrayOf(
-            permission.WRITE_EXTERNAL_STORAGE,
-            permission.ACCESS_NETWORK_STATE,
-            permission.ACCESS_WIFI_STATE,
-            permission.INTERNET,
-            permission.VIBRATE,
-        )
     }
 }

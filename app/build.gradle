@@ -2,28 +2,28 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    compileSdk 35
+    compileSdk 37
     defaultConfig {
         applicationId "net.osdn.gokigen.gr2control"
         minSdkVersion 14
-        targetSdkVersion 35
-        versionCode 1004001
-        versionName "1.4.1"
+        targetSdkVersion 37
+        versionCode 1004002
+        versionName "1.4.2"
         multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     namespace 'net.osdn.gokigen.gr2control'
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '21'
     }
 }
 
